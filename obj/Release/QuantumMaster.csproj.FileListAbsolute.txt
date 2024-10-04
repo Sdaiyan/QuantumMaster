@@ -1,0 +1,11 @@
+E:\SteamLibrary\steamapps\common\The Scroll Of Taiwu\Mod\QuantumMaster\Plugins\QuantumMaster.deps.json
+E:\SteamLibrary\steamapps\common\The Scroll Of Taiwu\Mod\QuantumMaster\Plugins\QuantumMaster.dll
+E:\SteamLibrary\steamapps\common\The Scroll Of Taiwu\Mod\QuantumMaster\Plugins\QuantumMaster.pdb
+G:\TaiWu\repos\QuantumMaster\obj\Release\QuantumMaster.csproj.AssemblyReference.cache
+G:\TaiWu\repos\QuantumMaster\obj\Release\QuantumMaster.GeneratedMSBuildEditorConfig.editorconfig
+G:\TaiWu\repos\QuantumMaster\obj\Release\QuantumMaster.AssemblyInfoInputs.cache
+G:\TaiWu\repos\QuantumMaster\obj\Release\QuantumMaster.AssemblyInfo.cs
+G:\TaiWu\repos\QuantumMaster\obj\Release\QuantumMaster.csproj.CoreCompileInputs.cache
+G:\TaiWu\repos\QuantumMaster\obj\Release\QuantumMaster.csproj.CopyComplete
+G:\TaiWu\repos\QuantumMaster\obj\Release\QuantumMaster.dll
+G:\TaiWu\repos\QuantumMaster\obj\Release\QuantumMaster.pdb
