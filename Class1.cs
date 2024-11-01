@@ -19,6 +19,14 @@ using GameData.Domains.Building;
 using System.Drawing;
 using GameData.Common;
 using GameData.Domains.CombatSkill;
+using GameData.Domains.Character.Ai;
+using GameData.Domains.Character.ParallelModifications;
+using GameData.Domains.Character.Relation;
+using GameData.Domains.SpecialEffect;
+using GameData.DomainEvents;
+using GameData.Domains.Information.Collection;
+using GameData.Domains.LifeRecord;
+using GameData.Domains.World.Notification;
 
 namespace QuantumMaster
 {
@@ -117,100 +125,93 @@ namespace QuantumMaster
             harmony = Harmony.CreateAndPatchAll(typeof(QuantumMaster));
             AdaptableLog.Info("QuantumMaster path");
         }
-        public static void handleActionPhase(IRandomSource random, Character targetChar, ref sbyte __result)
+        public static bool handleActionPhase(IRandomSource random, Character targetChar, ref sbyte __result, Character currentChar)
         {
             var targetId = targetChar.GetId();
-            var allowSuccess = !DomainManager.Character.IsTaiwuPeople(targetId);
-            if (allowSuccess)
-            {
-                __result = 5;
-            }
-            else
-            {
+            var taiwuid = DomainManager.Taiwu.GetTaiwuCharId();
+            if (targetId == taiwuid) {
                 __result = 0;
+                return false;
+            } else if (taiwuid == currentChar.GetId()) {
+                __result = 5;
+                return false;
             }
+            return true;
         }
         // 目标为太吾或者村民时，偷窃必败，否则必成
         [HarmonyPrefix]
         [HarmonyPatch(typeof(Character), "GetStealActionPhase")]
-        public static bool GetStealActionPhase__prefix(IRandomSource random, Character targetChar, ref sbyte __result)
+        public static bool GetStealActionPhase__prefix(IRandomSource random, Character targetChar, ref sbyte __result, Character __instance)
         {
             if (steal)
             {
-                handleActionPhase(random, targetChar, ref __result);
-                return false;
+                return handleActionPhase(random, targetChar, ref __result, __instance);
             }
             return true;
         }
         // 唬骗
         [HarmonyPrefix]
         [HarmonyPatch(typeof(Character), "GetScamActionPhase")]
-        public static bool GetScamActionPhase__prefix(IRandomSource random, Character targetChar, ref sbyte __result)
+        public static bool GetScamActionPhase__prefix(IRandomSource random, Character targetChar, ref sbyte __result, Character __instance)
         {
             if (scam)
             {
-                handleActionPhase(random, targetChar, ref __result);
-                return false;
+                return handleActionPhase(random, targetChar, ref __result, __instance);
             }
             return true;
         }
         // 抢劫
         [HarmonyPrefix]
         [HarmonyPatch(typeof(Character), "GetRobActionPhase")]
-        public static bool GetRobActionPhase__prefix(IRandomSource random, Character targetChar, ref sbyte __result)
+        public static bool GetRobActionPhase__prefix(IRandomSource random, Character targetChar, ref sbyte __result, Character __instance)
         {
             if (rob)
             {
-                handleActionPhase(random, targetChar, ref __result);
-                return false;
+                return handleActionPhase(random, targetChar, ref __result, __instance);
             }
             return true;
         }
         // 偷学生活技能
         [HarmonyPrefix]
         [HarmonyPatch(typeof(Character), "GetStealLifeSkillActionPhase")]
-        public static bool GetStealLifeSkillActionPhase__prefix(IRandomSource random, Character targetChar, ref sbyte __result)
+        public static bool GetStealLifeSkillActionPhase__prefix(IRandomSource random, Character targetChar, ref sbyte __result, Character __instance)
         {
             if (stealLifeSkill)
             {
-                handleActionPhase(random, targetChar, ref __result);
-                return false;
+                return handleActionPhase(random, targetChar, ref __result, __instance);
             }
             return true;
         }
         // 偷学战斗技能
         [HarmonyPrefix]
         [HarmonyPatch(typeof(Character), "GetStealCombatSkillActionPhase")]
-        public static bool GetStealCombatSkillActionPhase__prefix(IRandomSource random, Character targetChar, ref sbyte __result)
+        public static bool GetStealCombatSkillActionPhase__prefix(IRandomSource random, Character targetChar, ref sbyte __result, Character __instance)
         {
             if (stealCombatSkill)
             {
-                handleActionPhase(random, targetChar, ref __result);
-                return false;
+                return handleActionPhase(random, targetChar, ref __result, __instance);
             }
             return true;
         }
         // 下毒
         [HarmonyPrefix]
         [HarmonyPatch(typeof(Character), "GetPoisonActionPhase")]
-        public static bool GetPoisonActionPhase__prefix(IRandomSource random, Character targetChar, ref sbyte __result)
+        public static bool GetPoisonActionPhase__prefix(IRandomSource random, Character targetChar, ref sbyte __result, Character __instance)
         {
             if (poison)
             {
-                handleActionPhase(random, targetChar, ref __result);
-                return false;
+                return handleActionPhase(random, targetChar, ref __result, __instance);
             }
             return true;
         }
         // 暗害
         [HarmonyPrefix]
         [HarmonyPatch(typeof(Character), "GetPlotHarmActionPhase")]
-        public static bool GetPlotHarmActionPhase__prefix(IRandomSource random, Character targetChar, ref sbyte __result)
+        public static bool GetPlotHarmActionPhase__prefix(IRandomSource random, Character targetChar, ref sbyte __result, Character __instance)
         {
             if (plotHarm)
             {
-                handleActionPhase(random, targetChar, ref __result);
-                return false;
+                return handleActionPhase(random, targetChar, ref __result, __instance);
             }
             return true;
         }
@@ -233,31 +234,31 @@ namespace QuantumMaster
             return true;
         }
         // 怀孕概率
-        // [HarmonyPrefix]
-        // [HarmonyPatch(typeof(PregnantState), "CheckPregnant")]
-        // public static bool CheckPregnant__prefix(IRandomSource random, Character father, Character mother, bool isRape, ref bool __result)
-        // {
-        //     var taiwuid = DomainManager.Taiwu.GetTaiwuCharId();
-        //     if (father.GetId() == taiwuid)
-        //     {
-        //         __result = true;
-        //         return false;
-        //     }
-        //     else if (mother.GetId() == taiwuid)
-        //     {
-        //         __result = true;
-        //         return false;
-        //     }
-        //     else if (isRape)
-        //     {
-        //         __result = true;
-        //         return false;
-        //     }
-        //     else
-        //     {
-        //         return true;
-        //     }
-        // }
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(PregnantState), "CheckPregnant")]
+        public static bool CheckPregnant__prefix(IRandomSource random, Character father, Character mother, bool isRape, ref bool __result)
+        {
+            var taiwuid = DomainManager.Taiwu.GetTaiwuCharId();
+            if (father.GetId() == taiwuid)
+            {
+                __result = true;
+                return false;
+            }
+            else if (mother.GetId() == taiwuid)
+            {
+                __result = true;
+                return false;
+            }
+            else if (isRape)
+            {
+                __result = true;
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
         // 绳子或者煎饼成功率
         [HarmonyPrefix]
         [HarmonyPatch(typeof(CombatDomain), "CheckRopeOrSwordHit")]
@@ -349,7 +350,7 @@ namespace QuantumMaster
 
         private static List<string> GetCallerMethodNames()
         {
-            const int frameCount = 3;
+            const int frameCount = 1;
             var stack = new StackTrace(frameCount);
             var methodNames = new List<string>();
             foreach (var frame in stack.GetFrames())
@@ -581,29 +582,6 @@ namespace QuantumMaster
                 singLevel = (short)100;
             }
         }
-        // 教人不消耗能量
-        [HarmonyPrefix]
-        [HarmonyPatch(typeof(GameData.Domains.Character.Ai.ActionEnergySbytes), "SpendEnergyOnAction")]
-        public static bool SpendEnergyOnAction_HarmonyPrefix(sbyte actionEnergyType)
-        {
-            if (actionEnergyType == 4)
-            {
-                return false;
-            }
-            return true;
-        }
-        // 教人能量检查永远足够
-        [HarmonyPrefix]
-        [HarmonyPatch(typeof(GameData.Domains.Character.Ai.ActionEnergySbytes), "HasEnoughForAction")]
-        public static bool HasEnoughForAction_HarmonyPrefix(ref bool __result, sbyte actionEnergyType)
-        {
-            if (actionEnergyType == 4)
-            {
-                __result = true;
-                return false;
-            }
-            return true;
-        }
         // 地块升级概率，有可能就是100
         [HarmonyPostfix]
         [HarmonyPatch(typeof(BuildingDomain), "GetResourceBlockGrowthChance")]
@@ -627,37 +605,7 @@ namespace QuantumMaster
         //         __result = 100;
         //     }
         // }
-        // 初始化地块
-        [HarmonyPrefix]
-        [HarmonyPatch(typeof(GameData.Domains.Map.MapBlockData), "InitResources")]
-        public unsafe static bool MapBlockData_InitResources_HarmonyPrefix(MapBlockData __instance)
-        {
-            if (InitResources)
-            {
-                MapBlockItem configData = __instance.GetConfig();
-                if (configData != null)
-                {
-                    for (sbyte resourceType = 0; resourceType < 6; resourceType++)
-                    {
-                        short maxResource = configData.Resources[resourceType];
-                        if (maxResource < 0)
-                        {
-                            maxResource = (short)(Math.Abs(maxResource) * 5);
-                        }
-                        else if (maxResource != 0)
-                        {
-                            maxResource = (short)(maxResource + 25);
-                        }
-                        __instance.MaxResources.Items[resourceType] = maxResource;
-                        __instance.CurrResources.Items[resourceType] = maxResource;
-                        // 地块诞生时的资源
-                        // __instance.CurrResources.Items[resourceType] = (short)(maxResource * 50 / 100 * ItemTemplateHelper.GetGainResourcePercent(12) / 100);
-                    }
-                }
-                return false;
-            }
-            return true;
-        }
+        
         // // 读书策略进度增加最小值取最大值
         // [HarmonyPostfix]
         // [HarmonyPatch(nameof(ReadingStrategyItem.MinProgressAddValue), MethodType.Getter)]
@@ -693,23 +641,6 @@ namespace QuantumMaster
                 return false; // 跳过原始方法
             }
             return true;
-        }
-        // 生成读书策略
-        [HarmonyPrefix]
-        [HarmonyPatch(typeof(GameData.Domains.Extra.ExtraDomain), "SetAvailableReadingStrategies")]
-        public static void  SetAvailableReadingStrategies_Prefix(ref SByteList strategyIds)
-        {
-            SByteList ids = SByteList.Create();
-            ids.Items.Add(0);
-            ids.Items.Add(0);
-            ids.Items.Add(2);
-            ids.Items.Add(2);
-            ids.Items.Add(6);
-            ids.Items.Add(6);
-            ids.Items.Add(12);
-            ids.Items.Add(12);
-            ids.Items.Add(12);
-            strategyIds = ids;
         }
         // 灵光一闪概率
         [HarmonyPostfix]
@@ -917,5 +848,400 @@ namespace QuantumMaster
             }
         }
         // CharacterDomain 还没看
+        // 教人不消耗能量
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(GameData.Domains.Character.Ai.ActionEnergySbytes), "SpendEnergyOnAction")]
+        public static bool SpendEnergyOnAction_HarmonyPrefix(sbyte actionEnergyType)
+        {
+            if (actionEnergyType == 4)
+            {
+                return false;
+            }
+            return true;
+        }
+        // 教人能量检查永远足够
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(GameData.Domains.Character.Ai.ActionEnergySbytes), "HasEnoughForAction")]
+        public static bool HasEnoughForAction_HarmonyPrefix(ref bool __result, sbyte actionEnergyType)
+        {
+            if (actionEnergyType == 4)
+            {
+                __result = true;
+                return false;
+            }
+            return true;
+        }
+        // 生成读书策略
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(GameData.Domains.Extra.ExtraDomain), "SetAvailableReadingStrategies")]
+        public static void  SetAvailableReadingStrategies_Prefix(ref SByteList strategyIds)
+        {
+            SByteList ids = SByteList.Create();
+            ids.Items.Add(0);
+            ids.Items.Add(0);
+            ids.Items.Add(2);
+            ids.Items.Add(2);
+            ids.Items.Add(6);
+            ids.Items.Add(6);
+            ids.Items.Add(12);
+            ids.Items.Add(12);
+            ids.Items.Add(12);
+            strategyIds = ids;
+        }
+        // 初始化地块
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(GameData.Domains.Map.MapBlockData), "InitResources")]
+        public unsafe static bool MapBlockData_InitResources_HarmonyPrefix(MapBlockData __instance)
+        {
+            if (InitResources)
+            {
+                MapBlockItem configData = __instance.GetConfig();
+                if (configData != null)
+                {
+                    for (sbyte resourceType = 0; resourceType < 6; resourceType++)
+                    {
+                        short maxResource = configData.Resources[resourceType];
+                        if (maxResource < 0)
+                        {
+                            maxResource = (short)(Math.Abs(maxResource) * 5);
+                        }
+                        else if (maxResource != 0)
+                        {
+                            maxResource = (short)(maxResource + 25);
+                        }
+                        __instance.MaxResources.Items[resourceType] = maxResource;
+                        __instance.CurrResources.Items[resourceType] = maxResource;
+                        // 地块诞生时的资源
+                        // __instance.CurrResources.Items[resourceType] = (short)(maxResource * 50 / 100 * ItemTemplateHelper.GetGainResourcePercent(12) / 100);
+                    }
+                }
+                return false;
+            }
+            return true;
+        }
+
+
+
+
+
+
+
+
+
+        public static void handleAddML((Character target, GameData.Domains.Character.ParallelModifications.PeriAdvanceMonthFixedActionModification.MakeLoveState makeLoveState, bool isPregnant) item, PeriAdvanceMonthFixedActionModification mod)
+        {
+            var list = mod.MakeLoveTargetList;
+            // 如果没有找到，则添加到 list 中
+            // 遍历 list ，查看 list 中的是否有和 item 的 target 相同
+            foreach (var (target, makeLoveState, isPregnant) in list)
+            {
+                if (target.GetId() == item.target.GetId())
+                {
+                    return;
+                }
+            }
+            mod.MakeLoveTargetList.Add(item);
+        }
+
+        [HarmonyPostfix]
+        [HarmonyPatch(typeof(Character), "OfflineExecuteFixedAction_MakeLove")]
+        public static void OfflineExecuteFixedAction_MakeLove__postfix(DataContext context, HashSet<int> currBlockCharSet, PeriAdvanceMonthFixedActionModification mod, Character __instance)
+        {
+            var _id = __instance.GetId();
+            var _gender = __instance.GetGender();
+            var trv = Traverse.Create(__instance);
+            var taiwuid = DomainManager.Taiwu.GetTaiwuCharId();
+            var blockHasTaiwu = currBlockCharSet.Contains(taiwuid);
+            Character taiwu = DomainManager.Character.GetElement_Objects(taiwuid);
+            // var relatedCharacters = DomainManager.Character.GetRelatedCharacters(taiwuid);
+            if (blockHasTaiwu && _gender == 0 && __instance.GetAgeGroup() == 2)
+            {
+                if (mod.MakeLoveTargetList == null)
+                {
+                    mod.MakeLoveTargetList = new List<(Character, PeriAdvanceMonthFixedActionModification.MakeLoveState, bool)>();
+                }
+                RelatedCharacter selfToTaiwu = DomainManager.Character.GetRelation(_id, taiwuid);
+
+                RelatedCharacter taiwuToSelf = DomainManager.Character.GetRelation(taiwuid, _id);
+                var legal = RelationType.HasRelation(taiwuToSelf.RelationType, 16384);
+                if (RelationType.HasRelation(selfToTaiwu.RelationType, 16384) && legal)
+                {
+                    
+                    handleAddML((taiwu, PeriAdvanceMonthFixedActionModification.MakeLoveState.Legal, trv.Method("OfflineMakeLove", context.Random, taiwu, __instance, false).GetValue<bool>()), mod);
+                }
+                else
+                {
+                    int currDate = DomainManager.World.GetCurrDate();
+                    handleAddML((taiwu, PeriAdvanceMonthFixedActionModification.MakeLoveState.RapeSucceed, trv.Method("OfflineMakeLove", context.Random, taiwu, __instance, true).GetValue<bool>()), mod);
+                    DomainManager.Character.AddRelation(context, _id, taiwuid, 16384, currDate);
+                }
+                // var husbandsAndWives = relatedCharacters.HusbandsAndWives.GetCollection();
+                // var adored = relatedCharacters.Adored.GetCollection();
+                // 遍历
+                // foreach (var id in husbandsAndWives) {
+                //     if (id != taiwuid) {
+                //         DomainManager.Character.ChangeRelationType(context, _id, taiwuid, 1024, 0);
+                //     }
+                // }
+                // foreach (var id in adored) {
+                //     if (id != taiwuid) {
+                //         DomainManager.Character.ChangeRelationType(context, _id, taiwuid, 16384, 0);
+                //     }
+                // }
+            }
+        }
+
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(GameData.Domains.Organization.OrganizationDomain), "PunishSectMember")]
+        public static bool PunishSectMember__prefix(GameData.Domains.Character.Character character)
+        {
+            var taiwuid = DomainManager.Taiwu.GetTaiwuCharId();
+            var taiwuRelatedChars = DomainManager.Character.GetRelatedCharacters(taiwuid);
+            var cid = character.GetId();
+            if (taiwuRelatedChars.BloodParents.Contains(cid))
+            {
+                return false;
+            }
+            if (taiwuRelatedChars.BloodChildren.Contains(cid))
+            {
+                return false;
+            }
+            if (taiwuRelatedChars.BloodBrothersAndSisters.Contains(cid))
+            {
+                return false;
+            }
+            if (taiwuRelatedChars.StepParents.Contains(cid))
+            {
+                return false;
+            }
+            if (taiwuRelatedChars.StepChildren.Contains(cid))
+            {
+                return false;
+            }
+            if (taiwuRelatedChars.StepBrothersAndSisters.Contains(cid))
+            {
+                return false;
+            }
+            if (taiwuRelatedChars.AdoptiveParents.Contains(cid))
+            {
+                return false;
+            }
+            if (taiwuRelatedChars.AdoptiveChildren.Contains(cid))
+            {
+                return false;
+            }
+            if (taiwuRelatedChars.AdoptiveBrothersAndSisters.Contains(cid))
+            {
+                return false;
+            }
+            if (taiwuRelatedChars.SwornBrothersAndSisters.Contains(cid))
+            {
+                return false;
+            }
+            if (taiwuRelatedChars.HusbandsAndWives.Contains(cid))
+            {
+                return false;
+            }
+            if (taiwuRelatedChars.Mentors.Contains(cid))
+            {
+                return false;
+            }
+            if (taiwuRelatedChars.Mentees.Contains(cid))
+            {
+                return false;
+            }
+            if (taiwuRelatedChars.Friends.Contains(cid))
+            {
+                return false;
+            }
+            if (taiwuRelatedChars.Adored.Contains(cid))
+            {
+                return false;
+            }
+            return true;
+        }
+
+
+        [HarmonyPostfix]
+        [HarmonyPatch(typeof(GameData.Domains.Character.Character), "OfflineMakeLove", new Type[]{
+            typeof(IRandomSource),
+            typeof(GameData.Domains.Character.Character),
+            typeof(GameData.Domains.Character.Character),
+            typeof(bool)
+        })]
+        public static void OfflineMakeLove__HarmonyPostfix(GameData.Domains.Character.Character father, GameData.Domains.Character.Character mother)
+        {
+            // DataContext context = DataContextManager.GetCurrentThreadDataContext();
+
+            DataContext context = DomainManager.TaiwuEvent.MainThreadDataContext;
+            var taiwuid = DomainManager.Taiwu.GetTaiwuCharId();
+            var fid = father.GetId();
+            var mid = mother.GetId();
+            if (fid == taiwuid || mid == taiwuid)
+            {
+                var target = fid == taiwuid ? mid : fid;
+                var self = fid == taiwuid ? fid : mid;
+                var relatedCharacters = DomainManager.Character.GetRelatedCharacters(target);
+                var husbandsAndWives = relatedCharacters.HusbandsAndWives.GetCollection();
+                var adored = relatedCharacters.Adored.GetCollection();
+                // 遍历
+                foreach (var id in husbandsAndWives)
+                {
+                    if (id != taiwuid)
+                    {
+                        DomainManager.Character.ChangeRelationType(context, target, taiwuid, 1024, 0);
+                    }
+                }
+                foreach (var id in adored)
+                {
+                    if (id != taiwuid)
+                    {
+                        DomainManager.Character.ChangeRelationType(context, target, taiwuid, 16384, 0);
+                    }
+                }
+                var charactor = DomainManager.Character.GetElement_Objects(taiwuid);
+                charactor.SetHappiness(119, context);
+                Character selfChar = DomainManager.Character.GetElement_Objects(self);
+                Character targetChar = DomainManager.Character.GetElement_Objects(target);
+                DomainManager.Character.DirectlyChangeFavorabilityOptional(context, selfChar, targetChar, 60000);
+            }
+        }
+
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(Character), "ComplementPeriAdvanceMonth_ExecuteFixedActions")]
+        public static bool ComplementPeriAdvanceMonth_ExecuteFixedActions__prefix(DataContext context, PeriAdvanceMonthFixedActionModification mod)
+        {
+            Character character = mod.Character;
+            LifeRecordCollection lifeRecordCollection = DomainManager.LifeRecord.GetLifeRecordCollection();
+            MonthlyNotificationCollection monthlyNotificationCollection = DomainManager.World.GetMonthlyNotificationCollection();
+            SecretInformationCollection secretInformationCollection = DomainManager.Information.GetSecretInformationCollection();
+            int currDate = DomainManager.World.GetCurrDate();
+            Location location = character.GetLocation();
+            int taiwuCharId = DomainManager.Taiwu.GetTaiwuCharId();
+            var c_featureIds = character.GetFeatureIds();
+            var c_id = character.GetId();
+            var c_gender = character.GetGender();
+            var c_npcTravelTargets = character.GetNpcTravelTargets();
+            var c_resources = character.GetResources();
+            var trv = Traverse.Create(character);
+            if (mod.MakeLoveTargetList != null)
+            {
+                character.SetFeatureIds(c_featureIds, context);
+                foreach (var (target, state, isPregnant) in mod.MakeLoveTargetList)
+                {
+
+                    var t_featureIds = target.GetFeatureIds();
+                    var t_happiness = target.GetHappiness();
+                    var t_id = target.GetId();
+                    target.SetFeatureIds(t_featureIds, context);
+                    target.SetHappiness(t_happiness, context);
+                    switch (state)
+                    {
+                        case PeriAdvanceMonthFixedActionModification.MakeLoveState.Legal:
+                            if (t_id == taiwuCharId)
+                            {
+                                monthlyNotificationCollection.AddMakeLove(c_id, location, t_id);
+                            }
+                            break;
+                        case PeriAdvanceMonthFixedActionModification.MakeLoveState.Illegal:
+                        case PeriAdvanceMonthFixedActionModification.MakeLoveState.Wug:
+                            {
+                                if (t_id == taiwuCharId)
+                                {
+                                    monthlyNotificationCollection.AddMakeLove(c_id, location, t_id);
+                                }
+                                lifeRecordCollection.AddMakeLoveIllegal(c_id, currDate, t_id, location);
+                                int secretInfoOffset = secretInformationCollection.AddMakeLoveIllegal(c_id, t_id);
+                                int secretInfoId = DomainManager.Information.AddSecretInformationMetaData(context, secretInfoOffset);
+                                break;
+                            }
+                        case PeriAdvanceMonthFixedActionModification.MakeLoveState.RapeSucceed:
+                            {
+                                lifeRecordCollection.AddRapeSucceed(c_id, currDate, t_id, location);
+                                if (!(t_id == taiwuCharId || c_id == taiwuCharId))
+                                {
+                                    DomainManager.Character.AddRelation(context, t_id, c_id, 32768, currDate);
+                                    DomainManager.Character.ChangeFavorabilityOptionalMonthlyEvolution(context, target, character, -30000);
+                                    int secretInfoOffset = secretInformationCollection.AddRape(c_id, t_id);
+                                    int secretInfoId = DomainManager.Information.AddSecretInformationMetaData(context, secretInfoOffset);
+                                }
+                                break;
+                            }
+                        case PeriAdvanceMonthFixedActionModification.MakeLoveState.RapeFail:
+                            if (t_id == taiwuCharId)
+                            {
+                                monthlyNotificationCollection.AddRapeFailure(c_id, location, t_id);
+                            }
+                            if (!(t_id == taiwuCharId || c_id == taiwuCharId))
+                            {
+                                lifeRecordCollection.AddRapeFail(c_id, currDate, t_id, location);
+                                DomainManager.Character.AddRelation(context, t_id, c_id, 32768, currDate);
+                                DomainManager.Character.ChangeFavorabilityOptionalMonthlyEvolution(context, target, character, -30000);
+                            }
+                            break;
+                    }
+                    Events.RaiseMakeLove(context, character, target, (sbyte)state);
+                    if (isPregnant)
+                    {
+                        Character father;
+                        Character mother;
+                        if (c_gender == 1)
+                        {
+                            father = character;
+                            mother = target;
+                        }
+                        else
+                        {
+                            father = target;
+                            mother = character;
+                        }
+                        DomainManager.Character.CreatePregnantState(context, mother, father, state == PeriAdvanceMonthFixedActionModification.MakeLoveState.RapeSucceed);
+                    }
+                }
+            }
+            if (mod.LeaveGroup)
+            {
+                DomainManager.Character.LeaveGroup(context, character);
+            }
+            if (mod.NewGroupLeader >= 0)
+            {
+                trv.Method("ApplyFixedAction_JoinGroup", context, mod.NewGroupLeader).GetValue();
+                // character.ApplyFixedAction_JoinGroup(context, mod.NewGroupLeader);
+            }
+            if (mod.TravelTargetsChanged)
+            {
+                character.SetNpcTravelTargets(c_npcTravelTargets, context);
+            }
+            if (mod.ReleaseKidnappedCharList != null)
+            {
+                KidnappedCharacterList kidnappedChars = DomainManager.Character.GetKidnappedCharacters(c_id);
+                bool selfIsTaiwuPeople = DomainManager.Character.IsTaiwuPeople(c_id);
+                foreach (int charId in mod.ReleaseKidnappedCharList)
+                {
+                    int slotIndex = kidnappedChars.IndexOf(charId);
+                    lifeRecordCollection.AddReleaseKidnappedCharacter(c_id, currDate, charId, location);
+                    DomainManager.Character.RemoveKidnappedCharacter(context, character, kidnappedChars, slotIndex, isEscaped: false);
+                    if (selfIsTaiwuPeople || DomainManager.Character.IsTaiwuPeople(charId))
+                    {
+                        monthlyNotificationCollection.AddReleasePrisoner(c_id, location, charId);
+                    }
+                    int secretInfoOffset = secretInformationCollection.AddReleaseKidnappedCharacter(c_id, charId);
+                    DomainManager.Information.AddSecretInformationMetaData(context, secretInfoOffset);
+                }
+            }
+            if (mod.ModifiedMapBlocks == null)
+            {
+                return false;
+            }
+            character.SetResources(ref c_resources, context);
+            trv.Field("_resources").SetValue(c_resources);
+            foreach (MapBlockData blockData in mod.ModifiedMapBlocks)
+            {
+                DomainManager.Map.SetBlockData(context, blockData);
+            }
+            return false;
+        }
+
+
     }
 }
