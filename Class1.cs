@@ -1073,7 +1073,7 @@ namespace QuantumMaster
         {
             // DataContext context = DataContextManager.GetCurrentThreadDataContext();
 
-            DataContext context = DomainManager.TaiwuEvent.MainThreadDataContext;
+		    DataContext context = DataContextManager.GetCurrentThreadDataContext();
             var taiwuid = DomainManager.Taiwu.GetTaiwuCharId();
             var fid = father.GetId();
             var mid = mother.GetId();
@@ -1099,11 +1099,13 @@ namespace QuantumMaster
                         DomainManager.Character.ChangeRelationType(context, target, taiwuid, 16384, 0);
                     }
                 }
-                var charactor = DomainManager.Character.GetElement_Objects(taiwuid);
-                charactor.SetHappiness(119, context);
                 Character selfChar = DomainManager.Character.GetElement_Objects(self);
                 Character targetChar = DomainManager.Character.GetElement_Objects(target);
+                selfChar.SetHappiness(119, context);
+                targetChar.SetHappiness(119, context);
                 DomainManager.Character.DirectlyChangeFavorabilityOptional(context, selfChar, targetChar, 60000);
+                DomainManager.Character.DirectlyChangeFavorabilityOptional(context, targetChar, selfChar, 60000);
+                targetChar.AddPersonalNeed(context, GameData.Domains.Character.Ai.PersonalNeed.CreatePersonalNeed(23, taiwuid));
             }
         }
 
@@ -1151,8 +1153,11 @@ namespace QuantumMaster
                                     monthlyNotificationCollection.AddMakeLove(c_id, location, t_id);
                                 }
                                 lifeRecordCollection.AddMakeLoveIllegal(c_id, currDate, t_id, location);
-                                int secretInfoOffset = secretInformationCollection.AddMakeLoveIllegal(c_id, t_id);
-                                int secretInfoId = DomainManager.Information.AddSecretInformationMetaData(context, secretInfoOffset);
+                                if (t_id != taiwuCharId && c_id != taiwuCharId)
+                                {
+                                    int secretInfoOffset = secretInformationCollection.AddMakeLoveIllegal(c_id, t_id);
+                                    int secretInfoId = DomainManager.Information.AddSecretInformationMetaData(context, secretInfoOffset);
+                                }
                                 break;
                             }
                         case PeriAdvanceMonthFixedActionModification.MakeLoveState.RapeSucceed:
@@ -1162,9 +1167,9 @@ namespace QuantumMaster
                                 {
                                     DomainManager.Character.AddRelation(context, t_id, c_id, 32768, currDate);
                                     DomainManager.Character.ChangeFavorabilityOptionalMonthlyEvolution(context, target, character, -30000);
-                                    int secretInfoOffset = secretInformationCollection.AddRape(c_id, t_id);
-                                    int secretInfoId = DomainManager.Information.AddSecretInformationMetaData(context, secretInfoOffset);
                                 }
+                                int secretInfoOffset = secretInformationCollection.AddRape(c_id, t_id);
+                                int secretInfoId = DomainManager.Information.AddSecretInformationMetaData(context, secretInfoOffset);
                                 break;
                             }
                         case PeriAdvanceMonthFixedActionModification.MakeLoveState.RapeFail:
@@ -1234,7 +1239,6 @@ namespace QuantumMaster
                 return false;
             }
             character.SetResources(ref c_resources, context);
-            trv.Field("_resources").SetValue(c_resources);
             foreach (MapBlockData blockData in mod.ModifiedMapBlocks)
             {
                 DomainManager.Map.SetBlockData(context, blockData);
