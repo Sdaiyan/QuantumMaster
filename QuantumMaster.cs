@@ -918,7 +918,7 @@ namespace QuantumMaster
         {
             if (SpecBreak) {
                 // 17 = 嫁衣 11 = 逆行
-                __result = (_qmrd.CheckPercentProb(SpecBreakRate) ? 11 : 17);
+                __result = (sbyte)((_qmrd.Next(0, 100) > SpecBreakRate) ? 11 : 17);
             }
         }
     }
