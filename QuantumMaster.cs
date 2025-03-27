@@ -77,6 +77,9 @@ namespace QuantumMaster
         public static bool BreakVisible; // 突破格可见性
         public static bool BreakValue; // 突破格威力最大
         public static bool BreakFinnalChance; // 突破格最终概率
+        public static bool SpecBreak; // 修改突破格子的类型，使其必定是逆行或者嫁衣，逆行的占比可以在下方调整
+        public static int SpecBreakRate; // 逆行格子的占比，必须开启突破格子类型修改功能才能生效
+        public static Random _qmrd = new Random();
         public override void Dispose()
         {
             if (harmony != null)
@@ -127,6 +130,8 @@ namespace QuantumMaster
             DomainManager.Mod.GetSetting(ModIdStr, "BreakVisible", ref BreakVisible);
             DomainManager.Mod.GetSetting(ModIdStr, "BreakValue", ref BreakValue);
             DomainManager.Mod.GetSetting(ModIdStr, "BreakFinnalChance", ref BreakFinnalChance);
+            DomainManager.Mod.GetSetting(ModIdStr, "SpecBreak", ref SpecBreak);
+            DomainManager.Mod.GetSetting(ModIdStr, "SpecBreakRate", ref SpecBreakRate);
         }
         public override void Initialize()
         {
@@ -903,6 +908,17 @@ namespace QuantumMaster
                 {
                     __result = 100;
                 }
+            }
+        }
+
+        // 生成特殊格子
+        [HarmonyPostfix]
+        [HarmonyPatch(typeof(GameData.Domains.Taiwu.SkillBreakPlate), "RandomGridType", typeof(IRandomSource))]
+        public static void SkillBreakPlate_RandomGridType_HarmonyPostfix(ref sbyte __result)
+        {
+            if (SpecBreak) {
+                // 17 = 嫁衣 11 = 逆行
+                __result = (_qmrd.CheckPercentProb(SpecBreakRate) ? 11 : 17);
             }
         }
     }
