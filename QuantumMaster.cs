@@ -73,6 +73,10 @@ namespace QuantumMaster
         public static bool CalcNeigongLoopingEffect; // 周天运转时，获得的内力为浮动区间的最大值，但现在有个副作用，就是真气获取的时候会全部加在第一种真气上，暂时没有办法解决
         public static bool TryAddLoopingEvent; // 如果概率不为0，尝试触发天人感应时必定成功
         public static bool ChoosyGetMaterial; // 精挑细选，品质升级判定概率最大
+        public static bool BreakBaseChane; // 突破基础概率
+        public static bool BreakVisible; // 突破格可见性
+        public static bool BreakValue; // 突破格威力最大
+        public static bool BreakFinnalChance; // 突破格最终概率
         public override void Dispose()
         {
             if (harmony != null)
@@ -119,6 +123,10 @@ namespace QuantumMaster
             DomainManager.Mod.GetSetting(ModIdStr, "CalcNeigongLoopingEffect", ref CalcNeigongLoopingEffect);
             DomainManager.Mod.GetSetting(ModIdStr, "TryAddLoopingEvent", ref TryAddLoopingEvent);
             DomainManager.Mod.GetSetting(ModIdStr, "ChoosyGetMaterial", ref ChoosyGetMaterial);
+            DomainManager.Mod.GetSetting(ModIdStr, "BreakBaseChane", ref BreakBaseChane);
+            DomainManager.Mod.GetSetting(ModIdStr, "BreakVisible", ref BreakVisible);
+            DomainManager.Mod.GetSetting(ModIdStr, "BreakValue", ref BreakValue);
+            DomainManager.Mod.GetSetting(ModIdStr, "BreakFinnalChance", ref BreakFinnalChance);
         }
         public override void Initialize()
         {
@@ -857,5 +865,45 @@ namespace QuantumMaster
             return true;
         }
 
+
+
+        // 突破，基础成功率以及可见性
+        [HarmonyPostfix]
+        [HarmonyPatch(typeof(GameData.Domains.Taiwu.SkillBreakPlate), "RandomGridData", typeof(IRandomSource), typeof(sbyte))]
+        public static void SkillBreakPlate_RandomGridData_HarmonyPostfix(ref SkillBreakPlateGrid __result)
+        {
+            if (BreakBaseChane) {
+                if (__result.SuccessRateFix > 0)
+                {
+                    __result.SuccessRateFix = 100;
+                }
+            }
+            if (BreakVisible) {
+                Traverse.Create(__result).Field("_internalState").SetValue((sbyte)0);
+            }
+        }
+
+        // 随机的威力上限, 改为最大上限
+        [HarmonyPostfix]
+        [HarmonyPatch(typeof(GameData.Domains.Taiwu.SkillBreakPlate), "RandomGridPower", typeof(IRandomSource), typeof(int), typeof(int), typeof(int))]
+        public static void SkillBreakPlate_RandomGridPower_HarmonyPostfix(IRandomSource random, ref int power, ref int chance, int powerPerGrid, ref short __result)
+        {
+            if (BreakValue) {
+                __result = (short)powerPerGrid;
+            }
+        }
+
+        // 最终成功率
+        [HarmonyPostfix]
+        [HarmonyPatch(typeof(GameData.Domains.Taiwu.SkillBreakPlate), "CalcSuccessRate")]
+        public static void SkillBreakPlate_CalcSuccessRate_HarmonyPostfix(ref short __result)
+        {
+            if (BreakFinnalChance) {
+                if (__result > 0)
+                {
+                    __result = 100;
+                }
+            }
+        }
     }
 }
