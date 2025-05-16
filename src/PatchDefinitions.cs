@@ -49,4 +49,15 @@ namespace QuantumMaster
         public int ArgumentIndex { get; set; }
         public object ExpectedValue { get; set; }
     }
+
+    
+    /// <summary>
+    /// 接口/实例方法信息结构体
+    /// </summary>
+    public struct InstanceMethodInfo
+    {
+        public Type Type { get; set; }
+        public string MethodName { get; set; }
+        public Type[] Parameters { get; set; }
+    }
 }

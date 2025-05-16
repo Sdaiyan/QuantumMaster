@@ -47,10 +47,17 @@ public static class GenericTranspiler
     private static Dictionary<string, TranspilerPatchDefinition> _patchDefinitions =
         new Dictionary<string, TranspilerPatchDefinition>();
 
+    private static Dictionary<string, TranspilerPatchDefinition> _methodKeyToPatchDef = 
+        new Dictionary<string, TranspilerPatchDefinition>();
+
     // Register a patch definition
     public static void RegisterPatch(string patchId, TranspilerPatchDefinition definition)
     {
         _patchDefinitions[patchId] = definition;
+        
+        // 同时添加到方法查找字典
+        string methodKey = $"{definition.OriginalType.FullName}.{definition.OriginalMethodName}";
+        _methodKeyToPatchDef[methodKey] = definition;
     }
 
     // Apply all registered patches
@@ -78,37 +85,49 @@ public static class GenericTranspiler
     }
 
     // Adapter method to find the correct patch definition
+    private static HashSet<MethodBase> _processedMethods = new HashSet<MethodBase>();
+
     public static IEnumerable<CodeInstruction> GenerateTranspilerAdapter(
         IEnumerable<CodeInstruction> instructions,
         MethodBase original)
     {
-        // Find the matching patch definition for this method
+        // 检查这个方法是否已经被处理过
+        if (_processedMethods.Contains(original))
+        {
+            AdaptableLog.Info($"方法 {original.DeclaringType.Name}.{original.Name} 已经被处理过，跳过重复处理");
+            return instructions;
+        }
+
+        // 查找匹配的补丁定义
         foreach (var patchDef in _patchDefinitions.Values)
         {
             if (patchDef.OriginalType == original.DeclaringType &&
                 patchDef.OriginalMethodName == original.Name)
             {
+                // 标记为已处理
+                _processedMethods.Add(original);
+                AdaptableLog.Info($"开始处理方法 {original.DeclaringType.Name}.{original.Name}");
                 return GenerateTranspiler(instructions, patchDef);
             }
         }
 
-        // No matching patch found, return original instructions
+        // 没有找到匹配的补丁，返回原始指令
         return instructions;
     }
 
     // Generate a transpiler for a given patch definition
     public static IEnumerable<CodeInstruction> GenerateTranspiler(
-        IEnumerable<CodeInstruction> instructions,
+        IEnumerable<CodeInstruction> instructions, 
         TranspilerPatchDefinition patchDef)
     {
         var codes = new List<CodeInstruction>(instructions);
 
         foreach (var replacement in patchDef.Replacements)
         {
-            // 使用正确的绑定标志获取方法 - 对于扩展方法需要特殊处理
+            // 使用正确的绑定标志获取方法
             MethodInfo targetMethod = null;
 
-            // 尝试查找静态方法（扩展方法）
+            // 1. 首先尝试查找静态方法（扩展方法）
             targetMethod = replacement.TargetMethodDeclaringType.GetMethod(
                 replacement.TargetMethodName,
                 BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static,
@@ -116,21 +135,45 @@ public static class GenericTranspiler
                 replacement.TargetMethodParameters,
                 null);
 
-            // 如果找不到，记录详细信息
+            // 2. 如果找不到静态方法，尝试查找实例方法
+            if (targetMethod == null)
+            {
+                targetMethod = replacement.TargetMethodDeclaringType.GetMethod(
+                    replacement.TargetMethodName,
+                    BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance,
+                    null,
+                    replacement.TargetMethodParameters,
+                    null);
+            }
+
+            // 如果仍然找不到，记录详细信息
             if (targetMethod == null)
             {
                 AdaptableLog.Info($"找不到目标方法 {replacement.TargetMethodDeclaringType.Name}.{replacement.TargetMethodName}");
 
                 // 输出所有方法
-                var methods = replacement.TargetMethodDeclaringType.GetMethods(
+                var staticMethods = replacement.TargetMethodDeclaringType.GetMethods(
                     BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static);
-
-                foreach (var method in methods)
+                
+                AdaptableLog.Info("静态方法:");
+                foreach (var method in staticMethods)
                 {
-                    AdaptableLog.Info($"静态方法: {method.Name}, 参数数量: {method.GetParameters().Length}, " +
+                    AdaptableLog.Info($"  {method.Name}, 参数数量: {method.GetParameters().Length}, " +
                         $"参数类型: {string.Join(", ", method.GetParameters().Select(p => p.ParameterType.Name))}, " +
                         $"返回类型: {method.ReturnType.Name}");
                 }
+                
+                var instanceMethods = replacement.TargetMethodDeclaringType.GetMethods(
+                    BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+                
+                AdaptableLog.Info("实例方法:");
+                foreach (var method in instanceMethods)
+                {
+                    AdaptableLog.Info($"  {method.Name}, 参数数量: {method.GetParameters().Length}, " +
+                        $"参数类型: {string.Join(", ", method.GetParameters().Select(p => p.ParameterType.Name))}, " +
+                        $"返回类型: {method.ReturnType.Name}");
+                }
+                
                 continue; // 跳过当前替换
             }
 
@@ -156,11 +199,16 @@ public static class GenericTranspiler
 
             for (int i = 0; i < codes.Count; i++)
             {
-                // 确保方法不为空
-                if (codes[i].Calls(targetMethod))
+                if (targetMethod != null && codes[i].Calls(targetMethod))
                 {
                     currentOccurrence++;
-
+                    
+                    // 添加日志记录每次找到的方法调用
+                    int prevInstr = Math.Max(0, i-3);
+                    int nextInstr = Math.Min(codes.Count-1, i+3);
+                    AdaptableLog.Info($"找到第 {currentOccurrence} 次 {targetMethod.Name} 调用，" +
+                        $"位置: {i}, 上下文: {codes[prevInstr].opcode} ... {codes[i].opcode} ... {codes[nextInstr].opcode}");
+                    
                     bool shouldReplace = true;
 
                     // Check if we're targeting a specific occurrence
@@ -176,7 +224,18 @@ public static class GenericTranspiler
                         foreach (var condition in replacement.ArgumentConditions)
                         {
                             int argIndex = i - (replacement.TargetMethodParameters.Length - condition.ArgumentIndex);
-                            if (argIndex < 0 || !LoadsConstant(codes[argIndex], condition.ExpectedValue))
+                            if (argIndex < 0)
+                            {
+                                AdaptableLog.Info($"参数索引 {argIndex} 超出范围，不替换");
+                                shouldReplace = false;
+                                break;
+                            }
+                            
+                            bool conditionMet = LoadsConstant(codes[argIndex], condition.ExpectedValue);
+                            AdaptableLog.Info($"条件检查: 参数[{condition.ArgumentIndex}]={condition.ExpectedValue}, " +
+                                $"指令: {codes[argIndex].opcode}, 结果: {conditionMet}");
+                                
+                            if (!conditionMet)
                             {
                                 shouldReplace = false;
                                 break;
@@ -191,6 +250,8 @@ public static class GenericTranspiler
                 }
             }
         }
+
+        AdaptableLog.Info($"已应用 {patchDef.Replacements.Count} 个替换到 {patchDef.OriginalType.Name}.{patchDef.OriginalMethodName}");
 
         return codes;
     }
@@ -242,5 +303,10 @@ public static class GenericTranspiler
     public static Dictionary<string, TranspilerPatchDefinition> GetPatchDefinitions()
     {
         return _patchDefinitions;
+    }
+
+    public static void ResetProcessedMethods()
+    {
+        _processedMethods.Clear();
     }
 }

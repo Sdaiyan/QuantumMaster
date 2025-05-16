@@ -104,6 +104,28 @@ public class PatchBuilder
     }
 
     /// <summary>
+    /// 添加接口/实例方法替换
+    /// </summary>
+    public PatchBuilder AddInstanceMethodReplacement(
+        InstanceMethodInfo instanceMethod,
+        ReplacementMethodInfo replacementMethod,
+        int? targetOccurrence = null)
+    {
+        // 添加替换定义
+        _patchDefinition.Replacements.Add(new MethodCallReplacement
+        {
+            TargetMethodDeclaringType = instanceMethod.Type,
+            TargetMethodName = instanceMethod.MethodName,
+            TargetMethodParameters = instanceMethod.Parameters,
+            ReplacementMethodDeclaringType = replacementMethod.Type,
+            ReplacementMethodName = replacementMethod.MethodName,
+            TargetOccurrence = targetOccurrence
+        });
+
+        return this;
+    }
+
+    /// <summary>
     /// 添加参数条件
     /// </summary>
     public PatchBuilder AddArgumentCondition(

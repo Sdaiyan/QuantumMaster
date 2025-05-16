@@ -26,26 +26,6 @@ namespace QuantumMaster
             };
 
             /// <summary>
-            /// IRandomSource.Next(int, int) 扩展方法
-            /// </summary>
-            public static readonly ExtensionMethodInfo Next2Args = new ExtensionMethodInfo
-            {
-                Type = typeof(RedzenHelper),
-                MethodName = "Next",
-                Parameters = new Type[] { typeof(IRandomSource), typeof(int), typeof(int) }
-            };
-
-            /// <summary>
-            /// IRandomSource.Next(int) 扩展方法
-            /// </summary>
-            public static readonly ExtensionMethodInfo Next1Arg = new ExtensionMethodInfo
-            {
-                Type = typeof(RedzenHelper),
-                MethodName = "Next",
-                Parameters = new Type[] { typeof(IRandomSource), typeof(int) }
-            };
-
-            /// <summary>
             /// IRandomSource.CheckProb 扩展方法
             /// </summary>
             public static readonly ExtensionMethodInfo CheckProb = new ExtensionMethodInfo
@@ -53,6 +33,32 @@ namespace QuantumMaster
                 Type = typeof(RedzenHelper),
                 MethodName = "CheckProb",
                 Parameters = new Type[] { typeof(IRandomSource), typeof(int), typeof(int) }
+            };
+        }
+        
+        /// <summary>
+        /// 接口/实例方法预设
+        /// </summary>
+        public static class InstanceMethods
+        {
+            /// <summary>
+            /// IRandomSource.Next(int, int) 方法
+            /// </summary>
+            public static readonly InstanceMethodInfo Next2Args = new InstanceMethodInfo
+            {
+                Type = typeof(IRandomSource),
+                MethodName = "Next",
+                Parameters = new Type[] { typeof(int), typeof(int) }
+            };
+
+            /// <summary>
+            /// IRandomSource.Next(int) 方法
+            /// </summary>
+            public static readonly InstanceMethodInfo Next1Arg = new InstanceMethodInfo
+            {
+                Type = typeof(IRandomSource),
+                MethodName = "Next",
+                Parameters = new Type[] { typeof(int) }
             };
         }
 
@@ -133,5 +139,7 @@ namespace QuantumMaster
                 MethodName = "Random_CheckProb_False"
             };
         }
+
     }
+
 }
