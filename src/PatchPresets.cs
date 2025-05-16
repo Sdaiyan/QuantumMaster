@@ -133,23 +133,5 @@ namespace QuantumMaster
                 MethodName = "Random_CheckProb_False"
             };
         }
-
-        /// <summary>
-        /// 常用原始方法预设
-        /// </summary>
-        public static class OriginalMethods
-        {
-            /// <summary>
-            /// SkillBreakPlate.RandomGridData 方法
-            /// </summary>
-            public static readonly OriginalMethodInfo SkillBreakPlateRandomGridData = new OriginalMethodInfo
-            {
-                Type = typeof(GameData.Domains.Taiwu.SkillBreakPlate),
-                MethodName = "RandomGridData",
-                Parameters = new Type[] { typeof(IRandomSource), typeof(sbyte) }
-            };
-
-            // 可以添加更多常用原始方法...
-        }
     }
 }

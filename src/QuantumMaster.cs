@@ -37,10 +37,18 @@ namespace QuantumMaster
         public void patchBreakVisible()
         {
             if (!BreakVisible) return;
+
+            var SkillBreakPlateRandomGridData = new OriginalMethodInfo
+            {
+                Type = typeof(GameData.Domains.Taiwu.SkillBreakPlate),
+                MethodName = "RandomGridData",
+                Parameters = new Type[] { typeof(IRandomSource), typeof(sbyte) }
+            };
+            
             // 使用预设值创建补丁
             var patchBuilder = GenericTranspiler.CreatePatchBuilder(
                 "BreakVisible",
-                PatchPresets.OriginalMethods.SkillBreakPlateRandomGridData);
+                SkillBreakPlateRandomGridData);
 
             // 添加扩展方法替换，使用预设值
             patchBuilder.AddExtensionMethodReplacement(
