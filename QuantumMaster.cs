@@ -22,23 +22,16 @@ namespace QuantumMaster
 
         public void RegisterBreakVisiblePatch()
         {
-            // 使用通用 API 创建补丁
+            // 使用预设值创建补丁
             var patchBuilder = GenericTranspiler.CreatePatchBuilder(
-                "breakVisible",
-                typeof(GameData.Domains.Taiwu.SkillBreakPlate),
-                "RandomGridData",
-                new Type[] { typeof(IRandomSource), typeof(sbyte) }
-            );
+                "BreakVisible", 
+                PatchPresets.OriginalMethods.SkillBreakPlateRandomGridData);
 
-            // 添加扩展方法替换
+            // 添加扩展方法替换，使用预设值
             patchBuilder.AddExtensionMethodReplacement(
-                typeof(RedzenHelper), 
-                "CheckPercentProb",
-                new Type[] { typeof(IRandomSource), typeof(int) },
-                typeof(RandomPath),
-                "Random_CheckPercentProb_True",
-                1 // 替换第1次出现
-            );
+                PatchPresets.Extensions.CheckPercentProb,
+                PatchPresets.Replacements.CheckPercentProbTrue,
+                1); // 替换第1次出现
 
             // 应用补丁
             patchBuilder.Apply(harmony);

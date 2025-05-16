@@ -7,6 +7,7 @@ using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
 using TaiwuModdingLib.Core.Plugin;
+using QuantumMaster;  // 引用新的命名空间
 
 // Define a structure to hold patch information
 public class TranspilerPatchDefinition
@@ -43,15 +44,15 @@ public class ArgumentCondition
 // Universal transpiler generator
 public static class GenericTranspiler
 {
-    private static Dictionary<string, TranspilerPatchDefinition> _patchDefinitions = 
+    private static Dictionary<string, TranspilerPatchDefinition> _patchDefinitions =
         new Dictionary<string, TranspilerPatchDefinition>();
-    
+
     // Register a patch definition
     public static void RegisterPatch(string patchId, TranspilerPatchDefinition definition)
     {
         _patchDefinitions[patchId] = definition;
     }
-    
+
     // Apply all registered patches
     public static void ApplyPatches(Harmony harmony)
     {
@@ -63,19 +64,19 @@ public static class GenericTranspiler
                 null,
                 patchDef.OriginalMethodParameters,
                 null);
-                
+
             if (originalMethod == null)
             {
                 continue;
             }
-                
+
             harmony.Patch(
                 originalMethod,
-                transpiler: new HarmonyMethod(typeof(GenericTranspiler), 
+                transpiler: new HarmonyMethod(typeof(GenericTranspiler),
                     nameof(GenerateTranspilerAdapter)));
         }
     }
-    
+
     // Adapter method to find the correct patch definition
     public static IEnumerable<CodeInstruction> GenerateTranspilerAdapter(
         IEnumerable<CodeInstruction> instructions,
@@ -84,24 +85,24 @@ public static class GenericTranspiler
         // Find the matching patch definition for this method
         foreach (var patchDef in _patchDefinitions.Values)
         {
-            if (patchDef.OriginalType == original.DeclaringType && 
+            if (patchDef.OriginalType == original.DeclaringType &&
                 patchDef.OriginalMethodName == original.Name)
             {
                 return GenerateTranspiler(instructions, patchDef);
             }
         }
-        
+
         // No matching patch found, return original instructions
         return instructions;
     }
-    
+
     // Generate a transpiler for a given patch definition
     public static IEnumerable<CodeInstruction> GenerateTranspiler(
-        IEnumerable<CodeInstruction> instructions, 
+        IEnumerable<CodeInstruction> instructions,
         TranspilerPatchDefinition patchDef)
     {
         var codes = new List<CodeInstruction>(instructions);
-        
+
         foreach (var replacement in patchDef.Replacements)
         {
             // 使用正确的绑定标志获取方法 - 对于扩展方法需要特殊处理
@@ -119,11 +120,11 @@ public static class GenericTranspiler
             if (targetMethod == null)
             {
                 AdaptableLog.Info($"找不到目标方法 {replacement.TargetMethodDeclaringType.Name}.{replacement.TargetMethodName}");
-                
+
                 // 输出所有方法
                 var methods = replacement.TargetMethodDeclaringType.GetMethods(
                     BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static);
-                    
+
                 foreach (var method in methods)
                 {
                     AdaptableLog.Info($"静态方法: {method.Name}, 参数数量: {method.GetParameters().Length}, " +
@@ -132,11 +133,11 @@ public static class GenericTranspiler
                 }
                 continue; // 跳过当前替换
             }
-            
+
             MethodInfo replacementMethod = replacement.ReplacementMethodDeclaringType.GetMethod(
                 replacement.ReplacementMethodName,
                 BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static);
-                
+
             // 添加空值检查
             if (replacementMethod == null)
             {
@@ -149,26 +150,26 @@ public static class GenericTranspiler
                 }
                 continue; // 跳过当前替换
             }
-        
+
             // 跟踪出现次数，如果我们针对特定的一个
             int currentOccurrence = 0;
-            
+
             for (int i = 0; i < codes.Count; i++)
             {
                 // 确保方法不为空
                 if (codes[i].Calls(targetMethod))
                 {
                     currentOccurrence++;
-                    
+
                     bool shouldReplace = true;
-                    
+
                     // Check if we're targeting a specific occurrence
-                    if (replacement.TargetOccurrence.HasValue && 
+                    if (replacement.TargetOccurrence.HasValue &&
                         currentOccurrence != replacement.TargetOccurrence.Value)
                     {
                         shouldReplace = false;
                     }
-                    
+
                     // Check argument conditions if any
                     if (shouldReplace && replacement.ArgumentConditions.Count > 0)
                     {
@@ -182,7 +183,7 @@ public static class GenericTranspiler
                             }
                         }
                     }
-                    
+
                     if (shouldReplace)
                     {
                         codes[i] = new CodeInstruction(OpCodes.Call, replacementMethod);
@@ -190,15 +191,15 @@ public static class GenericTranspiler
                 }
             }
         }
-        
+
         return codes;
     }
-    
+
     // Helper method to check if an instruction loads a specific constant
     private static bool LoadsConstant(CodeInstruction instruction, object expectedValue)
     {
         // Check for constant loading instructions
-        if (instruction.opcode == OpCodes.Ldc_I4 || 
+        if (instruction.opcode == OpCodes.Ldc_I4 ||
             instruction.opcode == OpCodes.Ldc_I4_S ||
             instruction.opcode == OpCodes.Ldc_I8 ||
             instruction.opcode == OpCodes.Ldc_R4 ||
@@ -207,11 +208,11 @@ public static class GenericTranspiler
         {
             if (instruction.operand == null && expectedValue == null)
                 return true;
-                
+
             if (instruction.operand != null && instruction.operand.Equals(expectedValue))
                 return true;
         }
-        
+
         // Handle fixed int constants
         if (instruction.opcode == OpCodes.Ldc_I4_0) return Convert.ToInt32(expectedValue) == 0;
         if (instruction.opcode == OpCodes.Ldc_I4_1) return Convert.ToInt32(expectedValue) == 1;
@@ -223,20 +224,18 @@ public static class GenericTranspiler
         if (instruction.opcode == OpCodes.Ldc_I4_7) return Convert.ToInt32(expectedValue) == 7;
         if (instruction.opcode == OpCodes.Ldc_I4_8) return Convert.ToInt32(expectedValue) == 8;
         if (instruction.opcode == OpCodes.Ldc_I4_M1) return Convert.ToInt32(expectedValue) == -1;
-        
+
         return false;
     }
-    
+
     /// <summary>
     /// 创建一个补丁构建器
     /// </summary>
     public static PatchBuilder CreatePatchBuilder(
         string patchName,
-        Type originalType,
-        string originalMethodName,
-        Type[] originalMethodParams)
+        OriginalMethodInfo originalMethod)
     {
-        return new PatchBuilder(patchName, originalType, originalMethodName, originalMethodParams);
+        return new PatchBuilder(patchName, originalMethod.Type, originalMethod.MethodName, originalMethod.Parameters);
     }
 
     // 为外部使用暴露补丁定义

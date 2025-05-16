@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using QuantumMaster;
 
 /// <summary>
 /// 补丁构建器 - 用于流畅地构建补丁
@@ -29,30 +30,27 @@ public class PatchBuilder
     /// 添加扩展方法替换
     /// </summary>
     public PatchBuilder AddExtensionMethodReplacement(
-        Type extensionType,
-        string extensionMethodName,
-        Type[] extensionMethodParams,
-        Type replacementType,
-        string replacementMethodName,
+        ExtensionMethodInfo extensionMethod,
+        ReplacementMethodInfo replacementMethod,
         int? targetOccurrence = null)
     {
         // 检查扩展方法是否存在
-        var extensionMethodInfo = extensionType.GetMethod(
-            extensionMethodName,
+        var extensionMethodInfo = extensionMethod.Type.GetMethod(
+            extensionMethod.MethodName,
             BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static,
             null,
-            extensionMethodParams,
+            extensionMethod.Parameters,
             null);
             
         if (extensionMethodInfo == null)
         {
-            AdaptableLog.Info($"找不到扩展方法 {extensionType.Name}.{extensionMethodName}");
+            AdaptableLog.Info($"找不到扩展方法 {extensionMethod.Type.Name}.{extensionMethod.MethodName}");
             
             // 列出所有可能的方法
-            var methods = extensionType.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static);
+            var methods = extensionMethod.Type.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static);
             foreach (var method in methods)
             {
-                AdaptableLog.Info($"{extensionType.Name} 方法: {method.Name}, 参数: {string.Join(", ", method.GetParameters().Select(p => p.ParameterType.Name))}");
+                AdaptableLog.Info($"{extensionMethod.Type.Name} 方法: {method.Name}, 参数: {string.Join(", ", method.GetParameters().Select(p => p.ParameterType.Name))}");
             }
             return this;
         }
@@ -62,11 +60,11 @@ public class PatchBuilder
         // 添加替换定义
         _patchDefinition.Replacements.Add(new MethodCallReplacement
         {
-            TargetMethodDeclaringType = extensionType,
-            TargetMethodName = extensionMethodName,
-            TargetMethodParameters = extensionMethodParams,
-            ReplacementMethodDeclaringType = replacementType,
-            ReplacementMethodName = replacementMethodName,
+            TargetMethodDeclaringType = extensionMethod.Type,
+            TargetMethodName = extensionMethod.MethodName,
+            TargetMethodParameters = extensionMethod.Parameters,
+            ReplacementMethodDeclaringType = replacementMethod.Type,
+            ReplacementMethodName = replacementMethod.MethodName,
             TargetOccurrence = targetOccurrence
         });
 
@@ -74,24 +72,31 @@ public class PatchBuilder
     }
 
     /// <summary>
+    /// 目标方法信息结构体
+    /// </summary>
+    public struct TargetMethodInfo
+    {
+        public Type Type { get; set; }
+        public string MethodName { get; set; }
+        public Type[] Parameters { get; set; }
+    }
+
+    /// <summary>
     /// 添加普通方法替换
     /// </summary>
     public PatchBuilder AddMethodReplacement(
-        Type targetType,
-        string targetMethodName,
-        Type[] targetMethodParams,
-        Type replacementType,
-        string replacementMethodName,
+        TargetMethodInfo targetMethod,
+        ReplacementMethodInfo replacementMethod,
         int? targetOccurrence = null)
     {
         // 添加替换定义
         _patchDefinition.Replacements.Add(new MethodCallReplacement
         {
-            TargetMethodDeclaringType = targetType,
-            TargetMethodName = targetMethodName,
-            TargetMethodParameters = targetMethodParams,
-            ReplacementMethodDeclaringType = replacementType,
-            ReplacementMethodName = replacementMethodName,
+            TargetMethodDeclaringType = targetMethod.Type,
+            TargetMethodName = targetMethod.MethodName,
+            TargetMethodParameters = targetMethod.Parameters,
+            ReplacementMethodDeclaringType = replacementMethod.Type,
+            ReplacementMethodName = replacementMethod.MethodName,
             TargetOccurrence = targetOccurrence
         });
 
