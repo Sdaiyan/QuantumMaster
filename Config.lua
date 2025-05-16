@@ -1,8 +1,8 @@
 return {
 	Title = "天机秘术(自定义突破)",
 	Author = "dai",
-	Cover = "cover2.jpg",
-	Description = "此MOD为天机秘术的突破分支。通过控制概率减少SL。\n本MOD中实现的功能均是理论上允许的，所以即使是全开的情况下也是能通过SL达到的。虽然可能到宇宙爆炸都SL不出来罢了【dog】\n全开的情况下非常IMBA，建议结合自身情况开关。\n在测试版本同步到正式版本后，本MOD的功能将会合并到天机秘术的本体上。\n也欢迎大家订阅天机秘术本体MOD，https://steamcommunity.com/sharedfiles/filedetails/?id=3338644829",
+	Cover = "cover2.png",
+	Description = "此MOD为天机秘术的突破分支。通过控制概率减少SL。\n1. 支持将基础概率变更为100%（基础概率，会受到其他效果影响）\n2. 支持突破格全部可见(本体是每个格子有概率可见)\n3. 每个格子提供的威力可设置为理论上限（本体是随机的）\n4. 突破格子最终成功率如果大于0，则必定成功\n5. 特殊格子自定义（本体为37%概率为特殊格子，然后再从特殊格子中随机）\n本MOD中实现的功能均是理论上允许的，所以即使是全开的情况下也是能通过SL达到的。虽然可能到宇宙爆炸都SL不出来罢了【dog】\n全开的情况下非常IMBA，建议结合自身情况开关。\n在测试版本同步到正式版本后，本MOD的功能将会合并到天机秘术的本体上。\n也欢迎大家订阅天机秘术本体MOD，https://steamcommunity.com/sharedfiles/filedetails/?id=3338644829",
 	BackendPlugins = {
 		[1] = "QuantumMaster.dll",
 	},

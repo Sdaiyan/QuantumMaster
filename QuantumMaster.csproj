@@ -4,9 +4,9 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>annotations</Nullable>
-	  <OutputPath>C:\Program Files (x86)\Steam\steamapps\common\The Scroll Of Taiwu\Mod\QMBreak\Plugins</OutputPath>
+	  <OutputPath>C:\Program Files (x86)\Steam\steamapps\common\The Scroll Of Taiwu\Mod\QMBreakReborn\Plugins</OutputPath>
     <ProduceReferenceAssembly>False</ProduceReferenceAssembly>
-    <PackageOutputPath>C:\Program Files (x86)\Steam\steamapps\common\The Scroll Of Taiwu\Mod\QMBreak\Plugins</PackageOutputPath>
+    <PackageOutputPath>C:\Program Files (x86)\Steam\steamapps\common\The Scroll Of Taiwu\Mod\QMBreakReborn\Plugins</PackageOutputPath>
     <BaseIntermediateOutputPath></BaseIntermediateOutputPath>
     <AnalysisLevel>none</AnalysisLevel>
     <EnableNETAnalyzers>False</EnableNETAnalyzers>
@@ -23,6 +23,9 @@
     </Reference>
     <Reference Include="GameData">
       <HintPath>C:\Program Files (x86)\Steam\steamapps\common\The Scroll Of Taiwu\Backend\GameData.dll</HintPath>
+    </Reference>
+    <Reference Include="GameData.Utilities">
+      <HintPath>C:\Program Files (x86)\Steam\steamapps\common\The Scroll Of Taiwu\Backend\GameData.Utilities.dll</HintPath>
     </Reference>
     <Reference Include="Redzen">
       <HintPath>C:\Program Files (x86)\Steam\steamapps\common\The Scroll Of Taiwu\Backend\Redzen.dll</HintPath>
