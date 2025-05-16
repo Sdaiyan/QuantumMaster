@@ -3,6 +3,7 @@ using GameData.Domains;
 using GameData.Utilities;
 using TaiwuModdingLib.Core.Plugin;
 using Redzen.Random;
+using System.Reflection;
 
 namespace QuantumMaster
 {
@@ -13,18 +14,76 @@ namespace QuantumMaster
         Harmony harmony;
 
         public static bool debug = true;
-        public static bool BreakVisible;
-        public static bool CreateBuildingArea;
+        public static bool openAll = true; // 是否开启所有补丁
+        public static bool CreateBuildingArea; // 生成世界时，产业中的建筑和资源点的初始等级，以及生成数量
+        public static bool CalcNeigongLoopingEffect; // 周天运转时，获得的内力为浮动区间的最大值，内息恢复最大，内息紊乱最小
 
         public override void OnModSettingUpdate()
         {
-            DomainManager.Mod.GetSetting(ModIdStr, "steal", ref BreakVisible);
+            DomainManager.Mod.GetSetting(ModIdStr, "CreateBuildingArea", ref CreateBuildingArea);
+            DomainManager.Mod.GetSetting(ModIdStr, "CalcNeigongLoopingEffect", ref CalcNeigongLoopingEffect);
         }
         public override void Initialize()
         {
             harmony = new Harmony("daige");
-            patchBreakVisible();
-            patchCreateBuildingArea();
+            int appliedPatches = 0;
+            int skippedPatches = 0;
+            
+            // 自动调用所有以 patch 开头的方法
+            var patchMethods = this.GetType()
+                .GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
+                .Where(method => method.Name.StartsWith("patch", StringComparison.OrdinalIgnoreCase) && 
+                       method.GetParameters().Length == 0 &&
+                       (method.ReturnType == typeof(bool) || method.ReturnType == typeof(void)))
+                .ToList();
+            
+            DebugLog.Info($"发现 {patchMethods.Count} 个补丁方法");
+            
+            foreach (var method in patchMethods)
+            {
+                try
+                {
+                    DebugLog.Info($"尝试应用补丁: {method.Name}");
+                    object result = method.Invoke(this, null);
+                    
+                    // 检查返回值
+                    if (method.ReturnType == typeof(bool))
+                    {
+                        bool success = (bool)result;
+                        if (success)
+                        {
+                            DebugLog.Info($"补丁 {method.Name} 应用成功");
+                            appliedPatches++;
+                        }
+                        else
+                        {
+                            DebugLog.Info($"补丁 {method.Name} 未应用（跳过）");
+                            skippedPatches++;
+                        }
+                    }
+                    else
+                    {
+                        // void 返回类型视为成功
+                        DebugLog.Info($"补丁 {method.Name} 应用成功");
+                        appliedPatches++;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    DebugLog.Error($"应用补丁 {method.Name} 时出错: {ex.Message}");
+                    if (debug && ex.InnerException != null)
+                    {
+                        DebugLog.Error($"详细错误: {ex.InnerException.Message}");
+                        DebugLog.Error($"堆栈跟踪: {ex.InnerException.StackTrace}");
+                    }
+                    skippedPatches++;
+                }
+            }
+            
+            DebugLog.Info($"补丁应用完成: 成功 {appliedPatches} 个, 跳过 {skippedPatches} 个");
+            
+            // 重置已处理方法列表
+            GenericTranspiler.ResetProcessedMethods();
         }
 
         public override void Dispose()
@@ -36,38 +95,11 @@ namespace QuantumMaster
             }
         }
 
-        // 突破时格子可见
-        public void patchBreakVisible()
-        {
-            // if (!BreakVisible) return;
-
-            var OriginalMethod = new OriginalMethodInfo
-            {
-                Type = typeof(GameData.Domains.Taiwu.SkillBreakPlate),
-                MethodName = "RandomGridData",
-                Parameters = new Type[] { typeof(IRandomSource), typeof(sbyte) }
-            };
-
-            // 使用预设值创建补丁
-            var patchBuilder = GenericTranspiler.CreatePatchBuilder(
-                "BreakVisible",
-                OriginalMethod);
-
-            // 添加扩展方法替换，使用预设值
-            patchBuilder.AddExtensionMethodReplacement(
-                PatchPresets.Extensions.CheckPercentProb,
-                PatchPresets.Replacements.CheckPercentProbTrue,
-                1); // 替换第1次出现
-
-            // 应用补丁
-            patchBuilder.Apply(harmony);
-        }
-
 
         // 建筑生成时的数量/等级
-        public void patchCreateBuildingArea()
+        public bool patchCreateBuildingArea()
         {
-            // if (!CreateBuildingArea) return;
+            if (!CreateBuildingArea && !openAll) return false;
 
             var OriginalMethod = new OriginalMethodInfo
             {
@@ -107,7 +139,7 @@ namespace QuantumMaster
                 PatchPresets.InstanceMethods.Next2Args,
                 PatchPresets.Replacements.Next2ArgsMax,
                 5);
-            
+
             // 6 level = (sbyte)Math.Max(random.Next(maxLevel / 2, maxLevel + 1), 1);
             patchBuilder.AddInstanceMethodReplacement(
                 PatchPresets.InstanceMethods.Next2Args,
@@ -175,6 +207,47 @@ namespace QuantumMaster
                 3);
 
             patchBuilder.Apply(harmony);
+
+            return true;
+        }
+        
+        public bool patchCalcNeigongLoopingEffect()
+        {
+            if (!CalcNeigongLoopingEffect && !openAll) return false;
+
+            var OriginalMethod = new OriginalMethodInfo
+            {
+                Type = typeof(GameData.Domains.CombatSkill.CombatSkillDomain),
+                MethodName = "CalcNeigongLoopingEffect",
+                // IRandomSource random, GameData.Domains.Character.Character character, CombatSkillItem skillCfg, bool includeReference = true
+                Parameters = new Type[] { typeof(IRandomSource), typeof(GameData.Domains.Character.Character), typeof(Config.CombatSkillItem), typeof(bool) }
+            };
+
+            var patchBuilder = GenericTranspiler.CreatePatchBuilder(
+                "CalcNeigongLoopingEffect",
+                OriginalMethod);
+
+            // 1 neili = random.Next(neiliMin, neiliMax + 1);
+            patchBuilder.AddInstanceMethodReplacement(
+                PatchPresets.InstanceMethods.Next2Args,
+                PatchPresets.Replacements.Next2ArgsMax,
+                1);
+
+            // 2 qiDisorder = (short)random.Next(qiDisorder + 1);
+            patchBuilder.AddInstanceMethodReplacement(
+                PatchPresets.InstanceMethods.Next1Arg,
+                PatchPresets.Replacements.Next1Arg0,
+                2);
+
+            // 3 qiDisorder = (short)(-random.Next(-qiDisorder + 1));
+            patchBuilder.AddInstanceMethodReplacement(
+                PatchPresets.InstanceMethods.Next1Arg,
+                PatchPresets.Replacements.Next1ArgMax,
+                3);
+
+            patchBuilder.Apply(harmony);
+
+            return true;
         }
     }
 
