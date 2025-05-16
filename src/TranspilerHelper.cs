@@ -121,12 +121,16 @@ public static class GenericTranspiler
         TranspilerPatchDefinition patchDef)
     {
         var codes = new List<CodeInstruction>(instructions);
-
+        int totalReplacements = 0;
+        
+        // 第一阶段：准备数据 - 获取所有目标方法
+        var targetMethods = new Dictionary<MethodInfo, List<MethodCallReplacement>>();
+        
         foreach (var replacement in patchDef.Replacements)
         {
-            // 使用正确的绑定标志获取方法
+            // 获取目标方法
             MethodInfo targetMethod = null;
-
+            
             // 1. 首先尝试查找静态方法（扩展方法）
             targetMethod = replacement.TargetMethodDeclaringType.GetMethod(
                 replacement.TargetMethodName,
@@ -134,7 +138,7 @@ public static class GenericTranspiler
                 null,
                 replacement.TargetMethodParameters,
                 null);
-
+                
             // 2. 如果找不到静态方法，尝试查找实例方法
             if (targetMethod == null)
             {
@@ -145,114 +149,124 @@ public static class GenericTranspiler
                     replacement.TargetMethodParameters,
                     null);
             }
-
-            // 如果仍然找不到，记录详细信息
+            
+            // 如果找不到方法，记录日志并跳过
             if (targetMethod == null)
             {
-                AdaptableLog.Info($"找不到目标方法 {replacement.TargetMethodDeclaringType.Name}.{replacement.TargetMethodName}");
-
-                // 输出所有方法
-                var staticMethods = replacement.TargetMethodDeclaringType.GetMethods(
-                    BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static);
+                AdaptableLog.Info($"找不到目标方法 {replacement.TargetMethodDeclaringType.Name}.{replacement.TargetMethodName}，参数: {string.Join(", ", replacement.TargetMethodParameters.Select(p => p?.Name ?? "null"))}");
                 
-                AdaptableLog.Info("静态方法:");
-                foreach (var method in staticMethods)
+                // 输出类型中所有可能的方法
+                AdaptableLog.Info($"可用方法列表:");
+                foreach (var method in replacement.TargetMethodDeclaringType.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance))
                 {
-                    AdaptableLog.Info($"  {method.Name}, 参数数量: {method.GetParameters().Length}, " +
-                        $"参数类型: {string.Join(", ", method.GetParameters().Select(p => p.ParameterType.Name))}, " +
-                        $"返回类型: {method.ReturnType.Name}");
+                    AdaptableLog.Info($"  - {method.Name}({string.Join(", ", method.GetParameters().Select(p => p.ParameterType.Name))})");
                 }
-                
-                var instanceMethods = replacement.TargetMethodDeclaringType.GetMethods(
-                    BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-                
-                AdaptableLog.Info("实例方法:");
-                foreach (var method in instanceMethods)
-                {
-                    AdaptableLog.Info($"  {method.Name}, 参数数量: {method.GetParameters().Length}, " +
-                        $"参数类型: {string.Join(", ", method.GetParameters().Select(p => p.ParameterType.Name))}, " +
-                        $"返回类型: {method.ReturnType.Name}");
-                }
-                
-                continue; // 跳过当前替换
+                continue;
             }
-
-            MethodInfo replacementMethod = replacement.ReplacementMethodDeclaringType.GetMethod(
-                replacement.ReplacementMethodName,
-                BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static);
-
-            // 添加空值检查
-            if (replacementMethod == null)
+            
+            // 将替换添加到目标方法的列表中
+            if (!targetMethods.ContainsKey(targetMethod))
             {
-                // 记录日志或抛出异常
-                AdaptableLog.Info($"找不到替换方法 {replacement.ReplacementMethodDeclaringType.Name}.{replacement.ReplacementMethodName}");
-                // 输出所有方法
-                foreach (var method in replacement.ReplacementMethodDeclaringType.GetMethods())
-                {
-                    AdaptableLog.Info($"方法: {method.Name}, 参数数量: {method.GetParameters().Length}, 参数类型: {string.Join(", ", method.GetParameters().Select(p => p.ParameterType.Name))}, 返回类型: {method.ReturnType.Name}");
-                }
-                continue; // 跳过当前替换
+                targetMethods[targetMethod] = new List<MethodCallReplacement>();
             }
-
-            // 跟踪出现次数，如果我们针对特定的一个
-            int currentOccurrence = 0;
-
+            targetMethods[targetMethod].Add(replacement);
+        }
+        
+        AdaptableLog.Info($"找到 {targetMethods.Count} 个需要处理的目标方法");
+        
+        // 第二阶段：扫描代码，找出所有目标方法调用的位置
+        var methodCalls = new Dictionary<MethodInfo, List<(int Index, int Occurrence)>>();
+        
+        foreach (var entry in targetMethods)
+        {
+            var targetMethod = entry.Key;
+            methodCalls[targetMethod] = new List<(int, int)>();
+            
+            // 扫描代码中的所有调用
             for (int i = 0; i < codes.Count; i++)
             {
-                if (targetMethod != null && codes[i].Calls(targetMethod))
+                if (codes[i].Calls(targetMethod))
                 {
-                    currentOccurrence++;
+                    int occurrence = methodCalls[targetMethod].Count + 1;
+                    methodCalls[targetMethod].Add((i, occurrence));
                     
-                    // 添加日志记录每次找到的方法调用
+                    // 记录日志
                     int prevInstr = Math.Max(0, i-3);
                     int nextInstr = Math.Min(codes.Count-1, i+3);
-                    AdaptableLog.Info($"找到第 {currentOccurrence} 次 {targetMethod.Name} 调用，" +
+                    AdaptableLog.Info($"找到第 {occurrence} 次 {targetMethod.DeclaringType.Name}.{targetMethod.Name} 调用，" +
                         $"位置: {i}, 上下文: {codes[prevInstr].opcode} ... {codes[i].opcode} ... {codes[nextInstr].opcode}");
+                }
+            }
+            
+            AdaptableLog.Info($"方法 {targetMethod.DeclaringType.Name}.{targetMethod.Name} 共有 {methodCalls[targetMethod].Count} 处调用");
+        }
+        
+        // 第三阶段：确定需要替换的位置和替换方法
+        var replacements = new List<(int Index, MethodInfo ReplacementMethod)>();
+        
+        foreach (var methodEntry in methodCalls)
+        {
+            var targetMethod = methodEntry.Key;
+            var callPositions = methodEntry.Value;
+            var replacementList = targetMethods[targetMethod];
+            
+            foreach (var position in callPositions)
+            {
+                int index = position.Index;
+                int occurrence = position.Occurrence;
+                
+                // 找到所有可能的替换
+                var applicableReplacements = replacementList
+                    .Where(r => !r.TargetOccurrence.HasValue || r.TargetOccurrence.Value == occurrence)
+                    .ToList();
                     
-                    bool shouldReplace = true;
-
-                    // Check if we're targeting a specific occurrence
-                    if (replacement.TargetOccurrence.HasValue &&
-                        currentOccurrence != replacement.TargetOccurrence.Value)
+                if (applicableReplacements.Count == 0)
+                {
+                    AdaptableLog.Info($"第 {occurrence} 次出现的 {targetMethod.Name} 调用没有匹配的替换规则");
+                    continue;
+                }
+                
+                // 尝试查找满足参数条件的替换
+                var matchingReplacement = FindMatchingReplacement(codes, index, applicableReplacements);
+                
+                if (matchingReplacement != null)
+                {
+                    // 获取替换方法
+                    MethodInfo replacementMethod = matchingReplacement.ReplacementMethodDeclaringType.GetMethod(
+                        matchingReplacement.ReplacementMethodName,
+                        BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static);
+                        
+                    if (replacementMethod == null)
                     {
-                        shouldReplace = false;
+                        AdaptableLog.Info($"找不到替换方法 {matchingReplacement.ReplacementMethodDeclaringType.Name}.{matchingReplacement.ReplacementMethodName}");
+                        continue;
                     }
-
-                    // Check argument conditions if any
-                    if (shouldReplace && replacement.ArgumentConditions.Count > 0)
-                    {
-                        foreach (var condition in replacement.ArgumentConditions)
-                        {
-                            int argIndex = i - (replacement.TargetMethodParameters.Length - condition.ArgumentIndex);
-                            if (argIndex < 0)
-                            {
-                                AdaptableLog.Info($"参数索引 {argIndex} 超出范围，不替换");
-                                shouldReplace = false;
-                                break;
-                            }
-                            
-                            bool conditionMet = LoadsConstant(codes[argIndex], condition.ExpectedValue);
-                            AdaptableLog.Info($"条件检查: 参数[{condition.ArgumentIndex}]={condition.ExpectedValue}, " +
-                                $"指令: {codes[argIndex].opcode}, 结果: {conditionMet}");
-                                
-                            if (!conditionMet)
-                            {
-                                shouldReplace = false;
-                                break;
-                            }
-                        }
-                    }
-
-                    if (shouldReplace)
-                    {
-                        codes[i] = new CodeInstruction(OpCodes.Call, replacementMethod);
-                    }
+                    
+                    replacements.Add((index, replacementMethod));
+                    AdaptableLog.Info($"将替换 {targetMethod.Name} 在位置 {index} 的第 {occurrence} 次调用，" +
+                        $"替换方法: {replacementMethod.DeclaringType.Name}.{replacementMethod.Name}");
                 }
             }
         }
-
-        AdaptableLog.Info($"已应用 {patchDef.Replacements.Count} 个替换到 {patchDef.OriginalType.Name}.{patchDef.OriginalMethodName}");
-
+        
+        // 第四阶段：执行替换
+        // 按索引倒序排列，从后向前替换，避免索引变化
+        replacements.Sort((a, b) => b.Index.CompareTo(a.Index));
+        
+        foreach (var (index, replacementMethod) in replacements)
+        {
+            if (index < 0 || index >= codes.Count)
+            {
+                AdaptableLog.Info($"替换位置 {index} 超出范围 [0, {codes.Count - 1}]，跳过");
+                continue;
+            }
+            
+            codes[index] = new CodeInstruction(OpCodes.Call, replacementMethod);
+            totalReplacements++;
+            AdaptableLog.Info($"替换位置 {index} 的方法调用为 {replacementMethod.DeclaringType.Name}.{replacementMethod.Name}");
+        }
+        
+        AdaptableLog.Info($"已对 {patchDef.OriginalType.Name}.{patchDef.OriginalMethodName} 执行了 {totalReplacements} 次方法替换");
         return codes;
     }
 
@@ -308,5 +322,47 @@ public static class GenericTranspiler
     public static void ResetProcessedMethods()
     {
         _processedMethods.Clear();
+    }
+
+    // 辅助方法：查找满足参数条件的替换
+    private static MethodCallReplacement FindMatchingReplacement(List<CodeInstruction> codes, int index, List<MethodCallReplacement> replacements)
+    {
+        foreach (var replacement in replacements)
+        {
+            bool isMatch = true;
+            
+            // 检查参数条件
+            if (replacement.ArgumentConditions.Count > 0)
+            {
+                foreach (var condition in replacement.ArgumentConditions)
+                {
+                    int argIndex = index - (replacement.TargetMethodParameters.Length - condition.ArgumentIndex);
+                    
+                    if (argIndex < 0 || argIndex >= codes.Count)
+                    {
+                        AdaptableLog.Info($"参数索引 {argIndex} 超出范围 [0, {codes.Count - 1}]，不匹配");
+                        isMatch = false;
+                        break;
+                    }
+                    
+                    bool conditionMet = LoadsConstant(codes[argIndex], condition.ExpectedValue);
+                    AdaptableLog.Info($"条件检查: 参数[{condition.ArgumentIndex}]={condition.ExpectedValue}, " +
+                        $"指令: {codes[argIndex].opcode}, 结果: {conditionMet}");
+                        
+                    if (!conditionMet)
+                    {
+                        isMatch = false;
+                        break;
+                    }
+                }
+            }
+            
+            if (isMatch)
+            {
+                return replacement;
+            }
+        }
+        
+        return null;
     }
 }
