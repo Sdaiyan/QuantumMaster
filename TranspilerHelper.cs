@@ -1,7 +1,9 @@
+using GameData.Utilities;
 using HarmonyLib;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
 using TaiwuModdingLib.Core.Plugin;
@@ -102,18 +104,58 @@ public static class GenericTranspiler
         
         foreach (var replacement in patchDef.Replacements)
         {
-            MethodInfo targetMethod = replacement.TargetMethodDeclaringType.GetMethod(
-                replacement.TargetMethodName, 
-                replacement.TargetMethodParameters);
+            // 使用正确的绑定标志获取方法 - 对于扩展方法需要特殊处理
+            MethodInfo targetMethod = null;
+
+            // 尝试查找静态方法（扩展方法）
+            targetMethod = replacement.TargetMethodDeclaringType.GetMethod(
+                replacement.TargetMethodName,
+                BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static,
+                null,
+                replacement.TargetMethodParameters,
+                null);
+
+            // 如果找不到，记录详细信息
+            if (targetMethod == null)
+            {
+                AdaptableLog.Info($"找不到目标方法 {replacement.TargetMethodDeclaringType.Name}.{replacement.TargetMethodName}");
                 
-            MethodInfo replacementMethod = replacement.ReplacementMethodDeclaringType.GetMethod(
-                replacement.ReplacementMethodName);
+                // 输出所有方法
+                var methods = replacement.TargetMethodDeclaringType.GetMethods(
+                    BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static);
+                    
+                foreach (var method in methods)
+                {
+                    AdaptableLog.Info($"静态方法: {method.Name}, 参数数量: {method.GetParameters().Length}, " +
+                        $"参数类型: {string.Join(", ", method.GetParameters().Select(p => p.ParameterType.Name))}, " +
+                        $"返回类型: {method.ReturnType.Name}");
+                }
+                continue; // 跳过当前替换
+            }
             
-            // Track occurrences if we're targeting a specific one
+            MethodInfo replacementMethod = replacement.ReplacementMethodDeclaringType.GetMethod(
+                replacement.ReplacementMethodName,
+                BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static);
+                
+            // 添加空值检查
+            if (replacementMethod == null)
+            {
+                // 记录日志或抛出异常
+                AdaptableLog.Info($"找不到替换方法 {replacement.ReplacementMethodDeclaringType.Name}.{replacement.ReplacementMethodName}");
+                // 输出所有方法
+                foreach (var method in replacement.ReplacementMethodDeclaringType.GetMethods())
+                {
+                    AdaptableLog.Info($"方法: {method.Name}, 参数数量: {method.GetParameters().Length}, 参数类型: {string.Join(", ", method.GetParameters().Select(p => p.ParameterType.Name))}, 返回类型: {method.ReturnType.Name}");
+                }
+                continue; // 跳过当前替换
+            }
+        
+            // 跟踪出现次数，如果我们针对特定的一个
             int currentOccurrence = 0;
             
             for (int i = 0; i < codes.Count; i++)
             {
+                // 确保方法不为空
                 if (codes[i].Calls(targetMethod))
                 {
                     currentOccurrence++;

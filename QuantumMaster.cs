@@ -3,6 +3,8 @@ using TaiwuModdingLib.Core.Plugin;
 using Redzen.Random;
 using GameData;
 using GameData.Utilities;
+using System.Reflection;
+
 namespace QuantumMaster
 {
 
@@ -19,6 +21,29 @@ namespace QuantumMaster
 
         public void registeBreakVisiblePatch()
         {
+            // 检查扩展方法是否存在
+            var targetMethodInfo = typeof(RedzenHelper).GetMethod(
+                "CheckPercentProb",
+                BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static,
+                null,
+                new Type[] { typeof(IRandomSource), typeof(int) }, // 注意：扩展方法的第一个参数是被扩展的类型
+                null);
+                
+            if (targetMethodInfo == null)
+            {
+                AdaptableLog.Info("找不到扩展方法 RedzenHelper.CheckPercentProb");
+                
+                // 列出所有可能的方法
+                var methods = typeof(RedzenHelper).GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static);
+                foreach (var method in methods)
+                {
+                    AdaptableLog.Info($"RedzenHelper 方法: {method.Name}, 参数: {string.Join(", ", method.GetParameters().Select(p => p.ParameterType.Name))}");
+                }
+                return;
+            }
+            
+            AdaptableLog.Info($"找到扩展方法: {targetMethodInfo.Name}");
+
             var _patch = new TranspilerPatchDefinition
             {
                 OriginalType = typeof(GameData.Domains.Taiwu.SkillBreakPlate),
@@ -30,7 +55,8 @@ namespace QuantumMaster
                     {
                         TargetMethodDeclaringType = typeof(RedzenHelper),
                         TargetMethodName = "CheckPercentProb",
-                        TargetMethodParameters = new Type[] { typeof(int) },
+                        // 注意：扩展方法在IL中是静态方法，第一个参数是被扩展的类型
+                        TargetMethodParameters = new Type[] { typeof(IRandomSource), typeof(int) },
                         ReplacementMethodDeclaringType = typeof(RandomPath),
                         ReplacementMethodName = "Random_CheckPercentProb_True",
                         TargetOccurrence = 1 // Only replace the 2nd occurrence
@@ -39,8 +65,6 @@ namespace QuantumMaster
             };
 
             GenericTranspiler.RegisterPatch("breakVisible", _patch);
-
-            // Apply all patches
             GenericTranspiler.ApplyPatches(harmony);
         }
     }
@@ -68,7 +92,7 @@ namespace QuantumMaster
         }
 
         // Fix the rest of the methods similarly
-        public static bool Random_CheckPercentProb_True(int percent)
+        public static bool Random_CheckPercentProb_True(IRandomSource randomSource, int percent)
         {
             if (percent > 0)
             {
