@@ -3,7 +3,8 @@ using TaiwuModdingLib.Core.Plugin;
 using Redzen.Random;
 using GameData;
 using GameData.Utilities;
-using System.Reflection;
+using System;
+using System.Collections.Generic;
 
 namespace QuantumMaster
 {
@@ -12,60 +13,35 @@ namespace QuantumMaster
     public class QuantumMaster : TaiwuRemakeHarmonyPlugin
     {
         Harmony harmony;
+        
         public override void Initialize()
         {
             harmony = new Harmony("daige");
-            registeBreakVisiblePatch();
-
+            RegisterBreakVisiblePatch();
         }
 
-        public void registeBreakVisiblePatch()
+        public void RegisterBreakVisiblePatch()
         {
-            // 检查扩展方法是否存在
-            var targetMethodInfo = typeof(RedzenHelper).GetMethod(
+            // 使用通用 API 创建补丁
+            var patchBuilder = GenericTranspiler.CreatePatchBuilder(
+                "breakVisible",
+                typeof(GameData.Domains.Taiwu.SkillBreakPlate),
+                "RandomGridData",
+                new Type[] { typeof(IRandomSource), typeof(sbyte) }
+            );
+
+            // 添加扩展方法替换
+            patchBuilder.AddExtensionMethodReplacement(
+                typeof(RedzenHelper), 
                 "CheckPercentProb",
-                BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static,
-                null,
-                new Type[] { typeof(IRandomSource), typeof(int) }, // 注意：扩展方法的第一个参数是被扩展的类型
-                null);
-                
-            if (targetMethodInfo == null)
-            {
-                AdaptableLog.Info("找不到扩展方法 RedzenHelper.CheckPercentProb");
-                
-                // 列出所有可能的方法
-                var methods = typeof(RedzenHelper).GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static);
-                foreach (var method in methods)
-                {
-                    AdaptableLog.Info($"RedzenHelper 方法: {method.Name}, 参数: {string.Join(", ", method.GetParameters().Select(p => p.ParameterType.Name))}");
-                }
-                return;
-            }
-            
-            AdaptableLog.Info($"找到扩展方法: {targetMethodInfo.Name}");
+                new Type[] { typeof(IRandomSource), typeof(int) },
+                typeof(RandomPath),
+                "Random_CheckPercentProb_True",
+                1 // 替换第1次出现
+            );
 
-            var _patch = new TranspilerPatchDefinition
-            {
-                OriginalType = typeof(GameData.Domains.Taiwu.SkillBreakPlate),
-                OriginalMethodName = "RandomGridData",
-                OriginalMethodParameters = new Type[] { typeof(IRandomSource), typeof(sbyte) },
-                Replacements = new List<MethodCallReplacement>
-                {
-                    new MethodCallReplacement
-                    {
-                        TargetMethodDeclaringType = typeof(RedzenHelper),
-                        TargetMethodName = "CheckPercentProb",
-                        // 注意：扩展方法在IL中是静态方法，第一个参数是被扩展的类型
-                        TargetMethodParameters = new Type[] { typeof(IRandomSource), typeof(int) },
-                        ReplacementMethodDeclaringType = typeof(RandomPath),
-                        ReplacementMethodName = "Random_CheckPercentProb_True",
-                        TargetOccurrence = 1 // Only replace the 2nd occurrence
-                    }
-                }
-            };
-
-            GenericTranspiler.RegisterPatch("breakVisible", _patch);
-            GenericTranspiler.ApplyPatches(harmony);
+            // 应用补丁
+            patchBuilder.Apply(harmony);
         }
     }
 

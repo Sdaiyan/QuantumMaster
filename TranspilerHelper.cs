@@ -226,4 +226,22 @@ public static class GenericTranspiler
         
         return false;
     }
+    
+    /// <summary>
+    /// 创建一个补丁构建器
+    /// </summary>
+    public static PatchBuilder CreatePatchBuilder(
+        string patchName,
+        Type originalType,
+        string originalMethodName,
+        Type[] originalMethodParams)
+    {
+        return new PatchBuilder(patchName, originalType, originalMethodName, originalMethodParams);
+    }
+
+    // 为外部使用暴露补丁定义
+    public static Dictionary<string, TranspilerPatchDefinition> GetPatchDefinitions()
+    {
+        return _patchDefinitions;
+    }
 }
