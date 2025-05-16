@@ -44,18 +44,18 @@ public class PatchBuilder
             
         if (extensionMethodInfo == null)
         {
-            AdaptableLog.Info($"找不到扩展方法 {extensionMethod.Type.Name}.{extensionMethod.MethodName}");
+            DebugLog.Info($"找不到扩展方法 {extensionMethod.Type.Name}.{extensionMethod.MethodName}");
             
             // 列出所有可能的方法
             var methods = extensionMethod.Type.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static);
             foreach (var method in methods)
             {
-                AdaptableLog.Info($"{extensionMethod.Type.Name} 方法: {method.Name}, 参数: {string.Join(", ", method.GetParameters().Select(p => p.ParameterType.Name))}");
+                DebugLog.Info($"{extensionMethod.Type.Name} 方法: {method.Name}, 参数: {string.Join(", ", method.GetParameters().Select(p => p.ParameterType.Name))}");
             }
             return this;
         }
         
-        AdaptableLog.Info($"找到扩展方法: {extensionMethodInfo.Name}");
+        DebugLog.Info($"找到扩展方法: {extensionMethodInfo.Name}");
 
         // 添加替换定义
         _patchDefinition.Replacements.Add(new MethodCallReplacement
@@ -135,7 +135,7 @@ public class PatchBuilder
     {
         if (replacementIndex < 0 || replacementIndex >= _patchDefinition.Replacements.Count)
         {
-            AdaptableLog.Info($"替换索引 {replacementIndex} 超出范围");
+            DebugLog.Info($"替换索引 {replacementIndex} 超出范围");
             return this;
         }
         

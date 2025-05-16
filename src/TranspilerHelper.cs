@@ -94,7 +94,7 @@ public static class GenericTranspiler
         // 检查这个方法是否已经被处理过
         if (_processedMethods.Contains(original))
         {
-            AdaptableLog.Info($"方法 {original.DeclaringType.Name}.{original.Name} 已经被处理过，跳过重复处理");
+            DebugLog.Info($"方法 {original.DeclaringType.Name}.{original.Name} 已经被处理过，跳过重复处理");
             return instructions;
         }
 
@@ -106,7 +106,7 @@ public static class GenericTranspiler
             {
                 // 标记为已处理
                 _processedMethods.Add(original);
-                AdaptableLog.Info($"开始处理方法 {original.DeclaringType.Name}.{original.Name}");
+                DebugLog.Info($"开始处理方法 {original.DeclaringType.Name}.{original.Name}");
                 return GenerateTranspiler(instructions, patchDef);
             }
         }
@@ -153,13 +153,13 @@ public static class GenericTranspiler
             // 如果找不到方法，记录日志并跳过
             if (targetMethod == null)
             {
-                AdaptableLog.Info($"找不到目标方法 {replacement.TargetMethodDeclaringType.Name}.{replacement.TargetMethodName}，参数: {string.Join(", ", replacement.TargetMethodParameters.Select(p => p?.Name ?? "null"))}");
+                DebugLog.Info($"找不到目标方法 {replacement.TargetMethodDeclaringType.Name}.{replacement.TargetMethodName}，参数: {string.Join(", ", replacement.TargetMethodParameters.Select(p => p?.Name ?? "null"))}");
                 
                 // 输出类型中所有可能的方法
-                AdaptableLog.Info($"可用方法列表:");
+                DebugLog.Info($"可用方法列表:");
                 foreach (var method in replacement.TargetMethodDeclaringType.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance))
                 {
-                    AdaptableLog.Info($"  - {method.Name}({string.Join(", ", method.GetParameters().Select(p => p.ParameterType.Name))})");
+                    DebugLog.Info($"  - {method.Name}({string.Join(", ", method.GetParameters().Select(p => p.ParameterType.Name))})");
                 }
                 continue;
             }
@@ -172,7 +172,7 @@ public static class GenericTranspiler
             targetMethods[targetMethod].Add(replacement);
         }
         
-        AdaptableLog.Info($"找到 {targetMethods.Count} 个需要处理的目标方法");
+        DebugLog.Info($"找到 {targetMethods.Count} 个需要处理的目标方法");
         
         // 第二阶段：扫描代码，找出所有目标方法调用的位置
         var methodCalls = new Dictionary<MethodInfo, List<(int Index, int Occurrence)>>();
@@ -193,12 +193,12 @@ public static class GenericTranspiler
                     // 记录日志
                     int prevInstr = Math.Max(0, i-3);
                     int nextInstr = Math.Min(codes.Count-1, i+3);
-                    AdaptableLog.Info($"找到第 {occurrence} 次 {targetMethod.DeclaringType.Name}.{targetMethod.Name} 调用，" +
+                    DebugLog.Info($"找到第 {occurrence} 次 {targetMethod.DeclaringType.Name}.{targetMethod.Name} 调用，" +
                         $"位置: {i}, 上下文: {codes[prevInstr].opcode} ... {codes[i].opcode} ... {codes[nextInstr].opcode}");
                 }
             }
             
-            AdaptableLog.Info($"方法 {targetMethod.DeclaringType.Name}.{targetMethod.Name} 共有 {methodCalls[targetMethod].Count} 处调用");
+            DebugLog.Info($"方法 {targetMethod.DeclaringType.Name}.{targetMethod.Name} 共有 {methodCalls[targetMethod].Count} 处调用");
         }
         
         // 第三阶段：确定需要替换的位置和替换方法
@@ -222,7 +222,7 @@ public static class GenericTranspiler
                     
                 if (applicableReplacements.Count == 0)
                 {
-                    AdaptableLog.Info($"第 {occurrence} 次出现的 {targetMethod.Name} 调用没有匹配的替换规则");
+                    DebugLog.Info($"第 {occurrence} 次出现的 {targetMethod.Name} 调用没有匹配的替换规则");
                     continue;
                 }
                 
@@ -238,12 +238,12 @@ public static class GenericTranspiler
                         
                     if (replacementMethod == null)
                     {
-                        AdaptableLog.Info($"找不到替换方法 {matchingReplacement.ReplacementMethodDeclaringType.Name}.{matchingReplacement.ReplacementMethodName}");
+                        DebugLog.Info($"找不到替换方法 {matchingReplacement.ReplacementMethodDeclaringType.Name}.{matchingReplacement.ReplacementMethodName}");
                         continue;
                     }
                     
                     replacements.Add((index, replacementMethod));
-                    AdaptableLog.Info($"将替换 {targetMethod.Name} 在位置 {index} 的第 {occurrence} 次调用，" +
+                    DebugLog.Info($"将替换 {targetMethod.Name} 在位置 {index} 的第 {occurrence} 次调用，" +
                         $"替换方法: {replacementMethod.DeclaringType.Name}.{replacementMethod.Name}");
                 }
             }
@@ -257,16 +257,16 @@ public static class GenericTranspiler
         {
             if (index < 0 || index >= codes.Count)
             {
-                AdaptableLog.Info($"替换位置 {index} 超出范围 [0, {codes.Count - 1}]，跳过");
+                DebugLog.Info($"替换位置 {index} 超出范围 [0, {codes.Count - 1}]，跳过");
                 continue;
             }
             
             codes[index] = new CodeInstruction(OpCodes.Call, replacementMethod);
             totalReplacements++;
-            AdaptableLog.Info($"替换位置 {index} 的方法调用为 {replacementMethod.DeclaringType.Name}.{replacementMethod.Name}");
+            DebugLog.Info($"替换位置 {index} 的方法调用为 {replacementMethod.DeclaringType.Name}.{replacementMethod.Name}");
         }
         
-        AdaptableLog.Info($"已对 {patchDef.OriginalType.Name}.{patchDef.OriginalMethodName} 执行了 {totalReplacements} 次方法替换");
+        DebugLog.Info($"已对 {patchDef.OriginalType.Name}.{patchDef.OriginalMethodName} 执行了 {totalReplacements} 次方法替换");
         return codes;
     }
 
@@ -340,13 +340,13 @@ public static class GenericTranspiler
                     
                     if (argIndex < 0 || argIndex >= codes.Count)
                     {
-                        AdaptableLog.Info($"参数索引 {argIndex} 超出范围 [0, {codes.Count - 1}]，不匹配");
+                        DebugLog.Info($"参数索引 {argIndex} 超出范围 [0, {codes.Count - 1}]，不匹配");
                         isMatch = false;
                         break;
                     }
                     
                     bool conditionMet = LoadsConstant(codes[argIndex], condition.ExpectedValue);
-                    AdaptableLog.Info($"条件检查: 参数[{condition.ArgumentIndex}]={condition.ExpectedValue}, " +
+                    DebugLog.Info($"条件检查: 参数[{condition.ArgumentIndex}]={condition.ExpectedValue}, " +
                         $"指令: {codes[argIndex].opcode}, 结果: {conditionMet}");
                         
                     if (!conditionMet)

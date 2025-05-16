@@ -12,6 +12,7 @@ namespace QuantumMaster
     {
         Harmony harmony;
 
+        public static bool debug = true;
         public static bool BreakVisible;
         public static bool CreateBuildingArea;
 
@@ -181,13 +182,13 @@ namespace QuantumMaster
     {
         public int Random_Next_2Args_Max(int min, int max)
         {
-            AdaptableLog.Info($"Random_Next_2Args_Max min {min} max {max}");
+            DebugLog.Info($"Random_Next_2Args_Max min {min} max {max}");
             return Math.Max(min, max - 1);
         }
 
         public int Random_Next_2Args_Min(int min, int max)
         {
-            AdaptableLog.Info($"Random_Next_2Args_Min min {min} max {max}");
+            DebugLog.Info($"Random_Next_2Args_Min min {min} max {max}");
             return Math.Min(min, max - 1);
         }
 
