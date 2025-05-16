@@ -70,7 +70,7 @@ namespace QuantumMaster
             return false;
         }
 
-        public static bool Random_CheckPercentProb_False(int percent)
+        public static bool Random_CheckPercentProb_False(IRandomSource randomSource, int percent)
         {
             if (percent < 100)
             {
@@ -79,7 +79,7 @@ namespace QuantumMaster
             return true;
         }
         
-        public static bool Random_CheckProb_True(IRandomSource a, int b, int percent)
+        public static bool Random_CheckProb_True(IRandomSource randomSource, int chance, int percent)
         {
             if (percent > 0)
             {
@@ -88,7 +88,7 @@ namespace QuantumMaster
             return false;
         }
 
-        public static bool Random_CheckProb_False(IRandomSource a, int b, int percent)
+        public static bool Random_CheckProb_False(IRandomSource randomSource, int chance, int percent)
         {
             if (percent < 100)
             {
