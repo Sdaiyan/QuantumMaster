@@ -134,6 +134,10 @@ public class PatchBuilder
     public void Apply(Harmony harmony)
     {
         GenericTranspiler.RegisterPatch(_patchName, _patchDefinition);
+    }
+    
+    public void ApplyPatches(Harmony harmony)
+    {
         GenericTranspiler.ApplyPatches(harmony);
     }
 }

@@ -94,7 +94,7 @@ public static class GenericTranspiler
         // 检查这个方法是否已经被处理过
         if (_processedMethods.Contains(original))
         {
-            DebugLog.Info($"方法 {original.DeclaringType.Name}.{original.Name} 已经被处理过，跳过重复处理");
+            DebugLog.Info($"方法 {original.DeclaringType.Name}.{original.Name}({string.Join(", ", original.GetParameters().Select(p => p.ParameterType.Name))}) 已经被处理过，跳过重复处理");
             return instructions;
         }
 
@@ -181,12 +181,12 @@ public static class GenericTranspiler
                     // 记录日志
                     int prevInstr = Math.Max(0, i-3);
                     int nextInstr = Math.Min(codes.Count-1, i+3);
-                    DebugLog.Info($"找到第 {occurrence} 次 {targetMethod.DeclaringType.Name}.{targetMethod.Name} 调用，" +
+                    DebugLog.Info($"找到第 {occurrence} 次 {targetMethod.DeclaringType.Name}.{targetMethod.Name}({string.Join(", ", targetMethod.GetParameters().Select(p => p.ParameterType.Name))}) 调用，" +
                         $"位置: {i}, 上下文: {codes[prevInstr].opcode} ... {codes[i].opcode} ... {codes[nextInstr].opcode}");
                 }
             }
             
-            DebugLog.Info($"方法 {targetMethod.DeclaringType.Name}.{targetMethod.Name} 共有 {methodCalls[targetMethod].Count} 处调用");
+            DebugLog.Info($"方法 {targetMethod.DeclaringType.Name}.{targetMethod.Name}({string.Join(", ", targetMethod.GetParameters().Select(p => p.ParameterType.Name))}) 共有 {methodCalls[targetMethod].Count} 处调用");
         }
         
         // 第三阶段：确定需要替换的位置和替换方法
@@ -219,7 +219,7 @@ public static class GenericTranspiler
                 
                 if (applicableReplacements.Count == 0)
                 {
-                    DebugLog.Info($"第 {occurrence} 次出现的 {targetMethod.Name} 调用没有被要求替换，跳过");
+                    DebugLog.Info($"第 {occurrence} 次出现的 {targetMethod.DeclaringType.Name}.{targetMethod.Name}({string.Join(", ", targetMethod.GetParameters().Select(p => p.ParameterType.Name))}) 调用没有被要求替换，跳过");
                     continue;
                 }
                 // 尝试查找满足参数条件的替换
@@ -240,13 +240,13 @@ public static class GenericTranspiler
                     }
                     
                     replacements.Add((index, replacementMethod));
-                    DebugLog.Info($"将替换 {targetMethod.Name}({string.Join(", ", targetMethod.GetParameters().Select(p => p.ParameterType.Name))}) 在位置 {index} 的第 {occurrence} 次调用，" +
+                    DebugLog.Info($"将替换 {targetMethod.DeclaringType.Name}.{targetMethod.Name}({string.Join(", ", targetMethod.GetParameters().Select(p => p.ParameterType.Name))}) 在位置 {index} 的第 {occurrence} 次调用，" +
                         $"替换方法: {replacementMethod.DeclaringType.Name}.{replacementMethod.Name}({string.Join(", ", replacementMethod.GetParameters().Select(p => p.ParameterType.Name))})");
                 }
                 else
                 {
                     // 有适用的替换规则但没有匹配的参数条件
-                    DebugLog.Warning($"第 {occurrence} 次出现的 {targetMethod.Name} 调用有替换规则，但参数条件不匹配");
+                    DebugLog.Warning($"第 {occurrence} 次出现的 {targetMethod.DeclaringType.Name}.{targetMethod.Name}({string.Join(", ", targetMethod.GetParameters().Select(p => p.ParameterType.Name))}) 调用有替换规则，但参数条件不匹配");
                     hasFailedReplacement = true;
                 }
             }
