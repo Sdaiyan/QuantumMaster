@@ -18,12 +18,24 @@ namespace QuantumMaster
         public static bool CreateBuildingArea; // 生成世界时，产业中的建筑和资源点的初始等级，以及生成数量
         public static bool CalcNeigongLoopingEffect; // 周天运转时，获得的内力为浮动区间的最大值，内息恢复最大，内息紊乱最小
         public static bool collectResource; // 收获资源时必定获取引子，且是可能获取的最高级的引子
+        public static bool GetCollectResourceAmount; // 采集数量必定为浮动区间的上限
+        public static bool UpdateResourceBlock; // 如果概率不为0，过月时，对应的产业资源必定升级与扩张
+        public static bool OfflineUpdateShopManagement; // 如果概率不为0，产业建筑经营、招募必然成功、村民技艺必定提升
+        public static bool ApplyLifeSkillCombatResult; // 如果概率不为0，较艺读书必定触发
+        public static bool CalcReadInCombat; // 如果概率不为0，战斗读书必定触发
+        public static bool CalcLootItem; // 如果概率不为0，战利品掉落判定必定通过（原本逻辑是对每个战利品进行判断是否掉落）
 
         public override void OnModSettingUpdate()
         {
             DomainManager.Mod.GetSetting(ModIdStr, "collectResource", ref collectResource);
+            DomainManager.Mod.GetSetting(ModIdStr, "GetCollectResourceAmount", ref GetCollectResourceAmount);
             DomainManager.Mod.GetSetting(ModIdStr, "CreateBuildingArea", ref CreateBuildingArea);
             DomainManager.Mod.GetSetting(ModIdStr, "CalcNeigongLoopingEffect", ref CalcNeigongLoopingEffect);
+            DomainManager.Mod.GetSetting(ModIdStr, "UpdateResourceBlock", ref UpdateResourceBlock);
+            DomainManager.Mod.GetSetting(ModIdStr, "OfflineUpdateShopManagement", ref OfflineUpdateShopManagement);
+            DomainManager.Mod.GetSetting(ModIdStr, "ApplyLifeSkillCombatResult", ref ApplyLifeSkillCombatResult);
+            DomainManager.Mod.GetSetting(ModIdStr, "CalcReadInCombat", ref CalcReadInCombat);
+            DomainManager.Mod.GetSetting(ModIdStr, "CalcLootItem", ref CalcLootItem);
         }
         public override void Initialize()
         {
@@ -292,6 +304,268 @@ namespace QuantumMaster
 
             return true;
         }
+
+        public bool patchGetCollectResourceAmount()
+        {
+            if (!GetCollectResourceAmount && !openAll) return false;
+
+            var OriginalMethod = new OriginalMethodInfo
+            {
+                Type = typeof(GameData.Domains.Map.MapDomain),
+                MethodName = "GetCollectResourceAmount",
+                // IRandomSource random, MapBlockData blockData, sbyte resourceType
+                Parameters = new Type[] { typeof(IRandomSource), typeof(GameData.Domains.Map.MapBlockData), typeof(sbyte) }
+            };
+
+            patchBuilder = GenericTranspiler.CreatePatchBuilder(
+                "GetCollectResourceAmount",
+                OriginalMethod);
+
+            // 1 return currentResource * (((currentResource >= 100) ? 60 : 40) + random.Next(-20, 21)) / 100 * resourceMultiplier;
+            patchBuilder.AddInstanceMethodReplacement(
+                PatchPresets.InstanceMethods.Next2Args,
+                PatchPresets.Replacements.Next2ArgsMax,
+                1);
+
+            patchBuilder.Apply(harmony);
+
+            return true;
+        }
+
+        public bool patchUpdateResourceBlock()
+        {
+            if (!UpdateResourceBlock && !openAll) return false;
+
+            var OriginalMethod = new OriginalMethodInfo
+            {
+                Type = typeof(GameData.Domains.Building.BuildingDomain),
+                MethodName = "UpdateResourceBlock",
+                // DataContext context, short settlementId, BuildingBlockKey blockKey, BuildingBlockData blockData, List<short> neighborList, List<short> expandedResourceList, List<int> neighborDistanceList, List<short> neighborRangeOneList
+                Parameters = new Type[] { typeof(GameData.Common.DataContext), typeof(short), typeof(GameData.Domains.Building.BuildingBlockKey), typeof(GameData.Domains.Building.BuildingBlockData), typeof(List<short>), typeof(List<short>), typeof(List<int>), typeof(List<short>) }
+            };
+
+            patchBuilder = GenericTranspiler.CreatePatchBuilder(
+                "UpdateResourceBlock",
+                OriginalMethod);
+
+            // 1 if (random.CheckPercentProb(growOdds))
+            patchBuilder.AddExtensionMethodReplacement(
+                PatchPresets.Extensions.CheckPercentProb,
+                PatchPresets.Replacements.CheckPercentProbTrue,
+                1);
+
+            // 2 if (neighborBlock2.TemplateId == 0 && neighborBlock2.RootBlockIndex < 0 && random.CheckPercentProb(expandOdds))
+            patchBuilder.AddExtensionMethodReplacement(
+                PatchPresets.Extensions.CheckPercentProb,
+                PatchPresets.Replacements.CheckPercentProbTrue,
+                2);
+
+            patchBuilder.Apply(harmony);
+
+            return true;
+        }
+
+        public bool patchOfflineUpdateShopManagement()
+        {
+            if (!OfflineUpdateShopManagement && !openAll) return false;
+
+            var OriginalMethod = new OriginalMethodInfo
+            {
+                Type = typeof(GameData.Domains.Building.BuildingDomain),
+                MethodName = "OfflineUpdateShopManagement",
+                // ParallelBuildingModification modification, short settlementId, BuildingBlockItem buildingBlockCfg, BuildingBlockKey blockKey, BuildingBlockData blockData, IRandomSource random
+                Parameters = new Type[] { typeof(GameData.Domains.Building.ParallelBuildingModification), typeof(short), typeof(Config.BuildingBlockItem), typeof(GameData.Domains.Building.BuildingBlockKey), typeof(GameData.Domains.Building.BuildingBlockData), typeof(IRandomSource) }
+            };
+
+            patchBuilder = GenericTranspiler.CreatePatchBuilder(
+                "OfflineUpdateShopManagement",
+                OriginalMethod);
+
+            // CheckProb
+            // 1 if (data3.ShopSoldItemList[k].TemplateId != -1 && random.CheckProb(50, 100))
+            patchBuilder.AddExtensionMethodReplacement(
+                PatchPresets.Extensions.CheckProb,
+                PatchPresets.Replacements.CheckProbTrue,
+                1);
+
+            // Next 2 args
+            // 1 itemTemplateId = itemProbList[random.Next(0, itemProbList.Count)]; 从任意成功的结果中 随机一个
+            // 2 sbyte gradeLevel = itemProbList2[random.Next(0, itemProbList2.Count)]; 随机的品级，应该是越后面越大
+            patchBuilder.AddInstanceMethodReplacement(
+                PatchPresets.InstanceMethods.Next2Args,
+                PatchPresets.Replacements.Next2ArgsMax,
+                2);
+            // 3 int prob3 = successShopEventConfig2.RecruitPeopleProb[j] + blockData.Level + resourceAttainment / AttainmentToProb + random.Next(successShopEventConfig2.RecruitPeopleProbAdd[0], successShopEventConfig2.RecruitPeopleProbAdd[1]);
+            // 额外的概率
+            patchBuilder.AddInstanceMethodReplacement(
+                PatchPresets.InstanceMethods.Next2Args,
+                PatchPresets.Replacements.Next2ArgsMax,
+                3);
+
+            // 4 sbyte peopleLevel = itemProbList3[random.Next(0, itemProbList3.Count)]; 招募的人的品级
+            patchBuilder.AddInstanceMethodReplacement(
+                PatchPresets.InstanceMethods.Next2Args,
+                PatchPresets.Replacements.Next2ArgsMax,
+                4);
+
+            // CheckPercentProb 我也不知道为什么 IL 最后只有 3个 CheckPercentProb，全部替换 
+            // 1 if (hasManager && random.CheckPercentProb(prob))
+            patchBuilder.AddExtensionMethodReplacement(
+                PatchPresets.Extensions.CheckPercentProb,
+                PatchPresets.Replacements.CheckPercentProbTrue,
+                1);
+
+            // 2 if (random.CheckPercentProb(prob2))
+            patchBuilder.AddExtensionMethodReplacement(
+                PatchPresets.Extensions.CheckPercentProb,
+                PatchPresets.Replacements.CheckPercentProbTrue,
+                2);
+
+            // 3 if (random.CheckPercentProb(prob3))
+            patchBuilder.AddExtensionMethodReplacement(
+                PatchPresets.Extensions.CheckPercentProb,
+                PatchPresets.Replacements.CheckPercentProbTrue,
+                3);
+
+            // 4 if (random.CheckPercentProb(shopEventCfg.SkillGrowOdds))
+            // patchBuilder.AddExtensionMethodReplacement(
+            //     PatchPresets.Extensions.CheckPercentProb,
+            //     PatchPresets.Replacements.CheckPercentProbTrue,
+            //     4);
+
+            // 5 if (random.CheckPercentProb(shopEventCfg.LearnCombatSkillProb))
+            // patchBuilder.AddExtensionMethodReplacement(
+            //     PatchPresets.Extensions.CheckPercentProb,
+            //     PatchPresets.Replacements.CheckPercentProbTrue,
+            //     5);
+
+            // 6 if (random.CheckPercentProb(successRate))
+            // patchBuilder.AddExtensionMethodReplacement(
+            //     PatchPresets.Extensions.CheckPercentProb,
+            //     PatchPresets.Replacements.CheckPercentProbTrue,
+            //     6);
+
+            // 7 if (random.CheckPercentProb(shopEventCfg.SkillGrowOdds) && DomainManager.Extra.TrySetVillageWorkQualificationImprove(character, lifeSkillType, isLifeSkill: true))
+            // patchBuilder.AddExtensionMethodReplacement(
+            //     PatchPresets.Extensions.CheckPercentProb,
+            //     PatchPresets.Replacements.CheckPercentProbTrue,
+            //     7);
+
+            // 8 if (random.CheckPercentProb(shopEventCfg.LearnLifeSkillProb))
+            // patchBuilder.AddExtensionMethodReplacement(
+            //     PatchPresets.Extensions.CheckPercentProb,
+            //     PatchPresets.Replacements.CheckPercentProbTrue,
+            //     8);
+
+            // 9 if (random.CheckPercentProb(successRate2))
+            // patchBuilder.AddExtensionMethodReplacement(
+            //     PatchPresets.Extensions.CheckPercentProb,
+            //     PatchPresets.Replacements.CheckPercentProbTrue,
+            //     9);
+
+            patchBuilder.Apply(harmony);
+
+            return true;
+        }
+
+        public bool patchApplyLifeSkillCombatResult()
+        {
+            if (!ApplyLifeSkillCombatResult && !openAll) return false;
+
+            var OriginalMethod = new OriginalMethodInfo
+            {
+                Type = typeof(GameData.Domains.Taiwu.TaiwuDomain),
+                MethodName = "ApplyLifeSkillCombatResult",
+                // DataContext context, int adversaryCharacterId, bool isTaiwuWin
+                Parameters = new Type[] { typeof(GameData.Common.DataContext), typeof(int), typeof(bool) }
+            };
+
+            patchBuilder = GenericTranspiler.CreatePatchBuilder(
+                "ApplyLifeSkillCombatResult",
+                OriginalMethod);
+
+            // CheckPercentProb
+            // 1 if (context.Random.CheckPercentProb(bonusOdds))
+            patchBuilder.AddExtensionMethodReplacement(
+                PatchPresets.Extensions.CheckPercentProb,
+                PatchPresets.Replacements.CheckPercentProbTrue,
+                1);
+
+            patchBuilder.Apply(harmony);
+
+            return true;
+        }
+
+        public bool patchCalcReadInCombat()
+        {
+            if (!CalcReadInCombat && !openAll) return false;
+
+            var OriginalMethod = new OriginalMethodInfo
+            {
+                Type = typeof(GameData.Domains.Combat.CombatDomain),
+                MethodName = "CalcReadInCombat",
+                // DataContext context
+                Parameters = new Type[] { typeof(GameData.Common.DataContext) }
+            };
+
+            patchBuilder = GenericTranspiler.CreatePatchBuilder(
+                "CalcReadInCombat",
+                OriginalMethod);
+
+            // CheckPercentProb
+            // 1 if (context.Random.CheckPercentProb(odds))
+            patchBuilder.AddExtensionMethodReplacement(
+                PatchPresets.Extensions.CheckPercentProb,
+                PatchPresets.Replacements.CheckPercentProbTrue,
+                1);
+
+            patchBuilder.Apply(harmony);
+
+            return true;
+        }
+
+        public bool patchCalcLootItem()
+        {
+            if (!CalcLootItem && !openAll) return false;
+
+            var OriginalMethod = new OriginalMethodInfo
+            {
+                Type = typeof(GameData.Domains.Combat.CombatDomain),
+                MethodName = "CalcLootItem",
+                // DataContext context
+                Parameters = new Type[] { typeof(GameData.Common.DataContext) }
+            };
+
+            patchBuilder = GenericTranspiler.CreatePatchBuilder(
+                "CalcLootItem",
+                OriginalMethod);
+
+            // CheckPercentProb
+            // 1 if (context.Random.CheckPercentProb(dropRate))
+            patchBuilder.AddExtensionMethodReplacement(
+                PatchPresets.Extensions.CheckPercentProb,
+                PatchPresets.Replacements.CheckPercentProbTrue,
+                1);
+
+            // 2 if (context.Random.CheckPercentProb(dropRate2))
+            patchBuilder.AddExtensionMethodReplacement(
+                PatchPresets.Extensions.CheckPercentProb,
+                PatchPresets.Replacements.CheckPercentProbTrue,
+                2);
+
+            // 3 if (context.Random.CheckPercentProb(100 - 20 * j))
+            patchBuilder.AddExtensionMethodReplacement(
+                PatchPresets.Extensions.CheckPercentProb,
+                PatchPresets.Replacements.CheckPercentProbTrue,
+                3);
+
+            patchBuilder.Apply(harmony);
+
+            return true;
+        }
+
+
+
 
     }
 

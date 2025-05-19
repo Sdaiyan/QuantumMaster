@@ -287,6 +287,7 @@ public static class GenericTranspiler
         }
         
         DebugLog.Info($"已对 {patchDef.OriginalType.Name}.{patchDef.OriginalMethodName} 执行了 {totalReplacements} 次方法替换");
+        DebugLog.Info($"---------------------------------------------------------------------------------------------------");
         return codes;
     }
 
