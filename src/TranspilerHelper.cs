@@ -28,8 +28,8 @@ public class MethodCallReplacement
     public Type ReplacementMethodDeclaringType { get; set; }
     public string ReplacementMethodName { get; set; }
     
-    // New property to target specific occurrences
-    public int? TargetOccurrence { get; set; } = null; // null means replace all occurrences
+    // 修改为必传参数 - 不再使用可空类型
+    public int TargetOccurrence { get; set; } // 必须指定具体的出现次数
     
     // Add support for argument conditions
     public List<ArgumentCondition> ArgumentConditions { get; set; } = new List<ArgumentCondition>();
@@ -191,12 +191,21 @@ public static class GenericTranspiler
         
         // 第三阶段：确定需要替换的位置和替换方法
         var replacements = new List<(int Index, MethodInfo ReplacementMethod)>();
-        
+        int expectedReplacements = 0; // 跟踪预期的替换数量
+        bool hasFailedReplacement = false; // 标记是否有替换失败
+
         foreach (var methodEntry in methodCalls)
         {
             var targetMethod = methodEntry.Key;
             var callPositions = methodEntry.Value;
             var replacementList = targetMethods[targetMethod];
+            
+            // 计算这个方法预期的替换数量
+            foreach (var replacement in replacementList)
+            {
+                // 每个替换规则都必须指定目标出现次数
+                expectedReplacements++;
+            }
             
             foreach (var position in callPositions)
             {
@@ -205,37 +214,60 @@ public static class GenericTranspiler
                 
                 // 找到所有可能的替换
                 var applicableReplacements = replacementList
-                    .Where(r => !r.TargetOccurrence.HasValue || r.TargetOccurrence.Value == occurrence)
+                    .Where(r => r.TargetOccurrence == occurrence)
                     .ToList();
-                    
+                
                 if (applicableReplacements.Count == 0)
                 {
-                    DebugLog.Info($"第 {occurrence} 次出现的 {targetMethod.Name} 调用没有匹配的替换规则");
+                    DebugLog.Info($"第 {occurrence} 次出现的 {targetMethod.Name} 调用没有被要求替换，跳过");
                     continue;
                 }
-                
                 // 尝试查找满足参数条件的替换
                 var matchingReplacement = FindMatchingReplacement(codes, index, applicableReplacements);
                 
                 if (matchingReplacement != null)
                 {
-                    // 获取替换方法
-                    MethodInfo replacementMethod = matchingReplacement.ReplacementMethodDeclaringType.GetMethod(
-                        matchingReplacement.ReplacementMethodName,
-                        BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static);
+                    // 获取替换方法 - 使用AccessTools以支持所有访问级别
+                    MethodInfo replacementMethod = AccessTools.Method(
+                        matchingReplacement.ReplacementMethodDeclaringType,
+                        matchingReplacement.ReplacementMethodName);
                         
                     if (replacementMethod == null)
                     {
-                        DebugLog.Info($"找不到替换方法 {matchingReplacement.ReplacementMethodDeclaringType.Name}.{matchingReplacement.ReplacementMethodName}");
+                        DebugLog.Warning($"找不到替换方法 {matchingReplacement.ReplacementMethodDeclaringType.Name}.{matchingReplacement.ReplacementMethodName}");
+                        hasFailedReplacement = true;
                         continue;
                     }
                     
                     replacements.Add((index, replacementMethod));
-                    DebugLog.Info($"将替换 {targetMethod.Name} 在位置 {index} 的第 {occurrence} 次调用，" +
-                        $"替换方法: {replacementMethod.DeclaringType.Name}.{replacementMethod.Name}");
+                    DebugLog.Info($"将替换 {targetMethod.Name}({string.Join(", ", targetMethod.GetParameters().Select(p => p.ParameterType.Name))}) 在位置 {index} 的第 {occurrence} 次调用，" +
+                        $"替换方法: {replacementMethod.DeclaringType.Name}.{replacementMethod.Name}({string.Join(", ", replacementMethod.GetParameters().Select(p => p.ParameterType.Name))})");
+                }
+                else
+                {
+                    // 有适用的替换规则但没有匹配的参数条件
+                    DebugLog.Warning($"第 {occurrence} 次出现的 {targetMethod.Name} 调用有替换规则，但参数条件不匹配");
+                    hasFailedReplacement = true;
                 }
             }
         }
+        
+        // 如果有任何替换失败，放弃所有替换
+        if (hasFailedReplacement)
+        {
+            DebugLog.Warning($"存在替换失败的情况，预期替换 {expectedReplacements} 个方法调用，但有匹配失败。放弃所有替换！");
+            return instructions; // 返回原始指令，不进行任何替换
+        }
+
+        // 如果预期替换数量与实际找到的不符
+        if (expectedReplacements != replacements.Count)
+        {
+            DebugLog.Warning($"替换数量不匹配：预期替换 {expectedReplacements} 个方法调用，找到 {replacements.Count} 个匹配。放弃所有替换！");
+            return instructions; // 返回原始指令，不进行任何替换
+        }
+
+        // 所有替换都成功匹配，可以继续执行替换操作
+        DebugLog.Info($"成功匹配 {replacements.Count} 个替换方法调用，继续执行替换操作");
         
         // 第四阶段：执行替换
         // 按索引倒序排列，从后向前替换，避免索引变化
@@ -245,13 +277,13 @@ public static class GenericTranspiler
         {
             if (index < 0 || index >= codes.Count)
             {
-                DebugLog.Info($"替换位置 {index} 超出范围 [0, {codes.Count - 1}]，跳过");
+                DebugLog.Warning($"替换位置 {index} 超出范围 [0, {codes.Count - 1}]，跳过");
                 continue;
             }
             
             codes[index] = new CodeInstruction(OpCodes.Call, replacementMethod);
             totalReplacements++;
-            DebugLog.Info($"替换位置 {index} 的方法调用为 {replacementMethod.DeclaringType.Name}.{replacementMethod.Name}");
+            DebugLog.Info($"[{totalReplacements}/{replacements.Count}]替换位置 {index} 的方法调用为 {replacementMethod.DeclaringType.Name}.{replacementMethod.Name}");
         }
         
         DebugLog.Info($"已对 {patchDef.OriginalType.Name}.{patchDef.OriginalMethodName} 执行了 {totalReplacements} 次方法替换");

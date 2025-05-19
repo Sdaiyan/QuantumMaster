@@ -70,11 +70,11 @@ namespace QuantumMaster
                 }
                 catch (Exception ex)
                 {
-                    DebugLog.Error($"应用补丁 {method.Name} 时出错: {ex.Message}");
+                    DebugLog.Warning($"应用补丁 {method.Name} 时出错: {ex.Message}");
                     if (debug && ex.InnerException != null)
                     {
-                        DebugLog.Error($"详细错误: {ex.InnerException.Message}");
-                        DebugLog.Error($"堆栈跟踪: {ex.InnerException.StackTrace}");
+                        DebugLog.Warning($"详细错误: {ex.InnerException.Message}");
+                        DebugLog.Warning($"堆栈跟踪: {ex.InnerException.StackTrace}");
                     }
                     skippedPatches++;
                 }
@@ -233,17 +233,17 @@ namespace QuantumMaster
                 PatchPresets.Replacements.Next2ArgsMax,
                 1);
 
-            // 2 qiDisorder = (short)random.Next(qiDisorder + 1);
+            // 1 qiDisorder = (short)random.Next(qiDisorder + 1);
             patchBuilder.AddInstanceMethodReplacement(
                 PatchPresets.InstanceMethods.Next1Arg,
                 PatchPresets.Replacements.Next1Arg0,
-                2);
+                1);
 
-            // 3 qiDisorder = (short)(-random.Next(-qiDisorder + 1));
+            // 2 qiDisorder = (short)(-random.Next(-qiDisorder + 1));
             patchBuilder.AddInstanceMethodReplacement(
                 PatchPresets.InstanceMethods.Next1Arg,
                 PatchPresets.Replacements.Next1ArgMax,
-                3);
+                2);
 
             patchBuilder.Apply(harmony);
 

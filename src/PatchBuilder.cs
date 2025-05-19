@@ -32,7 +32,7 @@ public class PatchBuilder
     public PatchBuilder AddExtensionMethodReplacement(
         ExtensionMethodInfo extensionMethod,
         ReplacementMethodInfo replacementMethod,
-        int? targetOccurrence = null)
+        int targetOccurrence) // 必传参数
     {
         // 检查扩展方法是否存在
         var extensionMethodInfo = extensionMethod.Type.GetMethod(
@@ -82,34 +82,12 @@ public class PatchBuilder
     }
 
     /// <summary>
-    /// 添加普通方法替换
-    /// </summary>
-    public PatchBuilder AddMethodReplacement(
-        TargetMethodInfo targetMethod,
-        ReplacementMethodInfo replacementMethod,
-        int? targetOccurrence = null)
-    {
-        // 添加替换定义
-        _patchDefinition.Replacements.Add(new MethodCallReplacement
-        {
-            TargetMethodDeclaringType = targetMethod.Type,
-            TargetMethodName = targetMethod.MethodName,
-            TargetMethodParameters = targetMethod.Parameters,
-            ReplacementMethodDeclaringType = replacementMethod.Type,
-            ReplacementMethodName = replacementMethod.MethodName,
-            TargetOccurrence = targetOccurrence
-        });
-
-        return this;
-    }
-
-    /// <summary>
     /// 添加接口/实例方法替换
     /// </summary>
     public PatchBuilder AddInstanceMethodReplacement(
         InstanceMethodInfo instanceMethod,
         ReplacementMethodInfo replacementMethod,
-        int? targetOccurrence = null)
+        int targetOccurrence) // 必传参数
     {
         // 添加替换定义
         _patchDefinition.Replacements.Add(new MethodCallReplacement
