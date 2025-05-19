@@ -131,25 +131,12 @@ public static class GenericTranspiler
             // 获取目标方法
             MethodInfo targetMethod = null;
             
-            // 1. 首先尝试查找静态方法（扩展方法）
-            targetMethod = replacement.TargetMethodDeclaringType.GetMethod(
+            // 使用 AccessTools 查找方法，它能处理所有访问级别包括 internal
+            targetMethod = AccessTools.Method(
+                replacement.TargetMethodDeclaringType,
                 replacement.TargetMethodName,
-                BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static,
-                null,
-                replacement.TargetMethodParameters,
-                null);
-                
-            // 2. 如果找不到静态方法，尝试查找实例方法
-            if (targetMethod == null)
-            {
-                targetMethod = replacement.TargetMethodDeclaringType.GetMethod(
-                    replacement.TargetMethodName,
-                    BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance,
-                    null,
-                    replacement.TargetMethodParameters,
-                    null);
-            }
-            
+                replacement.TargetMethodParameters);
+    
             // 如果找不到方法，记录日志并跳过
             if (targetMethod == null)
             {
@@ -157,7 +144,8 @@ public static class GenericTranspiler
                 
                 // 输出类型中所有可能的方法
                 DebugLog.Info($"可用方法列表:");
-                foreach (var method in replacement.TargetMethodDeclaringType.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance))
+                var allMethods = AccessTools.GetDeclaredMethods(replacement.TargetMethodDeclaringType);
+                foreach (var method in allMethods)
                 {
                     DebugLog.Info($"  - {method.Name}({string.Join(", ", method.GetParameters().Select(p => p.ParameterType.Name))})");
                 }
