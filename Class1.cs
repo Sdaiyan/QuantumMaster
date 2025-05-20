@@ -1,36 +1,19 @@
 ﻿﻿using GameData.Domains;
-using GameData.Utilities;
 using HarmonyLib;
-using System.Reflection;
 using TaiwuModdingLib.Core.Plugin;
 using Character = GameData.Domains.Character.Character;
 using Redzen.Random;
-using System;
 using GameData.Domains.Character;
 using GameData.Domains.Combat;
 using System.Diagnostics;
 using GameData.Domains.Map;
 using Config;
 using GameData.Domains.Item;
-using static QuantumMaster.QuantumMaster;
+using GameData.Utilities;
 using GameData.Domains.Taiwu;
 using GameData.Domains.Extra;
 using GameData.Domains.Building;
-using System.Drawing;
-using GameData.Common;
-using GameData.Domains.CombatSkill;
-using GameData.Domains.Character.Ai;
-using GameData.Domains.Character.ParallelModifications;
-using GameData.Domains.Character.Relation;
-using GameData.Domains.SpecialEffect;
-using GameData.DomainEvents;
-using GameData.Domains.Information.Collection;
-using GameData.Domains.LifeRecord;
-using GameData.Domains.World.Notification;
-using GameData.Domains.TaiwuEvent;
-using GameData.Domains.TaiwuEvent.EventHelper;
 using GameData.Domains.TaiwuEvent.DisplayEvent;
-using System.Security.Cryptography;
 
 namespace QuantumMaster
 {
@@ -77,6 +60,17 @@ namespace QuantumMaster
         public static bool CalcNeigongLoopingEffect; // 周天运转时，获得的内力为浮动区间的最大值，但现在有个副作用，就是真气获取的时候会全部加在第一种真气上，暂时没有办法解决
         public static bool TryAddLoopingEvent; // 如果概率不为0，尝试触发天人感应时必定成功
         public static bool ChoosyGetMaterial; // 精挑细选，品质升级判定概率最大
+        public static bool BookStrategies; // 指定读书策略
+        public static int BookStrategiesSelect1; // 策略
+        public static int BookStrategiesSelect2; // 策略
+        public static int BookStrategiesSelect3; // 策略
+        public static int BookStrategiesSelect4; // 策略
+        public static int BookStrategiesSelect5; // 策略
+        public static int BookStrategiesSelect6; // 策略
+        public static int BookStrategiesSelect7; // 策略
+        public static int BookStrategiesSelect8; // 策略
+        public static int BookStrategiesSelect9; // 策略
+
         public override void Dispose()
         {
             if (harmony != null)
@@ -123,11 +117,21 @@ namespace QuantumMaster
             DomainManager.Mod.GetSetting(ModIdStr, "CalcNeigongLoopingEffect", ref CalcNeigongLoopingEffect);
             DomainManager.Mod.GetSetting(ModIdStr, "TryAddLoopingEvent", ref TryAddLoopingEvent);
             DomainManager.Mod.GetSetting(ModIdStr, "ChoosyGetMaterial", ref ChoosyGetMaterial);
+            DomainManager.Mod.GetSetting(ModIdStr, "BookStrategies", ref BookStrategies);
+            DomainManager.Mod.GetSetting(ModIdStr, "BookStrategiesSelect1", ref BookStrategiesSelect1);
+            DomainManager.Mod.GetSetting(ModIdStr, "BookStrategiesSelect2", ref BookStrategiesSelect2);
+            DomainManager.Mod.GetSetting(ModIdStr, "BookStrategiesSelect3", ref BookStrategiesSelect3);
+            DomainManager.Mod.GetSetting(ModIdStr, "BookStrategiesSelect4", ref BookStrategiesSelect4);
+            DomainManager.Mod.GetSetting(ModIdStr, "BookStrategiesSelect5", ref BookStrategiesSelect5);
+            DomainManager.Mod.GetSetting(ModIdStr, "BookStrategiesSelect6", ref BookStrategiesSelect6);
+            DomainManager.Mod.GetSetting(ModIdStr, "BookStrategiesSelect7", ref BookStrategiesSelect7);
+            DomainManager.Mod.GetSetting(ModIdStr, "BookStrategiesSelect8", ref BookStrategiesSelect8);
+            DomainManager.Mod.GetSetting(ModIdStr, "BookStrategiesSelect9", ref BookStrategiesSelect9);
         }
         public override void Initialize()
         {
             harmony = Harmony.CreateAndPatchAll(typeof(QuantumMaster));
-            AdaptableLog.Info("QuantumMaster path");
+
         }
         public static bool handleActionPhase(IRandomSource random, Character targetChar, int alertFactor, bool showCheckAnim, short templateId, ref sbyte __result, Character currentChar)
         {
@@ -285,32 +289,6 @@ namespace QuantumMaster
             }
             return true;
         }
-        // 怀孕概率
-        // [HarmonyPrefix]
-        // [HarmonyPatch(typeof(PregnantState), "CheckPregnant")]
-        // public static bool CheckPregnant__prefix(IRandomSource random, Character father, Character mother, bool isRape, ref bool __result)
-        // {
-        //     var taiwuid = DomainManager.Taiwu.GetTaiwuCharId();
-        //     if (father.GetId() == taiwuid)
-        //     {
-        //         __result = true;
-        //         return false;
-        //     }
-        //     else if (mother.GetId() == taiwuid)
-        //     {
-        //         __result = true;
-        //         return false;
-        //     }
-        //     else if (isRape)
-        //     {
-        //         __result = true;
-        //         return false;
-        //     }
-        //     else
-        //     {
-        //         return true;
-        //     }
-        // }
         // 绳子或者煎饼成功率
         [HarmonyPrefix]
         [HarmonyPatch(typeof(CombatDomain), "CheckRopeOrSwordHit")]
@@ -555,45 +533,6 @@ namespace QuantumMaster
         }
 
 
-        [HarmonyPrefix]
-        [HarmonyPatch(typeof(GameData.Domains.SpecialEffect.CombatSkill.Jieqingmen.Sword.JieQingKuaiJian), "OnCastSkillEnd", new Type[] {
-            typeof(DataContext),
-            typeof(int),
-            typeof(bool),
-            typeof(short),
-            typeof(sbyte),
-            typeof(bool)
-        })]
-        public static bool JieQingKuaiJian_Prefix(GameData.Domains.SpecialEffect.CombatSkill.Jieqingmen.Sword.JieQingKuaiJian __instance, DataContext context, int charId, bool isAlly, short skillId, sbyte power, bool interrupted)
-        {
-            if (charId != __instance.CharacterId || skillId != __instance.SkillTemplateId)
-            {
-                return false;
-            }
-            var trv = Traverse.Create(__instance);
-            var odd = trv.Field("_autoCastOdds");
-            var oddVal = odd.GetValue<int>();
-            if (__instance.PowerMatchAffectRequire(power))
-            {
-                if (__instance.PowerMatchAffectRequire(power, 1) && DomainManager.Combat.CanCastSkill(__instance.CombatChar, __instance.SkillTemplateId, costFree: true) && oddVal > 0)
-                {
-                    odd.SetValue(oddVal - 20);
-                    DomainManager.Combat.CastSkillFree(context, __instance.CombatChar, __instance.SkillTemplateId);
-                    __instance.ShowSpecialEffectTips(1);
-                }
-                else
-                {
-                    odd.SetValue(60);
-                }
-                DomainManager.Combat.AddTrick(context, __instance.IsDirect ? __instance.CombatChar : DomainManager.Combat.GetCombatCharacter(!isAlly), 19, __instance.IsDirect);
-                __instance.ShowSpecialEffectTips(0);
-            }
-            else
-            {
-                odd.SetValue(60);
-            }
-            return false;
-        }
 
 
         // 100% 教技能
@@ -639,31 +578,7 @@ namespace QuantumMaster
                 }
             }
         }
-        // 地块拓展概率，有可能就是100
-        // [HarmonyPostfix]
-        // [HarmonyPatch(typeof(BuildingDomain), "GetResourceBlockExpandChance")]
-        // public static void GetResourceBlockExpandChance_HarmonyPostfix(ref sbyte __result)
-        // {
-        //     if (__result > 0)
-        //     {
-        //         __result = 100;
-        //     }
-        // }
 
-        // // 读书策略进度增加最小值取最大值
-        // [HarmonyPostfix]
-        // [HarmonyPatch(nameof(ReadingStrategyItem.MinProgressAddValue), MethodType.Getter)]
-        // public static void PatchMinProgressAddValue(ref sbyte __result, ReadingStrategyItem __instance)
-        // {
-        //     __result = __instance.MaxProgressAddValue;
-        // }
-        // // 读书策略当前页效率增加最小值取最大值
-        // [HarmonyPostfix]
-        // [HarmonyPatch(nameof(ReadingStrategyItem.MinCurrPageEfficiencyChange), MethodType.Getter)]
-        // public static void PatchMinCurrPageEfficiencyChange(ref sbyte __result, ReadingStrategyItem __instance)
-        // {
-        //     __result = __instance.MaxCurrPageEfficiencyChange;
-        // }
         // 蛐蛐是否可以升级，如果符合条件必成
         [HarmonyPrefix]
         [HarmonyPatch(typeof(GameData.Domains.Extra.ExtraDomain), "CheckCricketIsSmart")]
@@ -699,22 +614,10 @@ namespace QuantumMaster
                 }
             }
         }
-        // 不限制角色，找到宝物的概率是 100%
-        // TODO: 测试
+        // 物品掉率
         [HarmonyPostfix]
-        [HarmonyPatch(typeof(ExtraDomain), "FindTreasureChance", typeof(MapBlockData), typeof(Character))]
-        public static void FindTreasureChancePostfix(ref int __result)
-        {
-            if (__result > 0)
-            {
-                __result = 100;
-            }
-        }
-        // 不限制角色，找到宝物的概率是 100%
-        // TODO: 测试
-        [HarmonyPostfix]
-        [HarmonyPatch(typeof(ExtraDomain), "FindTreasureChance", typeof(MapBlockData), typeof(Character), typeof(int))]
-        public static void FindTreasureChanceWithItemsCountPostfix(ref int __result)
+        [HarmonyPatch(typeof(ItemTemplateHelper), "GetDropRate")]
+        public static void GetDropRatePostfix(ref sbyte __result)
         {
             if (__result > 0)
             {
@@ -722,16 +625,6 @@ namespace QuantumMaster
             }
         }
 
-        // 物品掉率
-        // [HarmonyPostfix]
-        // [HarmonyPatch(typeof(ItemTemplateHelper), "GetDropRate")]
-        // public static void GetDropRatePostfix(ref sbyte __result)
-        // {
-        //     if (__result > 0)
-        //     {
-        //         __result = 100;
-        //     }
-        // }
         // 生成读书策略
         [HarmonyPrefix]
         [HarmonyPatch(typeof(GameData.Domains.Item.SkillBook), "GeneratePageIncompleteState")]
@@ -832,37 +725,6 @@ namespace QuantumMaster
             }
         }
 
-
-
-        // [HarmonyPrefix]
-        // [HarmonyPatch(typeof(GameData.Domains.CombatSkill.CombatSkillDomain), "")]
-        // public static void CalcNeigongLoopingEffect_Prefix(ref IRandomSource random, GameData.Domains.Character.Character character)
-        // {
-        //     var taiwuid = DomainManager.Taiwu.GetTaiwuCharId();
-        //     var id = character.GetId();
-        //     if (taiwuid == id)
-        //     {
-        //         random = new myRandom();
-        //     }
-        // }
-
-
-        // [HarmonyPostfix]
-        // [HarmonyPatch(typeof(CombatSkillDomain), "CalcTaiwuExtraDeltaNeiliPerLoop")]
-        // public static void CalcTaiwuExtraDeltaNeiliPerLoop_Postfix(DataContext context, ref (int minNeili, int maxNeili) __result)
-        // {
-        //     var bigger = __result.maxNeili > __result.minNeili ? __result.maxNeili : __result.minNeili;
-        //     __result = (minNeili: bigger, maxNeili: bigger);
-        // }
-        // 
-        // [HarmonyPostfix]
-        // [HarmonyPatch(typeof(TaiwuDomain), "GetQiArtStrategyExtraNeiliAllocationBonusRange")]
-        // public static void GetQiArtStrategyExtraNeiliAllocationBonusRange_Postfix(ref (int min, int max) __result)
-        // {
-        //     var bigger = __result.max > __result.min ? __result.max : __result.min;
-        //     __result = (min: bigger, max: bigger);
-        // }
-        // 
         // 灵光一闪？
         [HarmonyPrefix]
         [HarmonyPatch(typeof(TaiwuDomain), "TryAddLoopingEvent")]
@@ -917,22 +779,26 @@ namespace QuantumMaster
         //     return true;
         // }
         // 生成读书策略
-        // [HarmonyPrefix]
-        // [HarmonyPatch(typeof(GameData.Domains.Extra.ExtraDomain), "SetAvailableReadingStrategies")]
-        // public static void SetAvailableReadingStrategies_Prefix(ref SByteList strategyIds)
-        // {
-        //     SByteList ids = SByteList.Create();
-        //     ids.Items.Add(0);
-        //     ids.Items.Add(0);
-        //     ids.Items.Add(2);
-        //     ids.Items.Add(2);
-        //     ids.Items.Add(6);
-        //     ids.Items.Add(6);
-        //     ids.Items.Add(12);
-        //     ids.Items.Add(12);
-        //     ids.Items.Add(12);
-        //     strategyIds = ids;
-        // }
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(GameData.Domains.Extra.ExtraDomain), "SetAvailableReadingStrategies")]
+        public static void SetAvailableReadingStrategies_Prefix(ref SByteList strategyIds)
+        {
+            if (BookStrategies)
+            {
+                SByteList ids = SByteList.Create();
+                ids.Items.Add((sbyte)(BookStrategiesSelect1 - 1));
+                ids.Items.Add((sbyte)(BookStrategiesSelect2 - 1));
+                ids.Items.Add((sbyte)(BookStrategiesSelect3 - 1));
+                ids.Items.Add((sbyte)(BookStrategiesSelect4 - 1));
+                ids.Items.Add((sbyte)(BookStrategiesSelect5 - 1));
+                ids.Items.Add((sbyte)(BookStrategiesSelect6 - 1));
+                ids.Items.Add((sbyte)(BookStrategiesSelect7 - 1));
+                ids.Items.Add((sbyte)(BookStrategiesSelect8 - 1));
+                ids.Items.Add((sbyte)(BookStrategiesSelect9 - 1));
+                strategyIds = ids;
+            }
+        }
+
         // 初始化地块
         [HarmonyPrefix]
         [HarmonyPatch(typeof(GameData.Domains.Map.MapBlockData), "InitResources")]
@@ -968,63 +834,46 @@ namespace QuantumMaster
 
 
 
-        // 初始化地块
-        // [HarmonyPrefix]
-        // [HarmonyPatch(typeof(EventHelper), "SetSectMemberApproveTaiwu")]
-        // public static bool SetSectMemberApproveTaiwu_HarmonyPrefix(sbyte sectId, byte countMax, ref sbyte gradeMin, sbyte gradeMax, ref List<GameData.Domains.Character.Character> __result)
-        // {
-        //     List<GameData.Domains.Character.Character> allMembers = EventHelper.GetSectCharList(sectId, 0, 8);
-        //     for (int i = allMembers.Count - 1; i >= 0; i--)
-        //     {
-        //         OrganizationInfo orgInfo = allMembers[i].GetOrganizationInfo();
-        //         if (orgInfo.Grade != gradeMax)
-        //         {
-        //             allMembers.RemoveAt(i);
-        //             continue;
-        //         }
-        //         if (EventHelper.IsSectCharApprovedTaiwu(allMembers[i].GetId()))
-        //         {
-        //             allMembers.RemoveAt(i);
-        //             continue;
-        //         }
-        //     }
-        //     var ids1 = new List<string>();
-        //     foreach (var item in allMembers)
-        //     {
-        //         ids1.Add(item.GetId().ToString());
-        //     }
-        //     AdaptableLog.Info($"allMembers {ids1.Join()}");
-        //     countMax = (byte)Math.Min(countMax, allMembers.Count);
-        //     List<GameData.Domains.Character.Character> retList = new List<GameData.Domains.Character.Character>();
-        //     for (int i = 0; i < countMax; i++)
-        //     {
-        //         EventHelper.SetSectCharApprovedTaiwu(allMembers[i].GetId());
-        //         retList.Add(allMembers[i]);
-        //     }
-        //     __result = retList;
-        //     var ids = new List<string>();
-        //     foreach (var item in __result)
-        //     {
-        //         ids.Add(item.GetId().ToString());
-        //     }
-        //     AdaptableLog.Info($"retList {ids.Join()}");
-        //     return false;
-        // }
-        // 
-        // 
-        // [HarmonyPrefix]
-        // [HarmonyPatch(typeof(GameData.Domains.Character.Character), "OfflineCalcGeneralAction_TeachSkill", typeof(DataContext), typeof(PeriAdvanceMonthGeneralActionModification), typeof(HashSet<int>), typeof(HashSet<int>))]
-        // public static unsafe void OfflineCalcGeneralAction_TeachSkill_prefix(DataContext context, PeriAdvanceMonthGeneralActionModification mod, ref HashSet<int> currBlockChars, ref HashSet<int> caringCharIds)
-        // {
-        //     var taiwuid = DomainManager.Taiwu.GetTaiwuCharId();
-        //     if (currBlockChars.Contains(taiwuid))
-        //     {
-        //         currBlockChars = new HashSet<int> { taiwuid };
-        //     }
-        //     if (caringCharIds.Contains(taiwuid))
-        //     {
-        //         caringCharIds = new HashSet<int> { taiwuid };
-        //     }
-        // }
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(GameData.Domains.TaiwuEvent.EventHelper.EventHelper), "SetSectMemberApproveTaiwu")]
+        public static bool SetSectMemberApproveTaiwu_HarmonyPrefix(sbyte sectId, byte countMax, ref sbyte gradeMin, sbyte gradeMax, ref List<GameData.Domains.Character.Character> __result)
+        {
+            List<GameData.Domains.Character.Character> allMembers = GameData.Domains.TaiwuEvent.EventHelper.EventHelper.GetSectCharList(sectId, 0, 8);
+            for (int i = allMembers.Count - 1; i >= 0; i--)
+            {
+                OrganizationInfo orgInfo = allMembers[i].GetOrganizationInfo();
+                if (orgInfo.Grade != gradeMax)
+                {
+                    allMembers.RemoveAt(i);
+                    continue;
+                }
+                if (GameData.Domains.TaiwuEvent.EventHelper.EventHelper.IsSectCharApprovedTaiwu(allMembers[i].GetId()))
+                {
+                    allMembers.RemoveAt(i);
+                    continue;
+                }
+            }
+            var ids1 = new List<string>();
+            foreach (var item in allMembers)
+            {
+                ids1.Add(item.GetId().ToString());
+            }
+
+            countMax = (byte)Math.Min(countMax, allMembers.Count);
+            List<GameData.Domains.Character.Character> retList = new List<GameData.Domains.Character.Character>();
+            for (int i = 0; i < countMax; i++)
+            {
+                GameData.Domains.TaiwuEvent.EventHelper.EventHelper.SetSectCharApprovedTaiwu(allMembers[i].GetId());
+                retList.Add(allMembers[i]);
+            }
+            __result = retList;
+            var ids = new List<string>();
+            foreach (var item in __result)
+            {
+                ids.Add(item.GetId().ToString());
+            }
+
+            return false;
+        }
     }
 }

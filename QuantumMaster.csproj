@@ -4,7 +4,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>annotations</Nullable>
-	  <OutputPath>E:\SteamLibrary\steamapps\common\The Scroll Of Taiwu\Mod\QuantumMaster\Plugins</OutputPath>
+	  <OutputPath>E:\SteamLibrary\steamapps\common\The Scroll Of Taiwu\Mod\[测试]天机秘术\Plugins</OutputPath>
     <ProduceReferenceAssembly>False</ProduceReferenceAssembly>
     <BaseIntermediateOutputPath></BaseIntermediateOutputPath>
     <AnalysisLevel>none</AnalysisLevel>
@@ -24,6 +24,9 @@
     </Reference>
     <Reference Include="GameData">
       <HintPath>E:\SteamLibrary\steamapps\common\The Scroll Of Taiwu\Backend\GameData.dll</HintPath>
+    </Reference>
+    <Reference Include="GameData.Utilities">
+      <HintPath>E:\SteamLibrary\steamapps\common\The Scroll Of Taiwu\Backend\GameData.Utilities.dll</HintPath>
     </Reference>
     <Reference Include="Redzen">
       <HintPath>E:\SteamLibrary\steamapps\common\The Scroll Of Taiwu\Backend\Redzen.dll</HintPath>
