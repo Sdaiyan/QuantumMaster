@@ -879,15 +879,15 @@ namespace QuantumMaster
 				if (BookStrategies)
 				{
 					SByteList ids = SByteList.Create();
-					ids.Items.Add((sbyte)(BookStrategiesSelect1 - 1));
-					ids.Items.Add((sbyte)(BookStrategiesSelect2 - 1));
-					ids.Items.Add((sbyte)(BookStrategiesSelect3 - 1));
-					ids.Items.Add((sbyte)(BookStrategiesSelect4 - 1));
-					ids.Items.Add((sbyte)(BookStrategiesSelect5 - 1));
-					ids.Items.Add((sbyte)(BookStrategiesSelect6 - 1));
-					ids.Items.Add((sbyte)(BookStrategiesSelect7 - 1));
-					ids.Items.Add((sbyte)(BookStrategiesSelect8 - 1));
-					ids.Items.Add((sbyte)(BookStrategiesSelect9 - 1));
+					ids.Items.Add((sbyte)(BookStrategiesSelect1));
+					ids.Items.Add((sbyte)(BookStrategiesSelect2));
+					ids.Items.Add((sbyte)(BookStrategiesSelect3));
+					ids.Items.Add((sbyte)(BookStrategiesSelect4));
+					ids.Items.Add((sbyte)(BookStrategiesSelect5));
+					ids.Items.Add((sbyte)(BookStrategiesSelect6));
+					ids.Items.Add((sbyte)(BookStrategiesSelect7));
+					ids.Items.Add((sbyte)(BookStrategiesSelect8));
+					ids.Items.Add((sbyte)(BookStrategiesSelect9));
 					strategyIds = ids;
 				}
 			}
