@@ -23,7 +23,13 @@ namespace QuantumMaster
         public static bool OfflineUpdateShopManagement; // 如果概率不为0，产业建筑经营、招募必然成功、村民技艺必定提升
         public static bool ApplyLifeSkillCombatResult; // 如果概率不为0，较艺读书必定触发
         public static bool CalcReadInCombat; // 如果概率不为0，战斗读书必定触发
+        public static bool CalcQiQrtInCombat; // 如果概率不为0，战斗周天运转必定触发
         public static bool CalcLootItem; // 如果概率不为0，战利品掉落判定必定通过（原本逻辑是对每个战利品进行判断是否掉落）
+        public static bool InitPathContent; // 奇遇收获资源时，数量为浮动区间的上限
+        public static bool GetStrategyProgressAddValue; // 读书策略进度增加为浮动区间的上限
+        public static bool ApplyImmediateReadingStrategyEffectForLifeSkill; // 技艺读书策略进度增加为浮动区间的上限
+        public static bool ChoosyGetMaterial; // 精挑细选，品质升级判定概率最大
+        public static bool ParallelUpdateOnMonthChange; // 地块每月资源恢复数量为浮动区间的上限
 
         public override void OnModSettingUpdate()
         {
@@ -35,7 +41,13 @@ namespace QuantumMaster
             DomainManager.Mod.GetSetting(ModIdStr, "OfflineUpdateShopManagement", ref OfflineUpdateShopManagement);
             DomainManager.Mod.GetSetting(ModIdStr, "ApplyLifeSkillCombatResult", ref ApplyLifeSkillCombatResult);
             DomainManager.Mod.GetSetting(ModIdStr, "CalcReadInCombat", ref CalcReadInCombat);
+            DomainManager.Mod.GetSetting(ModIdStr, "CalcQiQrtInCombat", ref CalcQiQrtInCombat);
             DomainManager.Mod.GetSetting(ModIdStr, "CalcLootItem", ref CalcLootItem);
+            DomainManager.Mod.GetSetting(ModIdStr, "InitPathContent", ref InitPathContent);
+            DomainManager.Mod.GetSetting(ModIdStr, "GetStrategyProgressAddValue", ref GetStrategyProgressAddValue);
+            DomainManager.Mod.GetSetting(ModIdStr, "ApplyImmediateReadingStrategyEffectForLifeSkill", ref ApplyImmediateReadingStrategyEffectForLifeSkill);
+            DomainManager.Mod.GetSetting(ModIdStr, "ChoosyGetMaterial", ref ChoosyGetMaterial);
+            DomainManager.Mod.GetSetting(ModIdStr, "ParallelUpdateOnMonthChange", ref ParallelUpdateOnMonthChange);
         }
         public override void Initialize()
         {
@@ -563,6 +575,179 @@ namespace QuantumMaster
 
             return true;
         }
+
+        public bool patchInitPathContent()
+        {
+            if (!InitPathContent && !openAll) return false;
+
+            var OriginalMethod = new OriginalMethodInfo
+            {
+                Type = typeof(GameData.Domains.Adventure.AdventureDomain),
+                MethodName = "InitPathContent",
+                // DataContext context
+                Parameters = new Type[] { typeof(GameData.Common.DataContext) }
+            };
+
+            patchBuilder = GenericTranspiler.CreatePatchBuilder(
+                "InitPathContent",
+                OriginalMethod);
+
+            // 1 resAmount = (short)(context.Random.Next(minAmount, maxAmount) * DomainManager.World.GetGainResourcePercent(4) / 100);
+            patchBuilder.AddInstanceMethodReplacement(
+                PatchPresets.InstanceMethods.Next2Args,
+                PatchPresets.Replacements.Next2ArgsMax,
+                1);
+
+            patchBuilder.Apply(harmony);
+
+            return true;
+        }
+
+        public bool patchGetStrategyProgressAddValue()
+        {
+            if (!GetStrategyProgressAddValue && !openAll) return false;
+
+            var OriginalMethod = new OriginalMethodInfo
+            {
+                Type = typeof(GameData.Domains.Taiwu.TaiwuDomain),
+                MethodName = "GetStrategyProgressAddValue",
+                // IRandomSource random, ReadingStrategyItem strategyCfg
+                Parameters = new Type[] { typeof(IRandomSource), typeof(Config.ReadingStrategyItem) }
+            };
+
+            patchBuilder = GenericTranspiler.CreatePatchBuilder(
+                "GetStrategyProgressAddValue",
+                OriginalMethod);
+
+            // 1 return (sbyte)((strategyCfg.MaxProgressAddValue > strategyCfg.MinProgressAddValue) ? random.Next(strategyCfg.MinProgressAddValue, strategyCfg.MaxProgressAddValue + 1) : strategyCfg.MaxProgressAddValue);
+            patchBuilder.AddInstanceMethodReplacement(
+                PatchPresets.InstanceMethods.Next2Args,
+                PatchPresets.Replacements.Next2ArgsMax,
+                1);
+
+            patchBuilder.Apply(harmony);
+
+            return true;
+        }
+
+        public bool patchApplyImmediateReadingStrategyEffectForLifeSkill()
+        {
+            if (!ApplyImmediateReadingStrategyEffectForLifeSkill && !openAll) return false;
+
+            var OriginalMethod = new OriginalMethodInfo
+            {
+                Type = typeof(GameData.Domains.Taiwu.TaiwuDomain),
+                MethodName = "ApplyImmediateReadingStrategyEffectForLifeSkill",
+                // DataContext context, GameData.Domains.Item.SkillBook book, byte pageIndex, ref ReadingBookStrategies strategies, sbyte strategyId
+                Parameters = new Type[] { typeof(GameData.Common.DataContext), typeof(GameData.Domains.Item.SkillBook), typeof(byte), typeof(GameData.Domains.Taiwu.ReadingBookStrategies).MakeByRefType(), typeof(sbyte) }
+            };
+
+            patchBuilder = GenericTranspiler.CreatePatchBuilder(
+                "ApplyImmediateReadingStrategyEffectForLifeSkill",
+                OriginalMethod);
+
+            // 1 sbyte currPageAddValue = (sbyte)((strategyCfg.MaxProgressAddValue > strategyCfg.MinProgressAddValue) ? context.Random.Next(strategyCfg.MinProgressAddValue, strategyCfg.MaxProgressAddValue + 1) : strategyCfg.MaxProgressAddValue);
+            patchBuilder.AddInstanceMethodReplacement(
+                PatchPresets.InstanceMethods.Next2Args,
+                PatchPresets.Replacements.Next2ArgsMax,
+                1);
+
+            patchBuilder.Apply(harmony);
+
+            return true;
+        }
+
+        public bool patchChoosyGetMaterial()
+        {
+            if (!ChoosyGetMaterial && !openAll) return false;
+
+            var OriginalMethod = new OriginalMethodInfo
+            {
+                Type = typeof(GameData.Domains.Taiwu.TaiwuDomain),
+                MethodName = "ChoosyGetMaterial",
+                // DataContext context, sbyte resourceType, int count
+                Parameters = new Type[] { typeof(GameData.Common.DataContext), typeof(sbyte), typeof(int) }
+            };
+
+            patchBuilder = GenericTranspiler.CreatePatchBuilder(
+                "ChoosyGetMaterial",
+                OriginalMethod);
+
+            // 1 int random = context.Random.Next(10000);
+            patchBuilder.AddInstanceMethodReplacement(
+                PatchPresets.InstanceMethods.Next1Arg,
+                PatchPresets.Replacements.Next1ArgMax,
+                1);
+
+            patchBuilder.Apply(harmony);
+
+            return true;
+        }
+
+        public bool patchParallelUpdateOnMonthChange()
+        {
+            if (!ParallelUpdateOnMonthChange && !openAll) return false;
+
+            var OriginalMethod = new OriginalMethodInfo
+            {
+                Type = typeof(GameData.Domains.Map.MapDomain),
+                MethodName = "ParallelUpdateOnMonthChange",
+                // DataContext context, int areaIdInt
+                Parameters = new Type[] { typeof(GameData.Common.DataContext), typeof(int) }
+            };
+
+            patchBuilder = GenericTranspiler.CreatePatchBuilder(
+                "ParallelUpdateOnMonthChange",
+                OriginalMethod);
+
+            // 1 int addValue = context.Random.Next(maxAddValue + 1);
+            patchBuilder.AddInstanceMethodReplacement(
+                PatchPresets.InstanceMethods.Next1Arg,
+                PatchPresets.Replacements.Next1ArgMax,
+                1);
+
+            patchBuilder.Apply(harmony);
+
+            return true;
+        }
+
+        public bool patchCalcQiQrtInCombat()
+        {
+            if (!CalcQiQrtInCombat && !openAll) return false;
+
+            var OriginalMethod = new OriginalMethodInfo
+            {
+                Type = typeof(GameData.Domains.Combat.CombatDomain),
+                MethodName = "CalcQiQrtInCombat",
+                // DataContext context
+                Parameters = new Type[] { typeof(GameData.Common.DataContext) }
+            };
+
+            patchBuilder = GenericTranspiler.CreatePatchBuilder(
+                "CalcQiQrtInCombat",
+                OriginalMethod);
+
+            // CheckPercentProb
+            // 1 if (context.Random.CheckPercentProb(odds))
+            patchBuilder.AddExtensionMethodReplacement(
+                PatchPresets.Extensions.CheckPercentProb,
+                PatchPresets.Replacements.CheckPercentProbTrue,
+                1);
+
+            patchBuilder.Apply(harmony);
+
+            return true;
+        }
+
+
+
+
+
+
+
+
+
+
 
 
 
