@@ -26,7 +26,7 @@ namespace QuantumMaster
 	{
 		Harmony harmony;
 		PatchBuilder patchBuilder;
-		public static bool debug = true;
+		public static bool debug = false;
 		public static bool openAll = false; // 是否开启所有补丁
 
 		// 原Class1.cs中的各种功能开关
@@ -85,158 +85,158 @@ namespace QuantumMaster
 
 		public override void OnModSettingUpdate()
 		{
-			UpdateConfig()
+			UpdateConfig();
 		}
 
 		public void UpdateConfig()
 		{
-			
+
 			// 从Class1.cs迁移的设置读取
 			DomainManager.Mod.GetSetting(ModIdStr, "steal", ref steal);
 			DebugLog.Info($"配置加载: steal = {steal}");
-			
+
 			DomainManager.Mod.GetSetting(ModIdStr, "scam", ref scam);
 			DebugLog.Info($"配置加载: scam = {scam}");
-			
+
 			DomainManager.Mod.GetSetting(ModIdStr, "rob", ref rob);
 			DebugLog.Info($"配置加载: rob = {rob}");
-			
+
 			DomainManager.Mod.GetSetting(ModIdStr, "stealLifeSkill", ref stealLifeSkill);
 			DebugLog.Info($"配置加载: stealLifeSkill = {stealLifeSkill}");
-			
+
 			DomainManager.Mod.GetSetting(ModIdStr, "stealCombatSkill", ref stealCombatSkill);
 			DebugLog.Info($"配置加载: stealCombatSkill = {stealCombatSkill}");
-			
+
 			DomainManager.Mod.GetSetting(ModIdStr, "poison", ref poison);
 			DebugLog.Info($"配置加载: poison = {poison}");
-			
+
 			DomainManager.Mod.GetSetting(ModIdStr, "plotHarm", ref plotHarm);
 			DebugLog.Info($"配置加载: plotHarm = {plotHarm}");
-			
+
 			DomainManager.Mod.GetSetting(ModIdStr, "gender0", ref gender0);
 			DebugLog.Info($"配置加载: gender0 = {gender0}");
-			
+
 			DomainManager.Mod.GetSetting(ModIdStr, "gender1", ref gender1);
 			DebugLog.Info($"配置加载: gender1 = {gender1}");
-			
+
 			DomainManager.Mod.GetSetting(ModIdStr, "ropeOrSword", ref ropeOrSword);
 			DebugLog.Info($"配置加载: ropeOrSword = {ropeOrSword}");
-			
+
 			DomainManager.Mod.GetSetting(ModIdStr, "GetResourceBlockGrowthChance", ref GetResourceBlockGrowthChance);
 			DebugLog.Info($"配置加载: GetResourceBlockGrowthChance = {GetResourceBlockGrowthChance}");
-			
+
 			DomainManager.Mod.GetSetting(ModIdStr, "ApplyImmediateReadingStrategyEffectForCombatSkill", ref ApplyImmediateReadingStrategyEffectForCombatSkill);
 			DebugLog.Info($"配置加载: ApplyImmediateReadingStrategyEffectForCombatSkill = {ApplyImmediateReadingStrategyEffectForCombatSkill}");
-			
+
 			DomainManager.Mod.GetSetting(ModIdStr, "GetAskToTeachSkillRespondChance", ref GetAskToTeachSkillRespondChance);
 			DebugLog.Info($"配置加载: GetAskToTeachSkillRespondChance = {GetAskToTeachSkillRespondChance}");
-			
+
 			DomainManager.Mod.GetSetting(ModIdStr, "GetTaughtNewSkillSuccessRate", ref GetTaughtNewSkillSuccessRate);
 			DebugLog.Info($"配置加载: GetTaughtNewSkillSuccessRate = {GetTaughtNewSkillSuccessRate}");
-			
+
 			DomainManager.Mod.GetSetting(ModIdStr, "CatchCricket", ref CatchCricket);
 			DebugLog.Info($"配置加载: CatchCricket = {CatchCricket}");
-			
+
 			DomainManager.Mod.GetSetting(ModIdStr, "InitResources", ref InitResources);
 			DebugLog.Info($"配置加载: InitResources = {InitResources}");
-			
+
 			DomainManager.Mod.GetSetting(ModIdStr, "CheckCricketIsSmart", ref CheckCricketIsSmart);
 			DebugLog.Info($"配置加载: CheckCricketIsSmart = {CheckCricketIsSmart}");
-			
+
 			DomainManager.Mod.GetSetting(ModIdStr, "GetCurrReadingEventBonusRate", ref GetCurrReadingEventBonusRate);
 			DebugLog.Info($"配置加载: GetCurrReadingEventBonusRate = {GetCurrReadingEventBonusRate}");
-			
+
 			DomainManager.Mod.GetSetting(ModIdStr, "GeneratePageIncompleteState", ref GeneratePageIncompleteState);
 			DebugLog.Info($"配置加载: GeneratePageIncompleteState = {GeneratePageIncompleteState}");
-			
+
 			DomainManager.Mod.GetSetting(ModIdStr, "FixedPagePos", ref FixedPagePos);
 			DebugLog.Info($"配置加载: FixedPagePos = {FixedPagePos}");
-			
+
 			DomainManager.Mod.GetSetting(ModIdStr, "CricketInitialize", ref CricketInitialize);
 			DebugLog.Info($"配置加载: CricketInitialize = {CricketInitialize}");
-			
+
 			DomainManager.Mod.GetSetting(ModIdStr, "TryAddLoopingEvent", ref TryAddLoopingEvent);
 			DebugLog.Info($"配置加载: TryAddLoopingEvent = {TryAddLoopingEvent}");
-			
+
 			DomainManager.Mod.GetSetting(ModIdStr, "BookStrategies", ref BookStrategies);
 			DebugLog.Info($"配置加载: BookStrategies = {BookStrategies}");
-			
+
 			DomainManager.Mod.GetSetting(ModIdStr, "SetSectMemberApproveTaiwu", ref SetSectMemberApproveTaiwu);
 			DebugLog.Info($"配置加载: SetSectMemberApproveTaiwu = {SetSectMemberApproveTaiwu}");
-			
+
 			DomainManager.Mod.GetSetting(ModIdStr, "BookStrategiesSelect1", ref BookStrategiesSelect1);
 			DebugLog.Info($"配置加载: BookStrategiesSelect1 = {BookStrategiesSelect1}");
-			
+
 			DomainManager.Mod.GetSetting(ModIdStr, "BookStrategiesSelect2", ref BookStrategiesSelect2);
 			DebugLog.Info($"配置加载: BookStrategiesSelect2 = {BookStrategiesSelect2}");
-			
+
 			DomainManager.Mod.GetSetting(ModIdStr, "BookStrategiesSelect3", ref BookStrategiesSelect3);
 			DebugLog.Info($"配置加载: BookStrategiesSelect3 = {BookStrategiesSelect3}");
-			
+
 			DomainManager.Mod.GetSetting(ModIdStr, "BookStrategiesSelect4", ref BookStrategiesSelect4);
 			DebugLog.Info($"配置加载: BookStrategiesSelect4 = {BookStrategiesSelect4}");
-			
+
 			DomainManager.Mod.GetSetting(ModIdStr, "BookStrategiesSelect5", ref BookStrategiesSelect5);
 			DebugLog.Info($"配置加载: BookStrategiesSelect5 = {BookStrategiesSelect5}");
-			
+
 			DomainManager.Mod.GetSetting(ModIdStr, "BookStrategiesSelect6", ref BookStrategiesSelect6);
 			DebugLog.Info($"配置加载: BookStrategiesSelect6 = {BookStrategiesSelect6}");
-			
+
 			DomainManager.Mod.GetSetting(ModIdStr, "BookStrategiesSelect7", ref BookStrategiesSelect7);
 			DebugLog.Info($"配置加载: BookStrategiesSelect7 = {BookStrategiesSelect7}");
-			
+
 			DomainManager.Mod.GetSetting(ModIdStr, "BookStrategiesSelect8", ref BookStrategiesSelect8);
 			DebugLog.Info($"配置加载: BookStrategiesSelect8 = {BookStrategiesSelect8}");
-			
+
 			DomainManager.Mod.GetSetting(ModIdStr, "BookStrategiesSelect9", ref BookStrategiesSelect9);
 			DebugLog.Info($"配置加载: BookStrategiesSelect9 = {BookStrategiesSelect9}");
 
 			// 原QuantumMaster.cs中的设置读取
 			DomainManager.Mod.GetSetting(ModIdStr, "collectResource", ref collectResource);
 			DebugLog.Info($"配置加载: collectResource = {collectResource}");
-			
+
 			DomainManager.Mod.GetSetting(ModIdStr, "GetCollectResourceAmount", ref GetCollectResourceAmount);
 			DebugLog.Info($"配置加载: GetCollectResourceAmount = {GetCollectResourceAmount}");
-			
+
 			DomainManager.Mod.GetSetting(ModIdStr, "CreateBuildingArea", ref CreateBuildingArea);
 			DebugLog.Info($"配置加载: CreateBuildingArea = {CreateBuildingArea}");
-			
+
 			DomainManager.Mod.GetSetting(ModIdStr, "CalcNeigongLoopingEffect", ref CalcNeigongLoopingEffect);
 			DebugLog.Info($"配置加载: CalcNeigongLoopingEffect = {CalcNeigongLoopingEffect}");
-			
+
 			DomainManager.Mod.GetSetting(ModIdStr, "UpdateResourceBlock", ref UpdateResourceBlock);
 			DebugLog.Info($"配置加载: UpdateResourceBlock = {UpdateResourceBlock}");
-			
+
 			DomainManager.Mod.GetSetting(ModIdStr, "OfflineUpdateShopManagement", ref OfflineUpdateShopManagement);
 			DebugLog.Info($"配置加载: OfflineUpdateShopManagement = {OfflineUpdateShopManagement}");
-			
+
 			DomainManager.Mod.GetSetting(ModIdStr, "ApplyLifeSkillCombatResult", ref ApplyLifeSkillCombatResult);
 			DebugLog.Info($"配置加载: ApplyLifeSkillCombatResult = {ApplyLifeSkillCombatResult}");
-			
+
 			DomainManager.Mod.GetSetting(ModIdStr, "CalcReadInCombat", ref CalcReadInCombat);
 			DebugLog.Info($"配置加载: CalcReadInCombat = {CalcReadInCombat}");
-			
+
 			DomainManager.Mod.GetSetting(ModIdStr, "CalcQiQrtInCombat", ref CalcQiQrtInCombat);
 			DebugLog.Info($"配置加载: CalcQiQrtInCombat = {CalcQiQrtInCombat}");
-			
+
 			DomainManager.Mod.GetSetting(ModIdStr, "CalcLootItem", ref CalcLootItem);
 			DebugLog.Info($"配置加载: CalcLootItem = {CalcLootItem}");
-			
+
 			DomainManager.Mod.GetSetting(ModIdStr, "InitPathContent", ref InitPathContent);
 			DebugLog.Info($"配置加载: InitPathContent = {InitPathContent}");
-			
+
 			DomainManager.Mod.GetSetting(ModIdStr, "GetStrategyProgressAddValue", ref GetStrategyProgressAddValue);
 			DebugLog.Info($"配置加载: GetStrategyProgressAddValue = {GetStrategyProgressAddValue}");
-			
+
 			DomainManager.Mod.GetSetting(ModIdStr, "ApplyImmediateReadingStrategyEffectForLifeSkill", ref ApplyImmediateReadingStrategyEffectForLifeSkill);
 			DebugLog.Info($"配置加载: ApplyImmediateReadingStrategyEffectForLifeSkill = {ApplyImmediateReadingStrategyEffectForLifeSkill}");
-			
+
 			DomainManager.Mod.GetSetting(ModIdStr, "ChoosyGetMaterial", ref ChoosyGetMaterial);
 			DebugLog.Info($"配置加载: ChoosyGetMaterial = {ChoosyGetMaterial}");
-			
+
 			DomainManager.Mod.GetSetting(ModIdStr, "ParallelUpdateOnMonthChange", ref ParallelUpdateOnMonthChange);
 			DebugLog.Info($"配置加载: ParallelUpdateOnMonthChange = {ParallelUpdateOnMonthChange}");
-			
+
 			DebugLog.Info("所有配置项加载完成");
 		}
 
@@ -244,8 +244,10 @@ namespace QuantumMaster
 		{
 			UpdateConfig();
 			harmony = new Harmony("QuantumMaster");
-			harmony.PatchAll(); // 应用所有补丁类
 
+			// 不再使用 harmony.PatchAll() 直接应用所有补丁
+			// 而是根据配置选择性应用
+			ApplyClassPatches();
 
 			// 原QuantumMaster.cs中的自动补丁应用逻辑
 			int appliedPatches = 0;
@@ -308,6 +310,97 @@ namespace QuantumMaster
 
 			// 重置已处理方法列表
 			GenericTranspiler.ResetProcessedMethods();
+		}
+
+		// 新增方法，根据配置选择性应用 class 形式的补丁
+		private void ApplyClassPatches()
+		{
+			DebugLog.Info("开始应用类补丁...");
+			int appliedClassPatches = 0;
+			int skippedClassPatches = 0;
+
+			// 获取所有带有 HarmonyPatch 特性的嵌套类
+			var patchClasses = this.GetType().GetNestedTypes(BindingFlags.Public | BindingFlags.NonPublic)
+				.Where(t => t.GetCustomAttributes(typeof(HarmonyPatch), false).Length > 0)
+				.ToList();
+
+			DebugLog.Info($"发现 {patchClasses.Count} 个补丁类");
+
+			foreach (var patchClass in patchClasses)
+			{
+				try
+				{
+					string patchName = patchClass.Name;
+					bool shouldApply = false;
+
+					// 根据补丁类名称判断对应的开关
+					if (patchName.Contains("GetStealActionPhase"))
+						shouldApply = steal || openAll;
+					else if (patchName.Contains("GetScamActionPhase"))
+						shouldApply = scam || openAll;
+					else if (patchName.Contains("GetRobActionPhase"))
+						shouldApply = rob || openAll;
+					else if (patchName.Contains("GetStealLifeSkillActionPhase"))
+						shouldApply = stealLifeSkill || openAll;
+					else if (patchName.Contains("GetStealCombatSkillActionPhase"))
+						shouldApply = stealCombatSkill || openAll;
+					else if (patchName.Contains("GetPoisonActionPhase"))
+						shouldApply = poison || openAll;
+					else if (patchName.Contains("GetPlotHarmActionPhase"))
+						shouldApply = plotHarm || openAll;
+					else if (patchName.Contains("GenderGetRandom"))
+						shouldApply = (gender0 || gender1) || openAll;
+					else if (patchName.Contains("CheckRopeOrSwordHit") || patchName.Contains("CheckRopeOrSwordHitOutofCombat"))
+						shouldApply = ropeOrSword || openAll;
+					else if (patchName.Contains("GetResourceBlockGrowthChance"))
+						shouldApply = GetResourceBlockGrowthChance || openAll;
+					else if (patchName.Contains("GetAskToTeachSkillRespondChance"))
+						shouldApply = GetAskToTeachSkillRespondChance || openAll;
+					else if (patchName.Contains("GetTaughtNewSkillSuccessRate"))
+						shouldApply = GetTaughtNewSkillSuccessRate || openAll;
+					else if (patchName.Contains("CatchCricket"))
+						shouldApply = CatchCricket || openAll;
+					else if (patchName.Contains("CheckCricketIsSmart"))
+						shouldApply = CheckCricketIsSmart || openAll;
+					else if (patchName.Contains("GetCurrReadingEventBonusRate"))
+						shouldApply = GetCurrReadingEventBonusRate || openAll;
+					else if (patchName.Contains("GetDropRate"))
+						shouldApply = true; // 这个似乎总是应用的
+					else if (patchName.Contains("GeneratePageIncompleteState"))
+						shouldApply = GeneratePageIncompleteState || openAll;
+					else if (patchName.Contains("Cricket_Initialize"))
+						shouldApply = CricketInitialize || openAll;
+					else if (patchName.Contains("TryAddLoopingEvent"))
+						shouldApply = TryAddLoopingEvent || openAll;
+					else if (patchName.Contains("SetAvailableReadingStrategies"))
+						shouldApply = BookStrategies || openAll;
+					else if (patchName.Contains("MapBlockData_InitResources"))
+						shouldApply = InitResources || openAll;
+					else if (patchName.Contains("SetSectMemberApproveTaiwu"))
+						shouldApply = SetSectMemberApproveTaiwu || openAll;
+					else
+						shouldApply = true; // 默认应用，如果没有明确的开关
+
+					if (shouldApply)
+					{
+						DebugLog.Info($"应用补丁类: {patchName}");
+						harmony.PatchAll(patchClass);
+						appliedClassPatches++;
+					}
+					else
+					{
+						DebugLog.Info($"跳过补丁类: {patchName} (已禁用)");
+						skippedClassPatches++;
+					}
+				}
+				catch (Exception ex)
+				{
+					DebugLog.Warning($"应用补丁类 {patchClass.Name} 时出错: {ex.Message}");
+					skippedClassPatches++;
+				}
+			}
+
+			DebugLog.Info($"类补丁应用完成: 成功 {appliedClassPatches} 个, 跳过 {skippedClassPatches} 个");
 		}
 
 		public override void Dispose()
