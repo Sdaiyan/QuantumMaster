@@ -80,6 +80,7 @@ namespace QuantumMaster
 		public static bool GetStrategyProgressAddValue; // 读书策略进度增加为浮动区间的上限
 		public static bool ApplyImmediateReadingStrategyEffectForLifeSkill; // 技艺读书策略进度增加为浮动区间的上限
 		public static bool ChoosyGetMaterial; // 精挑细选，品质升级判定概率最大
+		public static bool AddChoosyRemainUpgradeData; // 精挑细选过月累计最大
 		public static bool ParallelUpdateOnMonthChange; // 地块每月资源恢复数量为浮动区间的上限
 
 		public override void OnModSettingUpdate()
@@ -232,6 +233,10 @@ namespace QuantumMaster
 
 			DomainManager.Mod.GetSetting(ModIdStr, "ParallelUpdateOnMonthChange", ref ParallelUpdateOnMonthChange);
 			DebugLog.Info($"配置加载: ParallelUpdateOnMonthChange = {ParallelUpdateOnMonthChange}");
+
+			// AddChoosyRemainUpgradeData
+			DomainManager.Mod.GetSetting(ModIdStr, "AddChoosyRemainUpgradeData", ref AddChoosyRemainUpgradeData);
+			DebugLog.Info($"配置加载: AddChoosyRemainUpgradeData = {AddChoosyRemainUpgradeData}");
 
 			DebugLog.Info("所有配置项加载完成");
 		}
@@ -1622,7 +1627,38 @@ namespace QuantumMaster
 			return true;
 		}
 
+		public bool patchAddChoosyRemainUpgradeData()
+		{
+			if (!AddChoosyRemainUpgradeData && !openAll) return false;
 
+			var OriginalMethod = new OriginalMethodInfo
+			{
+				Type = typeof(GameData.Domains.Taiwu.TaiwuDomain),
+				MethodName = "AddChoosyRemainUpgradeData",
+				// DataContext context
+				Parameters = new Type[] { typeof(GameData.Common.DataContext) }
+			};
+
+			patchBuilder = GenericTranspiler.CreatePatchBuilder(
+					"AddChoosyRemainUpgradeData",
+					OriginalMethod);
+
+			// 1 int randomAddCount = ((maxAddCount > 0) ? context.Random.Next(maxAddCount) : 0);
+			patchBuilder.AddInstanceMethodReplacement(
+					PatchPresets.InstanceMethods.Next1Arg,
+					PatchPresets.Replacements.Next1ArgMax,
+					1);
+
+			// 2 int randomAddRate = ((maxAddRate > 0) ? context.Random.Next(maxAddRate) : 0);
+			patchBuilder.AddInstanceMethodReplacement(
+					PatchPresets.InstanceMethods.Next1Arg,
+					PatchPresets.Replacements.Next1ArgMax,
+					2);
+
+			patchBuilder.Apply(harmony);
+
+			return true;
+		}
 
 
 

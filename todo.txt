@@ -1,8 +1,12 @@
 TaiwuDomain.cs: 太吾相关的功能
-AddChoosyRemainUpgradeData
 GetQiArtStrategyDeltaNeiliBonus
 
 AiHelper.cs: AI 行为
+GetStartRelationSuccessRate_Adored
+GetStartRelationSuccessRate_BoyOrGirlFriend
+GetStartRelationSuccessRate_HusbandOrWife
+GetStartRelationSuccessRate_SexRelationBaseRate
+我感觉 AI 的爱慕之类的行为有太多可以操作的地方了，天机秘术还是不改这类功能了，专门开一个新的MOD去弄
 
 Character.cs: NPC 属性以及行为
 OfflineCreateProtagonist

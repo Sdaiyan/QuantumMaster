@@ -69,217 +69,224 @@ return {
 			Description = "生成角色时，如果是随机的性别，则指定为男性，对于指定性别的NPC生成无效",
 			DefaultValue = false,
 		},
-		[9] = {
+		[10] = {
 			SettingType = "Toggle",
 			Key = "GetBisexualTrue",
 			DisplayName = "全体双性恋",
 			Description = "太吾世界中每个人在诞生的时候都有20%概率是双性恋，开启这个功能以后可以让所有人（包括开启这个功能之前出生的人）都视为双性恋。双性恋会影响表白结婚之类的概率。",
 			DefaultValue = true,
 		},
-		[9] = {
+		[11] = {
 			SettingType = "Toggle",
 			Key = "GetBisexualFalse",
 			DisplayName = "禁止双性恋",
 			Description = "太吾世界中每个人在诞生的时候都有20%概率是双性恋，开启这个功能以后可以让所有人（包括开启这个功能之前出生的人）都视为单性恋。双性恋会影响表白结婚之类的概率。",
 			DefaultValue = true,
 		},
-		[10] = {
+		[12] = {
 			SettingType = "Toggle",
 			Key = "CreateBuildingArea",
 			DisplayName = "世界初始建筑",
 			Description = "生成世界时，产业中的建筑和资源点的初始等级，以及生成数量",
 			DefaultValue = true,
 		},
-		[11] = {
+		[13] = {
 			SettingType = "Toggle",
 			Key = "ropeOrSword",
 			DisplayName = "绑人/剑柄救人",
 			Description = "事件触发时，如果概率不为0，绳子绑架或者煎饼救人必定成功",
 			DefaultValue = true,
 		},
-		[12] = {
+		[14] = {
 			SettingType = "Toggle",
 			Key = "collectResource",
 			DisplayName = "采集资源引子",
 			Description = "采集资源时必定获取引子，且是可能获取的最高级的引子",
 			DefaultValue = true,
 		},
-		[13] = {
+		[15] = {
 			SettingType = "Toggle",
 			Key = "GetCollectResourceAmount",
 			DisplayName = "采集资源数量",
 			Description = "采集数量必定为浮动区间的上限",
 			DefaultValue = true,
 		},
-		[14] = {
+		[16] = {
 			SettingType = "Toggle",
 			Key = "UpdateResourceBlock",
 			DisplayName = "太吾村资源点升级扩张",
 			Description = "事件触发时，如果概率不为0，过月时，对应的产业资源必定升级与扩张",
 			DefaultValue = true,
 		},
-		[15] = {
+		[17] = {
 			SettingType = "Toggle",
 			Key = "OfflineUpdateShopManagement",
 			DisplayName = "太吾村经营",
 			Description = "事件触发时，如果概率不为0，产业建筑经营、招募必然成功、村民技艺必定提升",
 			DefaultValue = true,
 		},
-		[16] = {
+		[18] = {
 			SettingType = "Toggle",
 			Key = "ApplyLifeSkillCombatResult",
 			DisplayName = "教艺读书",
 			Description = "事件触发时，如果概率不为0，较艺读书必定触发",
 			DefaultValue = true,
 		},
-		[17] = {
+		[19] = {
 			SettingType = "Toggle",
 			Key = "CalcReadInCombat",
 			DisplayName = "战斗读书",
 			Description = "事件触发时，如果概率不为0，战斗读书必定触发",
 			DefaultValue = true,
 		},
-		[18] = {
+		[20] = {
 			SettingType = "Toggle",
 			Key = "CalcQiQrtInCombat",
 			DisplayName = "战斗周天运转",
 			Description = "事件触发时，如果概率不为0，战斗中周天运转必定触发",
 			DefaultValue = true,
 		},
-		[19] = {
+		[21] = {
 			SettingType = "Toggle",
 			Key = "CalcLootItem",
 			DisplayName = "战利品概率",
 			Description = "事件触发时，如果概率不为0，战利品掉落判定必定通过（原本逻辑是对每个战利品进行判断是否掉落）",
 			DefaultValue = true,
 		},
-		[20] = {
+		[22] = {
 			SettingType = "Toggle",
 			Key = "InitPathContent",
 			DisplayName = "奇遇收获",
 			Description = "奇遇收获资源时，数量为浮动区间的上限",
 			DefaultValue = true,
 		},
-		[22] = {
+		[23] = {
 			SettingType = "Toggle",
 			Key = "GetStrategyProgressAddValue",
 			DisplayName = "读书进度策略",
 			Description = "读书策略（独见独知）进度增加为浮动区间的上限",
 			DefaultValue = true,
 		},
-		[23] = {
+		[24] = {
 			SettingType = "Toggle",
 			Key = "ApplyImmediateReadingStrategyEffectForLifeSkill",
 			DisplayName = "技艺读书效率策略",
 			Description = "技艺书籍的效率增加策略（奇思妙想）进度增加为浮动区间的上限值",
 			DefaultValue = true,
 		},
-		[24] = {
+		[25] = {
 			SettingType = "Toggle",
 			Key = "ApplyImmediateReadingStrategyEffectForCombatSkill",
 			DisplayName = "功法读书效率策略",
 			Description = "功法书籍的效率增加策略（奇思妙想）进度增加为浮动区间的上限值",
 			DefaultValue = true,
 		},
-		[25] = {
+		[26] = {
 			SettingType = "Toggle",
 			Key = "ParallelUpdateOnMonthChange",
 			DisplayName = "过月地块资源恢复",
 			Description = "地块每月资源恢复数量为浮动区间的上限",
 			DefaultValue = true,
 		},
-		[26] = {
+		[27] = {
 			SettingType = "Toggle",
 			Key = "GetAskToTeachSkillRespondChance",
 			DisplayName = "NPC过月指点概率",
 			Description = "事件触发时，如果概率不为0，则必定会指点别人",
 			DefaultValue = true,
 		},
-		[27] = {
+		[28] = {
 			SettingType = "Toggle",
 			Key = "GetTaughtNewSkillSuccessRate",
 			DisplayName = "NPC接受指点成功率",
 			Description = "事件触发时，如果概率不为0，接受指点的人必定能学习成功",
 			DefaultValue = true,
 		},
-		[28] = {
+		[29] = {
 			SettingType = "Toggle",
 			Key = "CatchCricket",
 			DisplayName = "抓蛐蛐捕捉成功率",
 			Description = "抓蛐蛐必定成功",
 			DefaultValue = true,
 		},
-		[29] = {
+		[30] = {
 			SettingType = "Toggle",
 			Key = "InitResources",
 			DisplayName = "初始生成地格资源最大",
 			Description = "生成世界时，每个地块上的资源为浮动区间的最大值以及地块上当前可采集的资源，受到难度的影响",
 			DefaultValue = true,
 		},
-		[30] = {
+		[31] = {
 			SettingType = "Toggle",
 			Key = "CheckCricketIsSmart",
 			DisplayName = "蛐蛐升级成功率",
 			Description = "蛐蛐是否可以升级，如果符合条件必定升级",
 			DefaultValue = true,
 		},
-		[31] = {
+		[32] = {
 			SettingType = "Toggle",
 			Key = "GetCurrReadingEventBonusRate",
 			DisplayName = "灵光一闪",
 			Description = "灵光一闪概率不为0时，必定灵光一闪",
 			DefaultValue = true,
 		},
-		[32] = {
+		[33] = {
 			SettingType = "Toggle",
 			Key = "GeneratePageIncompleteState",
 			DisplayName = "生成书籍参数",
 			Description = "生成书籍时，完整的书页为浮动区间的最大值，亡佚书页为浮动区间最小值",
 			DefaultValue = true,
 		},
-		[33] = {
+		[34] = {
 			SettingType = "Toggle",
 			Key = "FixedPagePos",
 			DisplayName = "完整书页固定靠前",
 			Description = "需要开启生成书籍参数的功能，开启这个功能完整的书页会出现在书本的前篇位置",
 			DefaultValue = true,
 		},
-		[34] = {
+		[35] = {
 			SettingType = "Toggle",
 			Key = "CricketInitialize",
 			DisplayName = "健康的蛐蛐",
 			Description = "生成蛐蛐时，必定生成耐久上限为理论上限值的，不受伤的蛐蛐",
 			DefaultValue = true,
 		},
-		[35] = {
+		[36] = {
 			SettingType = "Toggle",
 			Key = "CalcNeigongLoopingEffect",
 			DisplayName = "周天内力获取",
 			Description = "周天运转时，获得的内力为浮动区间的最大值",
 			DefaultValue = true,
 		},
-		[36] = {
+		[37] = {
 			SettingType = "Toggle",
 			Key = "TryAddLoopingEvent",
 			DisplayName = "天人感应",
 			Description = "如果概率不为0，尝试触发天人感应时必定成功",
 			DefaultValue = true,
 		},
-		[37] = {
+		[38] = {
 			SettingType = "Toggle",
 			Key = "ChoosyGetMaterial",
-			DisplayName = "精挑细选",
-			Description = "精挑细选时，品质升级机制必定生效（不是每次都获取最高品素材）",
+			DisplayName = "精挑细选品质升级",
+			Description = "精挑细选时，品质升级机制只要概率不是0，则必定生效（不是每次都获取最高品素材）",
 			DefaultValue = true,
 		},
-		[38] = {
+		[39] = {
+			SettingType = "Toggle",
+			Key = "AddChoosyRemainUpgradeData",
+			DisplayName = "精挑细选过月累计最大",
+			Description = "精挑细选时，每个月都会增加精挑细选的升级概率和数量，这个增加的数值是随机的，开启后可以让增加的数值为理论上限",
+			DefaultValue = true,
+		},
+		[40] = {
 			SettingType = "Toggle",
 			Key = "BookStrategies",
 			DisplayName = "读书策略",
 			Description = "是否指定读书策略",
 			DefaultValue = true,
 		},
-		[39] = {
+		[41] = {
 			SettingType = "Dropdown",
 			Key = "BookStrategiesSelect1",
 			DisplayName = "第一个策略指定",
@@ -307,7 +314,7 @@ return {
 			},
 			DefaultValue = 0,
 		},
-		[40] = {
+		[42] = {
 			SettingType = "Dropdown",
 			Key = "BookStrategiesSelect2",
 			DisplayName = "第二个策略指定",
@@ -335,7 +342,7 @@ return {
 			},
 			DefaultValue = 0,
 		},
-		[41] = {
+		[43] = {
 			SettingType = "Dropdown",
 			Key = "BookStrategiesSelect3",
 			DisplayName = "第三个策略指定",
@@ -363,7 +370,7 @@ return {
 			},
 			DefaultValue = 0,
 		},
-		[42] = {
+		[44] = {
 			SettingType = "Dropdown",
 			Key = "BookStrategiesSelect4",
 			DisplayName = "第四个策略指定",
@@ -391,7 +398,7 @@ return {
 			},
 			DefaultValue = 2,
 		},
-		[43] = {
+		[45] = {
 			SettingType = "Dropdown",
 			Key = "BookStrategiesSelect5",
 			DisplayName = "第五个策略指定",
@@ -419,7 +426,7 @@ return {
 			},
 			DefaultValue = 2,
 		},
-		[44] = {
+		[46] = {
 			SettingType = "Dropdown",
 			Key = "BookStrategiesSelect6",
 			DisplayName = "第六个策略指定",
@@ -447,7 +454,7 @@ return {
 			},
 			DefaultValue = 2,
 		},
-		[45] = {
+		[47] = {
 			SettingType = "Dropdown",
 			Key = "BookStrategiesSelect7",
 			DisplayName = "第七个策略指定",
@@ -475,7 +482,7 @@ return {
 			},
 			DefaultValue = 4,
 		},
-		[46] = {
+		[48] = {
 			SettingType = "Dropdown",
 			Key = "BookStrategiesSelect8",
 			DisplayName = "第八个策略指定",
@@ -503,7 +510,7 @@ return {
 			},
 			DefaultValue = 4,
 		},
-		[47] = {
+		[49] = {
 			SettingType = "Dropdown",
 			Key = "BookStrategiesSelect9",
 			DisplayName = "第九个策略指定",
@@ -531,7 +538,7 @@ return {
 			},
 			DefaultValue = 4,
 		},
-		[48] = {
+		[50] = {
 			SettingType = "Toggle",
 			Key = "SetSectMemberApproveTaiwu",
 			DisplayName = "门派初始支持度",
