@@ -1,0 +1,17 @@
+TaiwuDomain.cs: 太吾相关的功能
+AddChoosyRemainUpgradeData
+GetQiArtStrategyDeltaNeiliBonus
+
+AiHelper.cs: AI 行为
+
+Character.cs: NPC 属性以及行为
+- GetBisexual 可以设置为双性恋
+
+OfflineCreateProtagonist
+OfflineCreateIntelligentCharacter
+OfflineCreateTemporaryIntelligentCharacter
+
+CharacterCreation.cs: NPC 生成
+CreateMainAttributes
+CreateLifeSkillQualifications
+CreateCombatSkillQualifications

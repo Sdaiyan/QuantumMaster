@@ -40,7 +40,6 @@ namespace QuantumMaster
 		public static bool gender0; // 生成性别
 		public static bool gender1; // 生成性别
 		public static bool ropeOrSword; // 如果概率不为0，绳子绑架或者煎饼救人必定成功
-		public static bool GetResourceBlockGrowthChance; // 峨眉恩义太吾村资源升级判定时，如果概率不是0，那么这个资源点必定升级
 		public static bool ApplyImmediateReadingStrategyEffectForCombatSkill; // 功法书籍的效率增加策略（奇思妙想）进度增加为浮动区间的上限值
 		public static bool GetAskToTeachSkillRespondChance; // 如果概率不是0，则必定会指点别人
 		public static bool GetTaughtNewSkillSuccessRate; // 如果概率不为0，接受指点的人必定能学习成功
@@ -121,9 +120,6 @@ namespace QuantumMaster
 
 			DomainManager.Mod.GetSetting(ModIdStr, "ropeOrSword", ref ropeOrSword);
 			DebugLog.Info($"配置加载: ropeOrSword = {ropeOrSword}");
-
-			DomainManager.Mod.GetSetting(ModIdStr, "GetResourceBlockGrowthChance", ref GetResourceBlockGrowthChance);
-			DebugLog.Info($"配置加载: GetResourceBlockGrowthChance = {GetResourceBlockGrowthChance}");
 
 			DomainManager.Mod.GetSetting(ModIdStr, "ApplyImmediateReadingStrategyEffectForCombatSkill", ref ApplyImmediateReadingStrategyEffectForCombatSkill);
 			DebugLog.Info($"配置加载: ApplyImmediateReadingStrategyEffectForCombatSkill = {ApplyImmediateReadingStrategyEffectForCombatSkill}");
@@ -352,8 +348,6 @@ namespace QuantumMaster
 						shouldApply = (gender0 || gender1) || openAll;
 					else if (patchName.Contains("CheckRopeOrSwordHit") || patchName.Contains("CheckRopeOrSwordHitOutofCombat"))
 						shouldApply = ropeOrSword || openAll;
-					else if (patchName.Contains("GetResourceBlockGrowthChance"))
-						shouldApply = GetResourceBlockGrowthChance || openAll;
 					else if (patchName.Contains("GetAskToTeachSkillRespondChance"))
 						shouldApply = GetAskToTeachSkillRespondChance || openAll;
 					else if (patchName.Contains("GetTaughtNewSkillSuccessRate"))
@@ -671,23 +665,6 @@ namespace QuantumMaster
 				if (CatchCricket)
 				{
 					singLevel = (short)100;
-				}
-			}
-		}
-
-		// 补丁类 - 资源成长概率补丁
-		[HarmonyPatch(typeof(BuildingDomain), "GetResourceBlockGrowthChance")]
-		public class Patch_GetResourceBlockGrowthChance
-		{
-			[HarmonyPostfix]
-			public static void Postfix(ref sbyte __result)
-			{
-				if (GetResourceBlockGrowthChance)
-				{
-					if (__result > 0)
-					{
-						__result = 100;
-					}
 				}
 			}
 		}

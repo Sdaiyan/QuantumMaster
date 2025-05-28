@@ -146,13 +146,6 @@ return {
 			Description = "奇遇收获资源时，数量为浮动区间的上限",
 			DefaultValue = true,
 		},
-		[21] = {
-			SettingType = "Toggle",
-			Key = "GetResourceBlockGrowthChance",
-			DisplayName = "峨眉资源生长成功率",
-			Description = "峨眉恩义太吾村资源升级判定时，如果概率不是0，那么这个资源点必定升级",
-			DefaultValue = true,
-		},
 		[22] = {
 			SettingType = "Toggle",
 			Key = "GetStrategyProgressAddValue",
