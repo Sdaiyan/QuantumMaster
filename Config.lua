@@ -260,33 +260,40 @@ return {
 		},
 		[37] = {
 			SettingType = "Toggle",
+			Key = "GetQiArtStrategyDeltaNeiliBonus",
+			DisplayName = "周天内力策略收益最大",
+			Description = "周天运转时，通过策略获得的内力为浮动区间的最大值",
+			DefaultValue = true,
+		},
+		[38] = {
+			SettingType = "Toggle",
 			Key = "TryAddLoopingEvent",
 			DisplayName = "天人感应",
 			Description = "如果概率不为0，尝试触发天人感应时必定成功",
 			DefaultValue = true,
 		},
-		[38] = {
+		[39] = {
 			SettingType = "Toggle",
 			Key = "ChoosyGetMaterial",
 			DisplayName = "精挑细选品质升级",
 			Description = "精挑细选时，品质升级机制只要概率不是0，则必定生效（不是每次都获取最高品素材）",
 			DefaultValue = true,
 		},
-		[39] = {
+		[40] = {
 			SettingType = "Toggle",
 			Key = "AddChoosyRemainUpgradeData",
 			DisplayName = "精挑细选过月累计最大",
 			Description = "精挑细选时，每个月都会增加精挑细选的升级概率和数量，这个增加的数值是随机的，开启后可以让增加的数值为理论上限",
 			DefaultValue = true,
 		},
-		[40] = {
+		[41] = {
 			SettingType = "Toggle",
 			Key = "BookStrategies",
 			DisplayName = "读书策略",
 			Description = "是否指定读书策略",
 			DefaultValue = true,
 		},
-		[41] = {
+		[42] = {
 			SettingType = "Dropdown",
 			Key = "BookStrategiesSelect1",
 			DisplayName = "第一个策略指定",
@@ -314,7 +321,7 @@ return {
 			},
 			DefaultValue = 0,
 		},
-		[42] = {
+		[43] = {
 			SettingType = "Dropdown",
 			Key = "BookStrategiesSelect2",
 			DisplayName = "第二个策略指定",
@@ -342,7 +349,7 @@ return {
 			},
 			DefaultValue = 0,
 		},
-		[43] = {
+		[44] = {
 			SettingType = "Dropdown",
 			Key = "BookStrategiesSelect3",
 			DisplayName = "第三个策略指定",
@@ -370,7 +377,7 @@ return {
 			},
 			DefaultValue = 0,
 		},
-		[44] = {
+		[45] = {
 			SettingType = "Dropdown",
 			Key = "BookStrategiesSelect4",
 			DisplayName = "第四个策略指定",
@@ -398,7 +405,7 @@ return {
 			},
 			DefaultValue = 2,
 		},
-		[45] = {
+		[46] = {
 			SettingType = "Dropdown",
 			Key = "BookStrategiesSelect5",
 			DisplayName = "第五个策略指定",
@@ -426,7 +433,7 @@ return {
 			},
 			DefaultValue = 2,
 		},
-		[46] = {
+		[47] = {
 			SettingType = "Dropdown",
 			Key = "BookStrategiesSelect6",
 			DisplayName = "第六个策略指定",
@@ -454,7 +461,7 @@ return {
 			},
 			DefaultValue = 2,
 		},
-		[47] = {
+		[48] = {
 			SettingType = "Dropdown",
 			Key = "BookStrategiesSelect7",
 			DisplayName = "第七个策略指定",
@@ -482,7 +489,7 @@ return {
 			},
 			DefaultValue = 4,
 		},
-		[48] = {
+		[49] = {
 			SettingType = "Dropdown",
 			Key = "BookStrategiesSelect8",
 			DisplayName = "第八个策略指定",
@@ -510,7 +517,7 @@ return {
 			},
 			DefaultValue = 4,
 		},
-		[49] = {
+		[50] = {
 			SettingType = "Dropdown",
 			Key = "BookStrategiesSelect9",
 			DisplayName = "第九个策略指定",
@@ -538,7 +545,7 @@ return {
 			},
 			DefaultValue = 4,
 		},
-		[50] = {
+		[51] = {
 			SettingType = "Toggle",
 			Key = "SetSectMemberApproveTaiwu",
 			DisplayName = "门派初始支持度",

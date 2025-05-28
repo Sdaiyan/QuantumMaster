@@ -68,6 +68,7 @@ namespace QuantumMaster
 		// 原来QuantumMaster.cs中的功能开关
 		public static bool CreateBuildingArea; // 生成世界时，产业中的建筑和资源点的初始等级，以及生成数量
 		public static bool CalcNeigongLoopingEffect; // 周天运转时，获得的内力为浮动区间的最大值，内息恢复最大，内息紊乱最小
+		public static bool GetQiArtStrategyDeltaNeiliBonus; // 周天内力策略收益最大
 		public static bool collectResource; // 收获资源时必定获取引子，且是可能获取的最高级的引子
 		public static bool GetCollectResourceAmount; // 采集数量必定为浮动区间的上限
 		public static bool UpdateResourceBlock; // 如果概率不为0，过月时，对应的产业资源必定升级与扩张
@@ -187,6 +188,10 @@ namespace QuantumMaster
 
 			DomainManager.Mod.GetSetting(ModIdStr, "BookStrategiesSelect9", ref BookStrategiesSelect9);
 			DebugLog.Info($"配置加载: BookStrategiesSelect9 = {BookStrategiesSelect9}");
+
+			// GetQiArtStrategyDeltaNeiliBonus
+			DomainManager.Mod.GetSetting(ModIdStr, "GetQiArtStrategyDeltaNeiliBonus", ref GetQiArtStrategyDeltaNeiliBonus);
+			DebugLog.Info($"配置加载: GetQiArtStrategyDeltaNeiliBonus = {GetQiArtStrategyDeltaNeiliBonus}");
 
 			// 原QuantumMaster.cs中的设置读取
 			DomainManager.Mod.GetSetting(ModIdStr, "collectResource", ref collectResource);
@@ -381,6 +386,9 @@ namespace QuantumMaster
 					// GetBisexualFalse
 					else if (patchName.Contains("GetBisexual"))
 						shouldApply = (GetBisexualTrue || GetBisexualFalse) || openAll;
+					// GetQiArtStrategyDeltaNeiliBonus
+					else if (patchName.Contains("GetQiArtStrategyDeltaNeiliBonus") || patchName.Contains("GetQiArtStrategyExtraNeiliAllocationBonus"))
+						shouldApply = GetQiArtStrategyDeltaNeiliBonus || openAll;
 					else
 						shouldApply = true; // 默认应用，如果没有明确的开关
 
@@ -989,10 +997,79 @@ namespace QuantumMaster
 			}
 		}
 
+		// public int GameData.Domains.Taiwu.TaiwuDomain.GetQiArtStrategyDeltaNeiliBonus(Redzen.Random.IRandomSource random)
+		[HarmonyPatch(typeof(GameData.Domains.Taiwu.TaiwuDomain), "GetQiArtStrategyDeltaNeiliBonus")]
+		public class Patch_TaiwuDomain_GetQiArtStrategyDeltaNeiliBonus
+		{
+			[HarmonyPrefix]
+			public static bool Prefix(IRandomSource random, ref int __result)
+			{
+				if (GetQiArtStrategyDeltaNeiliBonus)
+				{
+					GameData.Domains.Character.Character taiwuChar = DomainManager.Taiwu.GetTaiwu();
+					short loopingNeigongTemplateId = taiwuChar.GetLoopingNeigong();
+					if (DomainManager.Extra.TryGetElement_QiArtStrategyMap(loopingNeigongTemplateId, out var qiArtStrategyList))
+					{
+						if (qiArtStrategyList.Items.Count == 0)
+						{
+							__result = 0;
+							return false;
+						}
+						int bonus = 0;
+						foreach (sbyte id in qiArtStrategyList.Items)
+						{
+							if (id != -1)
+							{
+								QiArtStrategyItem config = QiArtStrategy.Instance[id];
+								bonus += config.MaxExtraNeili;
+							}
+						}
+						__result = bonus;
+						return false;
+					}
+					__result = 0;
+					return false; // 跳过原始方法
+				}
+				return true; // 默认行为
+			}
+		}
 
-
-
-
+		// public int GameData.Domains.Taiwu.TaiwuDomain.GetQiArtStrategyExtraNeiliAllocationBonus(Redzen.Random.IRandomSource random)
+		[HarmonyPatch(typeof(GameData.Domains.Taiwu.TaiwuDomain), "GetQiArtStrategyExtraNeiliAllocationBonus")]
+		public class Patch_TaiwuDomain_GetQiArtStrategyExtraNeiliAllocationBonus
+		{
+			[HarmonyPrefix]
+			public static bool Prefix(IRandomSource random, ref int __result)
+			{
+				if (GetQiArtStrategyDeltaNeiliBonus)
+				{
+					GameData.Domains.Character.Character taiwuChar = DomainManager.Taiwu.GetTaiwu();
+					short loopingNeigongTemplateId = taiwuChar.GetLoopingNeigong();
+					if (DomainManager.Extra.TryGetElement_QiArtStrategyMap(loopingNeigongTemplateId, out var qiArtStrategyList))
+					{
+						if (qiArtStrategyList.Items.Count == 0)
+						{
+							__result = 0;
+							return false;
+						}
+						int bonus = 0;
+						foreach (sbyte id in qiArtStrategyList.Items)
+						{
+							if (id != -1)
+							{
+								QiArtStrategyItem config = QiArtStrategy.Instance[id];
+								bonus += config.MaxExtraNeiliAllocation;
+							}
+						}
+						__result = bonus;
+						return false;
+					}
+					__result = 0;
+					return false; // 跳过原始方法
+				}
+				return true; // 默认行为
+			}
+		}
 
 
 

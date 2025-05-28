@@ -1,5 +1,4 @@
 TaiwuDomain.cs: 太吾相关的功能
-GetQiArtStrategyDeltaNeiliBonus
 
 AiHelper.cs: AI 行为
 GetStartRelationSuccessRate_Adored
