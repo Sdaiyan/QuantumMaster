@@ -5,8 +5,6 @@ GetQiArtStrategyDeltaNeiliBonus
 AiHelper.cs: AI 行为
 
 Character.cs: NPC 属性以及行为
-- GetBisexual 可以设置为双性恋
-
 OfflineCreateProtagonist
 OfflineCreateIntelligentCharacter
 OfflineCreateTemporaryIntelligentCharacter

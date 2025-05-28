@@ -69,6 +69,20 @@ return {
 			Description = "生成角色时，如果是随机的性别，则指定为男性，对于指定性别的NPC生成无效",
 			DefaultValue = false,
 		},
+		[9] = {
+			SettingType = "Toggle",
+			Key = "GetBisexualTrue",
+			DisplayName = "全体双性恋",
+			Description = "太吾世界中每个人在诞生的时候都有20%概率是双性恋，开启这个功能以后可以让所有人（包括开启这个功能之前出生的人）都视为双性恋。双性恋会影响表白结婚之类的概率。",
+			DefaultValue = true,
+		},
+		[9] = {
+			SettingType = "Toggle",
+			Key = "GetBisexualFalse",
+			DisplayName = "禁止双性恋",
+			Description = "太吾世界中每个人在诞生的时候都有20%概率是双性恋，开启这个功能以后可以让所有人（包括开启这个功能之前出生的人）都视为单性恋。双性恋会影响表白结婚之类的概率。",
+			DefaultValue = true,
+		},
 		[10] = {
 			SettingType = "Toggle",
 			Key = "CreateBuildingArea",

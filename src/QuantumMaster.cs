@@ -62,6 +62,8 @@ namespace QuantumMaster
 		public static int BookStrategiesSelect7; // 第 7 个策略
 		public static int BookStrategiesSelect8; // 第 8 个策略
 		public static int BookStrategiesSelect9; // 第 9 个策略
+		public static bool GetBisexualTrue; // 强制所有人双性恋
+		public static bool GetBisexualFalse; // 强制所有人单性恋
 
 		// 原来QuantumMaster.cs中的功能开关
 		public static bool CreateBuildingArea; // 生成世界时，产业中的建筑和资源点的初始等级，以及生成数量
@@ -79,8 +81,6 @@ namespace QuantumMaster
 		public static bool ApplyImmediateReadingStrategyEffectForLifeSkill; // 技艺读书策略进度增加为浮动区间的上限
 		public static bool ChoosyGetMaterial; // 精挑细选，品质升级判定概率最大
 		public static bool ParallelUpdateOnMonthChange; // 地块每月资源恢复数量为浮动区间的上限
-
-		private static HashSet<string> noZero = new HashSet<string>(); // 此处定义 noZero 集合，迁移自 Class1.cs
 
 		public override void OnModSettingUpdate()
 		{
@@ -372,6 +372,10 @@ namespace QuantumMaster
 						shouldApply = InitResources || openAll;
 					else if (patchName.Contains("SetSectMemberApproveTaiwu"))
 						shouldApply = SetSectMemberApproveTaiwu || openAll;
+					// GetBisexualTrue
+					// GetBisexualFalse
+					else if (patchName.Contains("GetBisexual"))
+						shouldApply = (GetBisexualTrue || GetBisexualFalse) || openAll;
 					else
 						shouldApply = true; // 默认应用，如果没有明确的开关
 
@@ -952,6 +956,57 @@ namespace QuantumMaster
 				return false;
 			}
 		}
+
+		// 补丁类 - 强制所有人双性恋
+		// public bool GameData.Domains.Character.Character.GetBisexual()
+
+		[HarmonyPatch(typeof(GameData.Domains.Character.Character), "GetBisexual")]
+		public class Patch_Character_GetBisexual
+		{
+			[HarmonyPrefix]
+			public static bool Prefix(ref bool __result)
+			{
+				if (GetBisexualTrue || GetBisexualFalse)
+				{
+					// 如果 GetBisexualTrue 为 true，则强制返回 true
+					if (GetBisexualTrue)
+					{
+						__result = true;
+					}
+					// 如果 GetBisexualFalse 为 true，则强制返回 false
+					else if (GetBisexualFalse)
+					{
+						__result = false;
+					}
+					return false; // 跳过原始方法
+				}
+				return true; // 默认行为
+			}
+		}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 		// 原QuantumMaster.cs中的方法保留
 		public bool patchCreateBuildingArea()
