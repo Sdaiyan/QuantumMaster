@@ -11,8 +11,54 @@ Character.cs: NPC 属性以及行为
 OfflineCreateProtagonist
 OfflineCreateIntelligentCharacter
 OfflineCreateTemporaryIntelligentCharacter
+PeriAdvanceMonth_RelationsUpdate 尝试生成新的关系
+GetStartOrEndRelationTarget 具体判断生成新关系的函数 可以patch这个
+关系：
+64 养父母
+128 养子
+512 姐妹
+1024 夫妻
+8192 朋友
+16384 爱慕
+32768 敌人
+
+需求
+0,恢复心情
+1,恢复健康
+2,调理内息
+3,恢复内力
+4,治疗伤势
+5,驱除毒素
+6,恢复属性
+7,杀灭蛊虫
+8,获取资源
+9,花费资源
+10,需要道具
+11,修理道具
+12,淬毒道具
+13,花费道具
+14,学习武学
+15,学习技艺
+16,需要历练
+17,请教研读
+18,请教突破
+19,关怀人物
+20,组成队伍
+21,寻仇报复
+22,祭拜故人
+23,共度春宵
+24,寻找宝藏
+25,结成关系
+26,加入组织
 
 CharacterCreation.cs: NPC 生成
 CreateMainAttributes
 CreateLifeSkillQualifications
 CreateCombatSkillQualifications
+
+WorldDomain.cs
+AdvanceMonth 过月函数
+UpdateReadingProgressOnMonthChange 过月读书
+
+CharacterDomain.cs
+GetPotentialRelatedCharactersInSet 这个函数会收集当前地块所以可以开始变化关系的人员
