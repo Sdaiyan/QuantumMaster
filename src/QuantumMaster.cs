@@ -73,7 +73,7 @@ namespace QuantumMaster
 		public static bool GetCollectResourceAmount; // 采集数量必定为浮动区间的上限
 		public static bool UpdateResourceBlock; // 如果概率不为0，过月时，对应的产业资源必定升级与扩张
 		public static bool OfflineUpdateShopManagement; // 如果概率不为0，产业建筑经营、招募必然成功、村民技艺必定提升
-		public static bool ApplyLifeSkillCombatResult; // 如果概率不为0，较艺读书必定触发
+		public static bool ApplyLifeSkillCombatResult; // 如果概率不为0，较艺读书&周天必定触发
 		public static bool CalcReadInCombat; // 如果概率不为0，战斗读书必定触发
 		public static bool CalcQiQrtInCombat; // 如果概率不为0，战斗周天运转必定触发
 		public static bool CalcLootItem; // 如果概率不为0，战利品掉落判定必定通过（原本逻辑是对每个战利品进行判断是否掉落）
@@ -368,8 +368,8 @@ namespace QuantumMaster
 						shouldApply = CheckCricketIsSmart || openAll;
 					else if (patchName.Contains("GetCurrReadingEventBonusRate"))
 						shouldApply = GetCurrReadingEventBonusRate || openAll;
-					else if (patchName.Contains("GetDropRate"))
-						shouldApply = true; // 这个似乎总是应用的
+					// else if (patchName.Contains("GetDropRate"))
+					// 	shouldApply = true; // 这个似乎总是应用的
 					else if (patchName.Contains("GeneratePageIncompleteState"))
 						shouldApply = GeneratePageIncompleteState || openAll;
 					else if (patchName.Contains("Cricket_Initialize"))
@@ -730,18 +730,18 @@ namespace QuantumMaster
 		}
 
 		// 补丁类 - 物品掉落率补丁
-		[HarmonyPatch(typeof(ItemTemplateHelper), "GetDropRate")]
-		public class Patch_GetDropRate
-		{
-			[HarmonyPostfix]
-			public static void Postfix(ref sbyte __result)
-			{
-				if (__result > 0)
-				{
-					__result = 100;
-				}
-			}
-		}
+		// [HarmonyPatch(typeof(ItemTemplateHelper), "GetDropRate")]
+		// public class Patch_GetDropRate
+		// {
+		// 	[HarmonyPostfix]
+		// 	public static void Postfix(ref sbyte __result)
+		// 	{
+		// 		if (__result > 0)
+		// 		{
+		// 			__result = 100;
+		// 		}
+		// 	}
+		// }
 
 		// 补丁类 - 书籍页面状态生成补丁
 		[HarmonyPatch(typeof(GameData.Domains.Item.SkillBook), "GeneratePageIncompleteState")]
@@ -1452,21 +1452,27 @@ namespace QuantumMaster
 			var OriginalMethod = new OriginalMethodInfo
 			{
 				Type = typeof(GameData.Domains.Taiwu.TaiwuDomain),
-				MethodName = "ApplyLifeSkillCombatResult",
-				// DataContext context, int adversaryCharacterId, bool isTaiwuWin
-				Parameters = new Type[] { typeof(GameData.Common.DataContext), typeof(int), typeof(bool) }
+				MethodName = "DebateGameOver",
+				// DataContext context, bool isTaiwuWin
+				Parameters = new Type[] { typeof(GameData.Common.DataContext), typeof(bool) }
 			};
 
 			patchBuilder = GenericTranspiler.CreatePatchBuilder(
-					"ApplyLifeSkillCombatResult",
+					"DebateGameOver",
 					OriginalMethod);
 
 			// CheckPercentProb
-			// 1 if (context.Random.CheckPercentProb(bonusOdds))
+			// 1 if (readInLifeSkillCombatCount > 0 && currBook.IsValid() && GetTotalReadingProgress(currBook.Id) < 100 && bookCfg.LifeSkillTemplateId >= 0 && context.Random.CheckPercentProb(chanceReading))
 			patchBuilder.AddExtensionMethodReplacement(
 					PatchPresets.Extensions.CheckPercentProb,
 					PatchPresets.Replacements.CheckPercentProbTrue,
 					1);
+
+			// 2 if (loopInLifeSkillCombatCount > 0 && loopingNeigongTemplateId >= 0 && DomainManager.CombatSkill.TryGetElement_CombatSkills(skillKey, out var skill) && skill.GetObtainedNeili() >= skill.GetTotalObtainableNeili() && context.Random.CheckPercentProb(chanceLooping))
+			patchBuilder.AddExtensionMethodReplacement(
+					PatchPresets.Extensions.CheckPercentProb,
+					PatchPresets.Replacements.CheckPercentProbTrue,
+					2);
 
 			patchBuilder.Apply(harmony);
 

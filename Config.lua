@@ -128,8 +128,8 @@ return {
 		[18] = {
 			SettingType = "Toggle",
 			Key = "ApplyLifeSkillCombatResult",
-			DisplayName = "教艺读书",
-			Description = "事件触发时，如果概率不为0，较艺读书必定触发",
+			DisplayName = "教艺读书&周天",
+			Description = "事件触发时，如果概率不为0，较艺读书&周天必定触发",
 			DefaultValue = true,
 		},
 		[19] = {
