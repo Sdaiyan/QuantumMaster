@@ -60,4 +60,23 @@ namespace QuantumMaster
         public string MethodName { get; set; }
         public Type[] Parameters { get; set; }
     }
+
+    /// <summary>
+    /// 本地函数信息结构体
+    /// </summary>
+    public struct LocalFunctionInfo
+    {
+        /// <summary>
+        /// 本地函数部分名称（用于匹配）
+        /// </summary>
+        public string PartialName { get; set; }
+        /// <summary>
+        /// 本地函数参数类型
+        /// </summary>
+        public Type[] Parameters { get; set; }
+        /// <summary>
+        /// 本地函数返回类型
+        /// </summary>
+        public Type ReturnType { get; set; }
+    }
 }

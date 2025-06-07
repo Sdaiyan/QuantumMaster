@@ -33,6 +33,21 @@ public class MethodCallReplacement
     
     // Add support for argument conditions
     public List<ArgumentCondition> ArgumentConditions { get; set; } = new List<ArgumentCondition>();
+
+    /// <summary>
+    /// 是否为本地函数替换
+    /// </summary>
+    public bool IsLocalFunction { get; set; } = false;
+
+    /// <summary>
+    /// 本地函数部分名称（用于匹配本地函数）
+    /// </summary>
+    public string LocalFunctionPartialName { get; set; }
+
+    /// <summary>
+    /// 本地函数返回类型
+    /// </summary>
+    public Type LocalFunctionReturnType { get; set; }
 }
 
 public class ArgumentCondition
@@ -145,25 +160,41 @@ public static class GenericTranspiler
             // 获取目标方法
             MethodInfo targetMethod = null;
             
-            // 使用 AccessTools 查找方法，它能处理所有访问级别包括 internal
-            targetMethod = AccessTools.Method(
-                replacement.TargetMethodDeclaringType,
-                replacement.TargetMethodName,
-                replacement.TargetMethodParameters);
-    
-            // 如果找不到方法，记录日志并跳过
-            if (targetMethod == null)
+            if (replacement.IsLocalFunction)
             {
-                DebugLog.Info($"找不到目标方法 {replacement.TargetMethodDeclaringType.Name}.{replacement.TargetMethodName}，参数: {string.Join(", ", replacement.TargetMethodParameters.Select(p => p?.Name ?? "null"))}");
+                // 处理本地函数：通过扫描代码查找匹配的本地函数
+                targetMethod = FindLocalFunctionMethod(codes, replacement);
                 
-                // 输出类型中所有可能的方法
-                DebugLog.Info($"可用方法列表:");
-                var allMethods = AccessTools.GetDeclaredMethods(replacement.TargetMethodDeclaringType);
-                foreach (var method in allMethods)
+                if (targetMethod == null)
                 {
-                    DebugLog.Info($"  - {method.Name}({string.Join(", ", method.GetParameters().Select(p => p.ParameterType.Name))})");
+                    DebugLog.Info($"找不到本地函数，部分名称: {replacement.LocalFunctionPartialName}，参数: {string.Join(", ", replacement.TargetMethodParameters?.Select(p => p?.Name ?? "null") ?? new string[0])}");
+                    continue;
                 }
-                continue;
+                
+                DebugLog.Info($"找到本地函数: {targetMethod.Name}，完整名称: {targetMethod.DeclaringType.Name}.{targetMethod.Name}");
+            }
+            else
+            {
+                // 使用 AccessTools 查找方法，它能处理所有访问级别包括 internal
+                targetMethod = AccessTools.Method(
+                    replacement.TargetMethodDeclaringType,
+                    replacement.TargetMethodName,
+                    replacement.TargetMethodParameters);
+        
+                // 如果找不到方法，记录日志并跳过
+                if (targetMethod == null)
+                {
+                    DebugLog.Info($"找不到目标方法 {replacement.TargetMethodDeclaringType.Name}.{replacement.TargetMethodName}，参数: {string.Join(", ", replacement.TargetMethodParameters.Select(p => p?.Name ?? "null"))}");
+                    
+                    // 输出类型中所有可能的方法
+                    DebugLog.Info($"可用方法列表:");
+                    var allMethods = AccessTools.GetDeclaredMethods(replacement.TargetMethodDeclaringType);
+                    foreach (var method in allMethods)
+                    {
+                        DebugLog.Info($"  - {method.Name}({string.Join(", ", method.GetParameters().Select(p => p.ParameterType.Name))})");
+                    }
+                    continue;
+                }
             }
             
             // 将替换添加到目标方法的列表中
@@ -357,6 +388,94 @@ public static class GenericTranspiler
     public static void ResetProcessedMethods()
     {
         _processedMethods.Clear();
+    }
+
+    /// <summary>
+    /// 查找本地函数方法
+    /// </summary>
+    private static MethodInfo FindLocalFunctionMethod(List<CodeInstruction> codes, MethodCallReplacement replacement)
+    {
+        DebugLog.Info($"开始查找本地函数，部分名称: {replacement.LocalFunctionPartialName}");
+        
+        // 扫描所有的方法调用指令
+        for (int i = 0; i < codes.Count; i++)
+        {
+            var instruction = codes[i];
+            
+            // 检查是否为方法调用指令
+            if (instruction.opcode == OpCodes.Call || instruction.opcode == OpCodes.Callvirt)
+            {
+                if (instruction.operand is MethodInfo method)
+                {
+                    // 检查方法名是否包含部分名称（本地函数通常有编译器生成的特殊名称）
+                    if (method.Name.Contains(replacement.LocalFunctionPartialName))
+                    {
+                        DebugLog.Info($"找到可能的本地函数: {method.Name}, 声明类型: {method.DeclaringType?.Name}");
+                        
+                        // 检查参数类型是否匹配
+                        if (replacement.TargetMethodParameters != null)
+                        {
+                            var methodParams = method.GetParameters().Select(p => p.ParameterType).ToArray();
+                            if (ParametersMatch(methodParams, replacement.TargetMethodParameters))
+                            {
+                                DebugLog.Info($"参数类型匹配，确认找到本地函数: {method.Name}");
+                                
+                                // 检查返回类型是否匹配（如果指定了返回类型）
+                                if (replacement.LocalFunctionReturnType != null)
+                                {
+                                    if (method.ReturnType == replacement.LocalFunctionReturnType)
+                                    {
+                                        DebugLog.Info($"返回类型匹配: {method.ReturnType.Name}");
+                                        return method;
+                                    }
+                                    else
+                                    {
+                                        DebugLog.Info($"返回类型不匹配: 期望 {replacement.LocalFunctionReturnType.Name}, 实际 {method.ReturnType.Name}");
+                                        continue;
+                                    }
+                                }
+                                else
+                                {
+                                    // 如果没有指定返回类型，直接返回找到的方法
+                                    return method;
+                                }
+                            }
+                            else
+                            {
+                                DebugLog.Info($"参数类型不匹配: 期望 [{string.Join(", ", replacement.TargetMethodParameters.Select(p => p.Name))}], " +
+                                    $"实际 [{string.Join(", ", methodParams.Select(p => p.Name))}]");
+                            }
+                        }
+                        else
+                        {
+                            // 如果没有指定参数类型，只根据名称匹配
+                            DebugLog.Info($"仅根据名称匹配找到本地函数: {method.Name}");
+                            return method;
+                        }
+                    }
+                }
+            }
+        }
+        
+        DebugLog.Warning($"未找到匹配的本地函数，部分名称: {replacement.LocalFunctionPartialName}");
+        return null;
+    }
+
+    /// <summary>
+    /// 检查参数类型是否匹配
+    /// </summary>
+    private static bool ParametersMatch(Type[] actualParams, Type[] expectedParams)
+    {
+        if (actualParams.Length != expectedParams.Length)
+            return false;
+            
+        for (int i = 0; i < actualParams.Length; i++)
+        {
+            if (actualParams[i] != expectedParams[i])
+                return false;
+        }
+        
+        return true;
     }
 
     // 辅助方法：查找满足参数条件的替换

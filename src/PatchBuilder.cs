@@ -127,6 +127,62 @@ public class PatchBuilder
     }
 
     /// <summary>
+    /// 添加本地函数替换
+    /// </summary>
+    /// <param name="localFunction">本地函数信息</param>
+    /// <param name="replacementMethod">替换方法信息</param>
+    /// <param name="targetOccurrence">目标出现次数</param>
+    /// <returns>补丁构建器实例，支持链式调用</returns>
+    public PatchBuilder AddLocalFunctionReplacement(
+        LocalFunctionInfo localFunction,
+        ReplacementMethodInfo replacementMethod,
+        int targetOccurrence) // 必传参数
+    {
+        DebugLog.Info($"添加本地函数替换: 部分名称={localFunction.PartialName}, " +
+            $"参数=[{string.Join(", ", localFunction.Parameters?.Select(p => p.Name) ?? new string[0])}], " +
+            $"返回类型={localFunction.ReturnType?.Name ?? "未指定"}, " +
+            $"替换方法={replacementMethod.Type.Name}.{replacementMethod.MethodName}, " +
+            $"目标出现次数={targetOccurrence}");
+
+        // 检查替换方法是否存在
+        var replacementMethodInfo = replacementMethod.Type.GetMethod(
+            replacementMethod.MethodName,
+            BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance);
+            
+        if (replacementMethodInfo == null)
+        {
+            DebugLog.Warning($"找不到替换方法 {replacementMethod.Type.Name}.{replacementMethod.MethodName}");
+            
+            // 列出所有可能的方法
+            var methods = replacementMethod.Type.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance);
+            DebugLog.Info($"{replacementMethod.Type.Name} 可用方法列表:");
+            foreach (var method in methods)
+            {
+                DebugLog.Info($"  - {method.Name}({string.Join(", ", method.GetParameters().Select(p => p.ParameterType.Name))}) : {method.ReturnType.Name}");
+            }
+            return this;
+        }
+        
+        DebugLog.Info($"找到替换方法: {replacementMethodInfo.Name}, 参数: [{string.Join(", ", replacementMethodInfo.GetParameters().Select(p => p.ParameterType.Name))}], " +
+            $"返回类型: {replacementMethodInfo.ReturnType.Name}");
+
+        // 添加本地函数替换定义
+        _patchDefinition.Replacements.Add(new MethodCallReplacement
+        {
+            IsLocalFunction = true,
+            LocalFunctionPartialName = localFunction.PartialName,
+            TargetMethodParameters = localFunction.Parameters,
+            LocalFunctionReturnType = localFunction.ReturnType,
+            ReplacementMethodDeclaringType = replacementMethod.Type,
+            ReplacementMethodName = replacementMethod.MethodName,
+            TargetOccurrence = targetOccurrence
+        });
+
+        DebugLog.Info($"成功添加本地函数替换定义");
+        return this;
+    }
+
+    /// <summary>
     /// 添加参数条件
     /// </summary>
     public PatchBuilder AddArgumentCondition(

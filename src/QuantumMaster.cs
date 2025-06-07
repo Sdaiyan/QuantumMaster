@@ -26,8 +26,8 @@ namespace QuantumMaster
 	{
 		Harmony harmony;
 		PatchBuilder patchBuilder;
-		public static bool debug = false;
-		public static bool openAll = false; // 是否开启所有补丁
+		public static bool debug = true;
+		public static bool openAll = true; // 是否开启所有补丁
 
 		// 原Class1.cs中的各种功能开关
 		public static bool steal; // 偷窃必定成功
@@ -1180,6 +1180,21 @@ namespace QuantumMaster
 					PatchPresets.Extensions.CheckPercentProb,
 					PatchPresets.Replacements.CheckPercentProbTrue,
 					3);
+					
+			patchBuilder.AddLocalFunctionReplacement(
+					PatchPresets.LocalFunctions.GetRandomResourceLevel,
+					PatchPresets.Replacements.GetRandomResourceLevel5,
+					1);
+					
+			patchBuilder.AddLocalFunctionReplacement(
+					PatchPresets.LocalFunctions.GetRandomResourceLevel,
+					PatchPresets.Replacements.GetRandomResourceLevel5,
+					2);
+
+			patchBuilder.AddLocalFunctionReplacement(
+					PatchPresets.LocalFunctions.GetRandomUselessResourceLevel,
+					PatchPresets.Replacements.GetRandomUselessResourceLevel20,
+					1);
 
 			patchBuilder.Apply(harmony);
 
@@ -1738,6 +1753,16 @@ namespace QuantumMaster
 				return false;
 			}
 			return true;
+		}
+
+		sbyte Custom_GetRandomResourceLevel()
+		{
+			return 5;
+		}
+
+		sbyte Custom_GetRandomUselessResourceLevel()
+		{
+			return 20;
 		}
 	}
 }
