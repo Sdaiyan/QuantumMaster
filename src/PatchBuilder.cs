@@ -89,6 +89,29 @@ public class PatchBuilder
         ReplacementMethodInfo replacementMethod,
         int targetOccurrence) // 必传参数
     {
+        // 检查实例方法是否存在
+        var instanceMethodInfo = instanceMethod.Type.GetMethod(
+            instanceMethod.MethodName,
+            BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance,
+            null,
+            instanceMethod.Parameters,
+            null);
+            
+        if (instanceMethodInfo == null)
+        {
+            DebugLog.Info($"找不到实例方法 {instanceMethod.Type.Name}.{instanceMethod.MethodName}");
+            
+            // 列出所有可能的方法
+            var methods = instanceMethod.Type.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+            foreach (var method in methods)
+            {
+                DebugLog.Info($"{instanceMethod.Type.Name} 方法: {method.Name}, 参数: {string.Join(", ", method.GetParameters().Select(p => p.ParameterType.Name))}");
+            }
+            return this;
+        }
+        
+        DebugLog.Info($"找到实例方法: {instanceMethodInfo.Name}");
+
         // 添加替换定义
         _patchDefinition.Replacements.Add(new MethodCallReplacement
         {

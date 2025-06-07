@@ -63,6 +63,13 @@ public static class GenericTranspiler
     // Apply all registered patches
     public static void ApplyPatches(Harmony harmony)
     {
+        // 输出所有 _patchDefinitions.Values 信息，包括名称
+        DebugLog.Info($"正在应用 { _patchDefinitions.Count } 个补丁定义:");
+        foreach (var patchDef in _patchDefinitions.Values)
+        {
+            DebugLog.Info($"补丁名称: {patchDef.OriginalType.Name}.{patchDef.OriginalMethodName}, " +
+                $"参数: {string.Join(", ", patchDef.OriginalMethodParameters.Select(p => p.Name))}");
+        }
         foreach (var patchDef in _patchDefinitions.Values)
         {
             var originalMethod = patchDef.OriginalType.GetMethod(
@@ -74,6 +81,8 @@ public static class GenericTranspiler
 
             if (originalMethod == null)
             {
+                // 输出日志
+                DebugLog.Warning($"找不到方法 {patchDef.OriginalType.Name}.{patchDef.OriginalMethodName}，参数: {string.Join(", ", patchDef.OriginalMethodParameters.Select(p => p.Name))}");
                 continue;
             }
 
@@ -98,6 +107,9 @@ public static class GenericTranspiler
             return instructions;
         }
 
+        // 输出 _patchDefinitions.Values 详细信息
+        DebugLog.Info($"正在处理方法 {original.DeclaringType.Name}.{original.Name}({string.Join(", ", original.GetParameters().Select(p => p.ParameterType.Name))})");
+
         // 查找匹配的补丁定义
         foreach (var patchDef in _patchDefinitions.Values)
         {
@@ -112,6 +124,8 @@ public static class GenericTranspiler
         }
 
         // 没有找到匹配的补丁，返回原始指令
+        // 输出日志
+        DebugLog.Info($"没有找到匹配的补丁定义，返回原始指令");
         return instructions;
     }
 

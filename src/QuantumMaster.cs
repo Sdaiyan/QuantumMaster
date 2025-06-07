@@ -71,7 +71,7 @@ namespace QuantumMaster
 		public static bool GetQiArtStrategyDeltaNeiliBonus; // 周天内力策略收益最大
 		public static bool collectResource; // 收获资源时必定获取引子，且是可能获取的最高级的引子
 		public static bool GetCollectResourceAmount; // 采集数量必定为浮动区间的上限
-		public static bool UpdateResourceBlock; // 如果概率不为0，过月时，对应的产业资源必定升级与扩张
+		// public static bool UpdateResourceBlock; // 如果概率不为0，过月时，对应的产业资源必定升级与扩张
 		public static bool OfflineUpdateShopManagement; // 如果概率不为0，产业建筑经营、招募必然成功、村民技艺必定提升
 		public static bool ApplyLifeSkillCombatResult; // 如果概率不为0，较艺读书&周天必定触发
 		public static bool CalcReadInCombat; // 如果概率不为0，战斗读书必定触发
@@ -206,8 +206,8 @@ namespace QuantumMaster
 			DomainManager.Mod.GetSetting(ModIdStr, "CalcNeigongLoopingEffect", ref CalcNeigongLoopingEffect);
 			DebugLog.Info($"配置加载: CalcNeigongLoopingEffect = {CalcNeigongLoopingEffect}");
 
-			DomainManager.Mod.GetSetting(ModIdStr, "UpdateResourceBlock", ref UpdateResourceBlock);
-			DebugLog.Info($"配置加载: UpdateResourceBlock = {UpdateResourceBlock}");
+			// DomainManager.Mod.GetSetting(ModIdStr, "UpdateResourceBlock", ref UpdateResourceBlock);
+			// DebugLog.Info($"配置加载: UpdateResourceBlock = {UpdateResourceBlock}");
 
 			DomainManager.Mod.GetSetting(ModIdStr, "OfflineUpdateShopManagement", ref OfflineUpdateShopManagement);
 			DebugLog.Info($"配置加载: OfflineUpdateShopManagement = {OfflineUpdateShopManagement}");
@@ -267,7 +267,7 @@ namespace QuantumMaster
 								 (method.ReturnType == typeof(bool) || method.ReturnType == typeof(void)))
 					.ToList();
 
-			DebugLog.Info($"发现 {patchMethods.Count} 个补丁方法");
+			DebugLog.Info($"发现 {patchMethods.Count} 个补丁方法: {string.Join(", ", patchMethods.Select(m => m.Name))}");
 
 			foreach (var method in patchMethods)
 			{
@@ -385,7 +385,7 @@ namespace QuantumMaster
 					// GetBisexualTrue
 					// GetBisexualFalse
 					else if (patchName.Contains("GetBisexual"))
-						shouldApply = (GetBisexualTrue || GetBisexualFalse) || openAll;
+						shouldApply = GetBisexualTrue || GetBisexualFalse || openAll;
 					// GetQiArtStrategyDeltaNeiliBonus
 					else if (patchName.Contains("GetQiArtStrategyDeltaNeiliBonus") || patchName.Contains("GetQiArtStrategyExtraNeiliAllocationBonus"))
 						shouldApply = GetQiArtStrategyDeltaNeiliBonus || openAll;
@@ -1107,33 +1107,33 @@ namespace QuantumMaster
 					OriginalMethod);
 
 			// 2参数 NEXT 方法替换
-			// 1 sbyte level = (sbyte)Math.Max(random.Next(maxLevel / 2, maxLevel + 1), 1);
+			// 1 sbyte level = (sbyte)Math.Max(random.Next(centerBuildingMaxLevel / 2, centerBuildingMaxLevel + 1), 1);
 			patchBuilder.AddInstanceMethodReplacement(
 					PatchPresets.InstanceMethods.Next2Args,
 					PatchPresets.Replacements.Next2ArgsMax,
 					1);
 
-			// 2 AddElement_BuildingBlocks(tempKey, new BuildingBlockData(blockId, buildingBlock.TemplateId, (sbyte)random.Next(1, buildingBlock.MaxLevel), -1), context);
+			// 2 AddElement_BuildingBlocks(buildingBlockKey, new BuildingBlockData(num3, buildingBlockItem.TemplateId, (sbyte)((buildingBlockItem.MaxLevel <= 1) ? 1 : random.Next(1, buildingBlockItem.MaxLevel)), -1), context);
 			patchBuilder.AddInstanceMethodReplacement(
 					PatchPresets.InstanceMethods.Next2Args,
 					PatchPresets.Replacements.Next2ArgsMax,
 					2);
 
-			// 3 AddBuilding(context, mapAreaId, mapBlockId, blockId, buildingBlock.TemplateId, (sbyte)random.Next(1, buildingBlock.MaxLevel), areaWidth);
+			// 3 AddBuilding(context, mapAreaId, mapBlockId, num3, buildingBlockItem.TemplateId, (sbyte)((buildingBlockItem.MaxLevel <= 1) ? 1 : random.Next(1, buildingBlockItem.MaxLevel)), buildingAreaWidth);
 			patchBuilder.AddInstanceMethodReplacement(
 					PatchPresets.InstanceMethods.Next2Args,
 					PatchPresets.Replacements.Next2ArgsMax,
 					3);
 
-			// 4 blockIndex = canUseBlockList[random.Next(0, canUseBlockList.Count)];
+			// 4 num5 = list2[random.Next(0, list2.Count)];
 
-			// 5 level = (sbyte)Math.Clamp(random.Next(maxLevel / 2, maxLevel + 1), 1, currBuildingCfg.MaxLevel);
+			// 5 level = (sbyte)Math.Clamp(random.Next(centerBuildingMaxLevel / 2, centerBuildingMaxLevel + 1), 1, buildingBlockItem2.MaxLevel);
 			patchBuilder.AddInstanceMethodReplacement(
 					PatchPresets.InstanceMethods.Next2Args,
 					PatchPresets.Replacements.Next2ArgsMax,
 					5);
 
-			// 6 level = (sbyte)Math.Max(random.Next(maxLevel / 2, maxLevel + 1), 1);
+			// 6 level = (sbyte)Math.Max(random.Next(centerBuildingMaxLevel / 2, centerBuildingMaxLevel + 1), 1);
 			patchBuilder.AddInstanceMethodReplacement(
 					PatchPresets.InstanceMethods.Next2Args,
 					PatchPresets.Replacements.Next2ArgsMax,
@@ -1145,9 +1145,9 @@ namespace QuantumMaster
 					PatchPresets.Replacements.Next2ArgsMax,
 					7);
 
-			// 8 blockIndex3 = canUseBlockList[random.Next(0, canUseBlockList.Count)];
+			// 8 blockIndex = canUseBlockList[random.Next(0, canUseBlockList.Count)];
 
-			// 9 level = (sbyte)Math.Max(random.Next(maxLevel / 2, maxLevel + 1), 1);
+			// 9 level = (sbyte)Math.Max(random.Next(centerBuildingMaxLevel / 2, centerBuildingMaxLevel + 1), 1);
 			patchBuilder.AddInstanceMethodReplacement(
 					PatchPresets.InstanceMethods.Next2Args,
 					PatchPresets.Replacements.Next2ArgsMax,
@@ -1155,27 +1155,9 @@ namespace QuantumMaster
 
 			// 10 short blockIndex4 = canUseBlockList[random.Next(0, canUseBlockList.Count)];
 
-			// 11 AddElement_BuildingBlocks(new BuildingBlockKey(mapAreaId, mapBlockId, blockIndex4), new BuildingBlockData(blockIndex4, buildingId3, (sbyte)random.Next(1, 11), -1), context);
-			patchBuilder.AddInstanceMethodReplacement(
-					PatchPresets.InstanceMethods.Next2Args,
-					PatchPresets.Replacements.Next2ArgsMax,
-					11);
+			// 11 short blockIndex5 = canUseBlockList[random.Next(0, canUseBlockList.Count)];
 
-			// 12 short blockIndex5 = canUseBlockList[random.Next(0, canUseBlockList.Count)];
-
-			// 13 AddElement_BuildingBlocks(new BuildingBlockKey(mapAreaId, mapBlockId, blockIndex5), new BuildingBlockData(blockIndex5, buildingId4, (sbyte)random.Next(1, 6), -1), context);
-			patchBuilder.AddInstanceMethodReplacement(
-					PatchPresets.InstanceMethods.Next2Args,
-					PatchPresets.Replacements.Next2ArgsMax,
-					13);
-
-			// 14 short blockIndex6 = canUseBlockList[random.Next(0, canUseBlockList.Count)];
-
-			// 15 AddElement_BuildingBlocks(new BuildingBlockKey(mapAreaId, mapBlockId, blockIndex6), new BuildingBlockData(blockIndex6, buildingId5, (sbyte)random.Next(1, 16), -1), context);
-			patchBuilder.AddInstanceMethodReplacement(
-					PatchPresets.InstanceMethods.Next2Args,
-					PatchPresets.Replacements.Next2ArgsMax,
-					15);
+			// 12 short blockIndex6 = canUseBlockList[random.Next(0, canUseBlockList.Count)];
 
 			// 1 参数 NEXT 方法替换
 			// 1 short merchantBuildingId = (short)(274 + context.Random.Next(7));
@@ -1309,49 +1291,50 @@ namespace QuantumMaster
 			return true;
 		}
 
-		public bool patchUpdateResourceBlock()
-		{
-			if (!UpdateResourceBlock && !openAll) return false;
+		// public bool patchUpdateResourceBlock()
+		// {
+		// 	if (!UpdateResourceBlock && !openAll) return false;
 
-			var OriginalMethod = new OriginalMethodInfo
-			{
-				Type = typeof(GameData.Domains.Building.BuildingDomain),
-				MethodName = "UpdateResourceBlock",
-				// DataContext context, short settlementId, BuildingBlockKey blockKey, BuildingBlockData blockData, List<short> neighborList, List<short> expandedResourceList, List<int> neighborDistanceList, List<short> neighborRangeOneList
-				Parameters = new Type[] { typeof(GameData.Common.DataContext), typeof(short), typeof(GameData.Domains.Building.BuildingBlockKey), typeof(GameData.Domains.Building.BuildingBlockData), typeof(List<short>), typeof(List<short>), typeof(List<int>), typeof(List<short>) }
-			};
+		// 	var OriginalMethod = new OriginalMethodInfo
+		// 	{
+		// 		Type = typeof(GameData.Domains.Building.BuildingDomain),
+		// 		MethodName = "UpdateResourceBlock",
+		// 		// DataContext context, short settlementId, BuildingBlockKey blockKey, BuildingBlockData blockData, List<short> neighborList, List<short> expandedResourceList, List<int> neighborDistanceList, List<short> neighborRangeOneList
+		// 		Parameters = new Type[] { typeof(GameData.Common.DataContext), typeof(short), typeof(GameData.Domains.Building.BuildingBlockKey), typeof(GameData.Domains.Building.BuildingBlockData), typeof(List<short>), typeof(List<short>), typeof(List<int>), typeof(List<short>) }
+		// 	};
 
-			patchBuilder = GenericTranspiler.CreatePatchBuilder(
-					"UpdateResourceBlock",
-					OriginalMethod);
+		// 	patchBuilder = GenericTranspiler.CreatePatchBuilder(
+		// 			"UpdateResourceBlock",
+		// 			OriginalMethod);
 
-			// 1 if (random.CheckPercentProb(growOdds))
-			patchBuilder.AddExtensionMethodReplacement(
-					PatchPresets.Extensions.CheckPercentProb,
-					PatchPresets.Replacements.CheckPercentProbTrue,
-					1);
+		// 	// 1 if (random.CheckPercentProb(growOdds))
+		// 	patchBuilder.AddExtensionMethodReplacement(
+		// 			PatchPresets.Extensions.CheckPercentProb,
+		// 			PatchPresets.Replacements.CheckPercentProbTrue,
+		// 			1);
 
-			// 2 if (neighborBlock2.TemplateId == 0 && neighborBlock2.RootBlockIndex < 0 && random.CheckPercentProb(expandOdds))
-			patchBuilder.AddExtensionMethodReplacement(
-					PatchPresets.Extensions.CheckPercentProb,
-					PatchPresets.Replacements.CheckPercentProbTrue,
-					2);
+		// 	// 2 if (neighborBlock2.TemplateId == 0 && neighborBlock2.RootBlockIndex < 0 && random.CheckPercentProb(expandOdds))
+		// 	patchBuilder.AddExtensionMethodReplacement(
+		// 			PatchPresets.Extensions.CheckPercentProb,
+		// 			PatchPresets.Replacements.CheckPercentProbTrue,
+		// 			2);
 
-			patchBuilder.Apply(harmony);
+		// 	patchBuilder.Apply(harmony);
 
-			return true;
-		}
+		// 	return true;
+		// }
 
 		public bool patchOfflineUpdateShopManagement()
 		{
 			if (!OfflineUpdateShopManagement && !openAll) return false;
-
+			
+			// private void OfflineUpdateShopManagement(ParallelBuildingModification modification, short settlementId, BuildingBlockItem buildingBlockCfg, BuildingBlockKey blockKey, BuildingBlockData blockData, DataContext context)
 			var OriginalMethod = new OriginalMethodInfo
 			{
 				Type = typeof(GameData.Domains.Building.BuildingDomain),
 				MethodName = "OfflineUpdateShopManagement",
-				// ParallelBuildingModification modification, short settlementId, BuildingBlockItem buildingBlockCfg, BuildingBlockKey blockKey, BuildingBlockData blockData, IRandomSource random
-				Parameters = new Type[] { typeof(GameData.Domains.Building.ParallelBuildingModification), typeof(short), typeof(Config.BuildingBlockItem), typeof(GameData.Domains.Building.BuildingBlockKey), typeof(GameData.Domains.Building.BuildingBlockData), typeof(IRandomSource) }
+				// ParallelBuildingModification modification, short settlementId, BuildingBlockItem buildingBlockCfg, BuildingBlockKey blockKey, BuildingBlockData blockData, DataContext context
+				Parameters = new Type[] { typeof(GameData.Domains.Building.ParallelBuildingModification), typeof(short), typeof(Config.BuildingBlockItem), typeof(GameData.Domains.Building.BuildingBlockKey), typeof(GameData.Domains.Building.BuildingBlockData), typeof(GameData.Common.DataContext) }
 			};
 
 			patchBuilder = GenericTranspiler.CreatePatchBuilder(
@@ -1372,18 +1355,6 @@ namespace QuantumMaster
 					PatchPresets.InstanceMethods.Next2Args,
 					PatchPresets.Replacements.Next2ArgsMax,
 					2);
-			// 3 int prob3 = successShopEventConfig2.RecruitPeopleProb[j] + blockData.Level + resourceAttainment / AttainmentToProb + random.Next(successShopEventConfig2.RecruitPeopleProbAdd[0], successShopEventConfig2.RecruitPeopleProbAdd[1]);
-			// 额外的概率
-			patchBuilder.AddInstanceMethodReplacement(
-					PatchPresets.InstanceMethods.Next2Args,
-					PatchPresets.Replacements.Next2ArgsMax,
-					3);
-
-			// 4 sbyte peopleLevel = itemProbList3[random.Next(0, itemProbList3.Count)]; 招募的人的品级
-			patchBuilder.AddInstanceMethodReplacement(
-					PatchPresets.InstanceMethods.Next2Args,
-					PatchPresets.Replacements.Next2ArgsMax,
-					4);
 
 			// CheckPercentProb 我也不知道为什么 IL 最后只有 3个 CheckPercentProb，全部替换 
 			// 1 if (hasManager && random.CheckPercentProb(prob))
@@ -1397,48 +1368,6 @@ namespace QuantumMaster
 					PatchPresets.Extensions.CheckPercentProb,
 					PatchPresets.Replacements.CheckPercentProbTrue,
 					2);
-
-			// 3 if (random.CheckPercentProb(prob3))
-			patchBuilder.AddExtensionMethodReplacement(
-					PatchPresets.Extensions.CheckPercentProb,
-					PatchPresets.Replacements.CheckPercentProbTrue,
-					3);
-
-			// 4 if (random.CheckPercentProb(shopEventCfg.SkillGrowOdds))
-			// patchBuilder.AddExtensionMethodReplacement(
-			//     PatchPresets.Extensions.CheckPercentProb,
-			//     PatchPresets.Replacements.CheckPercentProbTrue,
-			//     4);
-
-			// 5 if (random.CheckPercentProb(shopEventCfg.LearnCombatSkillProb))
-			// patchBuilder.AddExtensionMethodReplacement(
-			//     PatchPresets.Extensions.CheckPercentProb,
-			//     PatchPresets.Replacements.CheckPercentProbTrue,
-			//     5);
-
-			// 6 if (random.CheckPercentProb(successRate))
-			// patchBuilder.AddExtensionMethodReplacement(
-			//     PatchPresets.Extensions.CheckPercentProb,
-			//     PatchPresets.Replacements.CheckPercentProbTrue,
-			//     6);
-
-			// 7 if (random.CheckPercentProb(shopEventCfg.SkillGrowOdds) && DomainManager.Extra.TrySetVillageWorkQualificationImprove(character, lifeSkillType, isLifeSkill: true))
-			// patchBuilder.AddExtensionMethodReplacement(
-			//     PatchPresets.Extensions.CheckPercentProb,
-			//     PatchPresets.Replacements.CheckPercentProbTrue,
-			//     7);
-
-			// 8 if (random.CheckPercentProb(shopEventCfg.LearnLifeSkillProb))
-			// patchBuilder.AddExtensionMethodReplacement(
-			//     PatchPresets.Extensions.CheckPercentProb,
-			//     PatchPresets.Replacements.CheckPercentProbTrue,
-			//     8);
-
-			// 9 if (random.CheckPercentProb(successRate2))
-			// patchBuilder.AddExtensionMethodReplacement(
-			//     PatchPresets.Extensions.CheckPercentProb,
-			//     PatchPresets.Replacements.CheckPercentProbTrue,
-			//     9);
 
 			patchBuilder.Apply(harmony);
 
@@ -1462,17 +1391,11 @@ namespace QuantumMaster
 					OriginalMethod);
 
 			// CheckPercentProb
-			// 1 if (readInLifeSkillCombatCount > 0 && currBook.IsValid() && GetTotalReadingProgress(currBook.Id) < 100 && bookCfg.LifeSkillTemplateId >= 0 && context.Random.CheckPercentProb(chanceReading))
+			// 1 if (context.Random.CheckPercentProb(bonusOdds))
 			patchBuilder.AddExtensionMethodReplacement(
 					PatchPresets.Extensions.CheckPercentProb,
 					PatchPresets.Replacements.CheckPercentProbTrue,
 					1);
-
-			// 2 if (loopInLifeSkillCombatCount > 0 && loopingNeigongTemplateId >= 0 && DomainManager.CombatSkill.TryGetElement_CombatSkills(skillKey, out var skill) && skill.GetObtainedNeili() >= skill.GetTotalObtainableNeili() && context.Random.CheckPercentProb(chanceLooping))
-			patchBuilder.AddExtensionMethodReplacement(
-					PatchPresets.Extensions.CheckPercentProb,
-					PatchPresets.Replacements.CheckPercentProbTrue,
-					2);
 
 			patchBuilder.Apply(harmony);
 

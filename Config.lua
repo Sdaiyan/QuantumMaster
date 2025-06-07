@@ -74,14 +74,14 @@ return {
 			Key = "GetBisexualTrue",
 			DisplayName = "全体双性恋",
 			Description = "太吾世界中每个人在诞生的时候都有20%概率是双性恋，开启这个功能以后可以让所有人（包括开启这个功能之前出生的人）都视为双性恋。双性恋会影响表白结婚之类的概率。",
-			DefaultValue = true,
+			DefaultValue = false,
 		},
 		[11] = {
 			SettingType = "Toggle",
 			Key = "GetBisexualFalse",
 			DisplayName = "禁止双性恋",
 			Description = "太吾世界中每个人在诞生的时候都有20%概率是双性恋，开启这个功能以后可以让所有人（包括开启这个功能之前出生的人）都视为单性恋。双性恋会影响表白结婚之类的概率。",
-			DefaultValue = true,
+			DefaultValue = false,
 		},
 		[12] = {
 			SettingType = "Toggle",
@@ -114,7 +114,7 @@ return {
 		[16] = {
 			SettingType = "Toggle",
 			Key = "UpdateResourceBlock",
-			DisplayName = "太吾村资源点升级扩张",
+			DisplayName = "（已弃用）太吾村资源点升级扩张",
 			Description = "事件触发时，如果概率不为0，过月时，对应的产业资源必定升级与扩张",
 			DefaultValue = true,
 		},
