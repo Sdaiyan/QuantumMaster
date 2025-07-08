@@ -26,8 +26,11 @@ namespace QuantumMaster
 	{
 		Harmony harmony;
 		PatchBuilder patchBuilder;
-		public static bool debug = true;
-		public static bool openAll = true; // 是否开启所有补丁
+		public static bool debug = false;
+		public static bool openAll = false; // 是否开启所有补丁
+
+		public static Random Random = new Random();
+
 
 		// 原Class1.cs中的各种功能开关
 		public static bool steal; // 偷窃必定成功
@@ -65,13 +68,37 @@ namespace QuantumMaster
 		public static bool GetBisexualTrue; // 强制所有人双性恋
 		public static bool GetBisexualFalse; // 强制所有人单性恋
 
-		// 原来QuantumMaster.cs中的功能开关
+		// 通过 PatchBuilder 应用的补丁
+
+		public static int LuckyLevel;
+
+
+		// 0 命途多舛 0.67
+		// 1 时运不济 0.33
+		// 2 顺风顺水 关闭mod
+		// 3 左右逢源 0.2
+		// 4 心想事成 0.4
+		// 5 福星高照 0.6
+		// 6 洪福齐天 0.8
+		// 7 气运之子 1
+		// lucklevel的 因子 映射表
+		public static Dictionary<int, float> LuckyLevelFactor = new Dictionary<int, float>
+		{
+			{ 0, -0.67f }, // 命途多舛
+			{ 1, -0.33f }, // 时运不济
+			{ 2, 0.0f }, // 顺风顺水
+			{ 3, 0.2f }, // 左右逢源
+			{ 4, 0.4f }, // 心想事成
+			{ 5, 0.6f }, // 福星高照
+			{ 6, 0.8f }, // 洪福齐天
+			{ 7, 1.0f }  // 气运之子
+		};
+
 		public static bool CreateBuildingArea; // 生成世界时，产业中的建筑和资源点的初始等级，以及生成数量
 		public static bool CalcNeigongLoopingEffect; // 周天运转时，获得的内力为浮动区间的最大值，内息恢复最大，内息紊乱最小
 		public static bool GetQiArtStrategyDeltaNeiliBonus; // 周天内力策略收益最大
 		public static bool collectResource; // 收获资源时必定获取引子，且是可能获取的最高级的引子
 		public static bool GetCollectResourceAmount; // 采集数量必定为浮动区间的上限
-		// public static bool UpdateResourceBlock; // 如果概率不为0，过月时，对应的产业资源必定升级与扩张
 		public static bool OfflineUpdateShopManagement; // 如果概率不为0，产业建筑经营、招募必然成功、村民技艺必定提升
 		public static bool ApplyLifeSkillCombatResult; // 如果概率不为0，较艺读书&周天必定触发
 		public static bool CalcReadInCombat; // 如果概率不为0，战斗读书必定触发
@@ -92,7 +119,7 @@ namespace QuantumMaster
 		public void UpdateConfig()
 		{
 
-			// 从Class1.cs迁移的设置读取
+			// 通过 class 形式的补丁
 			DomainManager.Mod.GetSetting(ModIdStr, "steal", ref steal);
 			DebugLog.Info($"配置加载: steal = {steal}");
 
@@ -189,11 +216,13 @@ namespace QuantumMaster
 			DomainManager.Mod.GetSetting(ModIdStr, "BookStrategiesSelect9", ref BookStrategiesSelect9);
 			DebugLog.Info($"配置加载: BookStrategiesSelect9 = {BookStrategiesSelect9}");
 
-			// GetQiArtStrategyDeltaNeiliBonus
 			DomainManager.Mod.GetSetting(ModIdStr, "GetQiArtStrategyDeltaNeiliBonus", ref GetQiArtStrategyDeltaNeiliBonus);
 			DebugLog.Info($"配置加载: GetQiArtStrategyDeltaNeiliBonus = {GetQiArtStrategyDeltaNeiliBonus}");
 
-			// 原QuantumMaster.cs中的设置读取
+			// 通过 PatchBuilder 应用的补丁
+			DomainManager.Mod.GetSetting(ModIdStr, "LuckyLevel", ref LuckyLevel);
+			DebugLog.Info($"配置加载: LuckyLevel = {LuckyLevel}");
+
 			DomainManager.Mod.GetSetting(ModIdStr, "collectResource", ref collectResource);
 			DebugLog.Info($"配置加载: collectResource = {collectResource}");
 
@@ -1175,26 +1204,21 @@ namespace QuantumMaster
 					PatchPresets.Replacements.CheckPercentProbTrue,
 					2);
 
-			// 3 if (num11 >= 10 || random.CheckPercentProb(num11 * 10))
+			// 1 sbyte level2 = (sbyte)formula.Calculate();
 			patchBuilder.AddExtensionMethodReplacement(
-					PatchPresets.Extensions.CheckPercentProb,
-					PatchPresets.Replacements.CheckPercentProbTrue,
-					3);
-					
-			patchBuilder.AddLocalFunctionReplacement(
-					PatchPresets.LocalFunctions.GetRandomResourceLevel,
-					PatchPresets.Replacements.GetRandomResourceLevel5,
+					PatchPresets.Extensions.CalculateFormula0Arg,
+					PatchPresets.Replacements.RandomCalculateMax,
 					1);
-					
-			patchBuilder.AddLocalFunctionReplacement(
-					PatchPresets.LocalFunctions.GetRandomResourceLevel,
-					PatchPresets.Replacements.GetRandomResourceLevel5,
-					2);
 
-			patchBuilder.AddLocalFunctionReplacement(
-					PatchPresets.LocalFunctions.GetRandomUselessResourceLevel,
-					PatchPresets.Replacements.GetRandomUselessResourceLevel20,
-					1);
+			patchBuilder.AddExtensionMethodReplacement(
+					PatchPresets.Extensions.CalculateFormula0Arg,
+					PatchPresets.Replacements.RandomCalculateMax,
+					2);
+					
+			patchBuilder.AddExtensionMethodReplacement(
+					PatchPresets.Extensions.CalculateFormula0Arg,
+					PatchPresets.Replacements.RandomCalculateMax,
+					3);
 
 			patchBuilder.Apply(harmony);
 
@@ -1262,17 +1286,51 @@ namespace QuantumMaster
 					PatchPresets.Replacements.CheckPercentProbTrue,
 					1);
 
-			// 2 if (random.CheckPercentProb(gradeUpOdds))
+			// // 2 if (random.CheckPercentProb(gradeUpOdds))
+			// patchBuilder.AddExtensionMethodReplacement(
+			// 		PatchPresets.Extensions.CheckPercentProb,
+			// 		PatchPresets.Replacements.CheckPercentProbTrue,
+			// 		2);
+
+			// // 3 if (random.CheckPercentProb(odds))
+			// patchBuilder.AddExtensionMethodReplacement(
+			// 		PatchPresets.Extensions.CheckPercentProb,
+			// 		PatchPresets.Replacements.CheckPercentProbTrue,
+			// 		3);
+
+			patchBuilder.Apply(harmony);
+
+			return true;
+		}
+
+		public bool patchUpgradeCollectMaterial()
+		{
+			if (!collectResource && !openAll) return false;
+
+			var OriginalMethod = new OriginalMethodInfo
+			{
+				Type = typeof(GameData.Domains.Map.MapDomain),
+				MethodName = "UpgradeCollectMaterial",
+				// public void UpgradeCollectMaterial(IRandomSource random, ResourceCollectionItem collectionConfig, sbyte resourceType, short maxResource, short currentResource, int neighborOddsMultiplier, ref short itemTemplateId)
+				Parameters = new Type[] { typeof(IRandomSource), typeof(ResourceCollectionItem), typeof(sbyte), typeof(short), typeof(short), typeof(int), typeof(short).MakeByRefType() }
+			};
+
+			patchBuilder = GenericTranspiler.CreatePatchBuilder(
+					"UpgradeCollectMaterial",
+					OriginalMethod);
+
+
+			// if (!random.CheckPercentProb(gradeUpOdds))
+			patchBuilder.AddExtensionMethodReplacement(
+					PatchPresets.Extensions.CheckPercentProb,
+					PatchPresets.Replacements.CheckPercentProbTrue,
+					1);
+
+			// 2 if (random.CheckPercentProb(odds))
 			patchBuilder.AddExtensionMethodReplacement(
 					PatchPresets.Extensions.CheckPercentProb,
 					PatchPresets.Replacements.CheckPercentProbTrue,
 					2);
-
-			// 3 if (random.CheckPercentProb(odds))
-			patchBuilder.AddExtensionMethodReplacement(
-					PatchPresets.Extensions.CheckPercentProb,
-					PatchPresets.Replacements.CheckPercentProbTrue,
-					3);
 
 			patchBuilder.Apply(harmony);
 
@@ -1342,7 +1400,7 @@ namespace QuantumMaster
 		public bool patchOfflineUpdateShopManagement()
 		{
 			if (!OfflineUpdateShopManagement && !openAll) return false;
-			
+
 			// private void OfflineUpdateShopManagement(ParallelBuildingModification modification, short settlementId, BuildingBlockItem buildingBlockCfg, BuildingBlockKey blockKey, BuildingBlockData blockData, DataContext context)
 			var OriginalMethod = new OriginalMethodInfo
 			{
@@ -1397,8 +1455,8 @@ namespace QuantumMaster
 			{
 				Type = typeof(GameData.Domains.Taiwu.TaiwuDomain),
 				MethodName = "DebateGameOver",
-				// DataContext context, bool isTaiwuWin
-				Parameters = new Type[] { typeof(GameData.Common.DataContext), typeof(bool) }
+				// DataContext context, bool isTaiwuWin, bool isSurrender
+				Parameters = new Type[] { typeof(GameData.Common.DataContext), typeof(bool), typeof(bool) }
 			};
 
 			patchBuilder = GenericTranspiler.CreatePatchBuilder(
@@ -1406,11 +1464,17 @@ namespace QuantumMaster
 					OriginalMethod);
 
 			// CheckPercentProb
-			// 1 if (context.Random.CheckPercentProb(bonusOdds))
+			// 1 if (readInLifeSkillCombatCount > 0 && currBook.IsValid() && GetTotalReadingProgress(currBook.Id) < 100 && bookCfg.LifeSkillTemplateId >= 0 && context.Random.CheckPercentProb(chanceReading))
 			patchBuilder.AddExtensionMethodReplacement(
 					PatchPresets.Extensions.CheckPercentProb,
 					PatchPresets.Replacements.CheckPercentProbTrue,
 					1);
+
+			// 2 if (loopInLifeSkillCombatCount > 0 && loopingNeigongTemplateId >= 0 && DomainManager.CombatSkill.TryGetElement_CombatSkills(skillKey, out var skill) && skill.GetObtainedNeili() >= skill.GetTotalObtainableNeili() && context.Random.CheckPercentProb(chanceLooping))
+			patchBuilder.AddExtensionMethodReplacement(
+					PatchPresets.Extensions.CheckPercentProb,
+					PatchPresets.Replacements.CheckPercentProbTrue,
+					2);
 
 			patchBuilder.Apply(harmony);
 
@@ -1696,73 +1760,297 @@ namespace QuantumMaster
 
 	public class RandomPath
 	{
+		public int Calc_Random_Next_2Args_Max_By_Luck(int min, int max)
+		{
+			var luck = QuantumMaster.LuckyLevelFactor[QuantumMaster.LuckyLevel];
+			// 先随机一个结果
+			var randomValue = QuantumMaster.Random.Next(min, max);
+			DebugLog.Info($"randomValue = {randomValue}");
+			if (luck > 0)
+			{
+				// 获取的数量/概率 = Math.min(当前 + (最大-当前) * 因子, 最大)
+				return (int)Math.Min(max - 1, randomValue + (max - 1 - randomValue) * luck);
+			}
+			if (luck < 0)
+			{
+				// 获取的数量/概率 = 最小 + (当前-最小) * (1 + 因子)
+				return Math.Max(min, min + (int)((randomValue - min) * (1 + luck)));
+			}
+			return randomValue;
+		}
+
 		public int Random_Next_2Args_Max(int min, int max)
 		{
-			DebugLog.Info($"Random_Next_2Args_Max min {min} max {max}");
-			return Math.Max(min, max - 1);
+			var result = Calc_Random_Next_2Args_Max_By_Luck(min, max);
+			DebugLog.Info($"Random_Next_2Args_Max min {min} max {max} result {result}");
+			return result;
+		}
+
+		public int Calc_Random_Next_2Args_Min_By_Luck(int min, int max)
+		{
+			var luck = QuantumMaster.LuckyLevelFactor[QuantumMaster.LuckyLevel];
+			// 先随机一个结果
+			var randomValue = QuantumMaster.Random.Next(min, max);
+			DebugLog.Info($"randomValue = {randomValue}");
+			if (luck > 0)
+			{
+				// 获取的数量/概率 = Math.max(当前 - (当前-最小) * 因子, 最小)
+				return Math.Max(min, (int)(randomValue - (randomValue - min) * luck));
+			}
+			if (luck < 0)
+			{
+				// 获取的数量/概率 = 最小 + (当前-最小) * (1 + 因子)
+				return Math.Min(max - 1, min + (int)((randomValue - min) * (1 - luck)));
+			}
+			return randomValue;
 		}
 
 		public int Random_Next_2Args_Min(int min, int max)
 		{
-			DebugLog.Info($"Random_Next_2Args_Min min {min} max {max}");
-			return Math.Min(min, max - 1);
+			var result = Calc_Random_Next_2Args_Min_By_Luck(min, max);
+			DebugLog.Info($"Random_Next_2Args_Min min {min} max {max} result {result}");
+			return result;
+		}
+
+		public int Calc_Random_Next_1Arg_Max_By_Luck(int max)
+		{
+			var luck = QuantumMaster.LuckyLevelFactor[QuantumMaster.LuckyLevel];
+			// 先随机一个结果
+			var randomValue = QuantumMaster.Random.Next(0, max);
+			DebugLog.Info($"randomValue = {randomValue}");
+			if (luck > 0)
+			{
+				// 获取的数量/概率 = Math.min(当前 + (最大-当前) * 因子, 最大-1)
+				return Math.Min(max - 1, randomValue + (int)((max - 1 - randomValue) * luck));
+
+				// max = 100 randomValue = 50 luck = 0.2
+				// 50 + (99 - 50) * 0.2 = 50 + 9.8 = 59.8
+
+				// max = 100 randomValue = 50 luck = 1
+				// 50 + (99 - 50) * 1 = 50 + 49 = 99
+			}
+			if (luck < 0)
+			{
+				// 获取的数量/概率 = 0 + (当前-0) * (1 + 因子)
+				return Math.Max(0, (int)(randomValue * (1 + luck)));
+
+				// max = 100 randomValue = 50 luck = -0.33
+				// 50 * (1 - 0.33) = 50 * 0.67 = 33.5
+			}
+			return randomValue;
 		}
 
 		public int Random_Next_1Arg_Max(int max)
 		{
-			return Math.Max(0, max - 1);
+			var result = Calc_Random_Next_1Arg_Max_By_Luck(max);
+			DebugLog.Info($"Random_Next_1Arg_Max max {max} result {result}");
+			return result;
+		}
+
+		public int Calc_Random_Next_1Arg_0_By_Luck(int max)
+		{
+			var luck = QuantumMaster.LuckyLevelFactor[QuantumMaster.LuckyLevel];
+			// 先随机一个结果
+			var randomValue = QuantumMaster.Random.Next(0, max);
+			DebugLog.Info($"randomValue = {randomValue}");
+			if (luck > 0)
+			{
+				// 获取的数量/概率 = Math.max(当前 - 当前 * 因子, 0)
+				return Math.Max(0, randomValue - (int)(randomValue * luck));
+
+				// max = 100 randomValue = 50 luck = 0.2
+				// 50 - 50 * 0.2 = 50 - 10 = 40
+
+				// max = 100 randomValue = 50 luck = 1
+				// 50 - 50 * 1 = 50 - 50 = 0
+			}
+			if (luck < 0)
+			{
+				// 获取的数量/概率 = 0 + (当前-0) * (1 - 因子)
+				return Math.Min(max - 1, (int)(randomValue * (1 - luck)));
+
+				// max = 100 randomValue = 50 luck = -0.33
+				// 50 * (1 - (-0.33)) = 50 * 1.33 = 66.5
+			}
+			return randomValue;
 		}
 
 		public int Random_Next_1Arg_0(int max)
 		{
-			return 0;
+			var result = Calc_Random_Next_1Arg_0_By_Luck(max);
+			DebugLog.Info($"Random_Next_1Arg_0 max {max} result {result}");
+			return result;
 		}
 
-		// Fix the rest of the methods similarly
+		public static bool Calc_Random_CheckPercentProb_True_By_Luck(IRandomSource randomSource, int percent)
+		{
+			if (percent <= 0) return false;
+			if (percent >= 100) return true;
+
+			var luck = QuantumMaster.LuckyLevelFactor[QuantumMaster.LuckyLevel];
+			var randomValue = QuantumMaster.Random.Next(0, 100);
+			DebugLog.Info($"randomValue = {randomValue}");
+
+			if (luck > 0)
+			{
+				// 提高成功概率
+				var adjustedPercent = Math.Min(100, percent + (100 - percent) * luck);
+				return randomValue < adjustedPercent;
+			}
+			if (luck < 0)
+			{
+				// 降低成功概率
+				var adjustedPercent = Math.Max(0, percent * (1 + luck));
+				return randomValue < adjustedPercent;
+			}
+			return randomValue < percent;
+		}
+
 		public static bool Random_CheckPercentProb_True(IRandomSource randomSource, int percent)
 		{
-			if (percent > 0)
+			var result = Calc_Random_CheckPercentProb_True_By_Luck(randomSource, percent);
+			DebugLog.Info($"Random_CheckPercentProb_True percent {percent} result {result}");
+			return result;
+		}
+
+		public static bool Calc_Random_CheckPercentProb_False_By_Luck(IRandomSource randomSource, int percent)
+		{
+			if (percent <= 0) return true;
+			if (percent >= 100) return false;
+
+			var luck = QuantumMaster.LuckyLevelFactor[QuantumMaster.LuckyLevel];
+			var randomValue = QuantumMaster.Random.Next(0, 100);
+			DebugLog.Info($"randomValue = {randomValue}");
+
+			if (luck > 0)
 			{
-				return true;
+				// 提高失败概率（降低成功概率）
+				var adjustedPercent = Math.Max(0, percent - percent * luck);
+				return randomValue >= adjustedPercent;
 			}
-			return false;
+			if (luck < 0)
+			{
+				// 降低失败概率（提高成功概率）
+				var adjustedPercent = Math.Min(100, percent + (100 - percent) * (-luck));
+				return randomValue >= adjustedPercent;
+			}
+			return randomValue >= percent;
 		}
 
 		public static bool Random_CheckPercentProb_False(IRandomSource randomSource, int percent)
 		{
-			if (percent < 100)
+			var result = Calc_Random_CheckPercentProb_False_By_Luck(randomSource, percent);
+			DebugLog.Info($"Random_CheckPercentProb_False percent {percent} result {result}");
+			return result;
+		}
+
+		public static bool Calc_Random_CheckProb_True_By_Luck(IRandomSource randomSource, int chance, int total)
+		{
+			if (chance <= 0) return false;
+			if (chance >= total) return true;
+
+			var luck = QuantumMaster.LuckyLevelFactor[QuantumMaster.LuckyLevel];
+			var randomValue = QuantumMaster.Random.Next(0, total);
+			DebugLog.Info($"randomValue = {randomValue}");
+
+			if (luck > 0)
 			{
-				return false;
+				// 提高成功概率
+				var adjustedChance = Math.Min(total, chance + (total - chance) * luck);
+				return randomValue < adjustedChance;
 			}
-			return true;
-		}
-
-		public static bool Random_CheckProb_True(IRandomSource randomSource, int chance, int percent)
-		{
-			if (percent > 0)
+			if (luck < 0)
 			{
-				return true;
+				// 降低成功概率
+				var adjustedChance = Math.Max(0, chance * (1 + luck));
+				return randomValue < adjustedChance;
 			}
-			return false;
+			return randomValue < chance;
 		}
 
-		public static bool Random_CheckProb_False(IRandomSource randomSource, int chance, int percent)
+		public static bool Random_CheckProb_True(IRandomSource randomSource, int chance, int total)
 		{
-			if (percent < 100)
+			var result = Calc_Random_CheckProb_True_By_Luck(randomSource, chance, total);
+			DebugLog.Info($"Random_CheckProb_True chance {chance} total {total} result {result}");
+			return result;
+		}
+
+		public static bool Calc_Random_CheckProb_False_By_Luck(IRandomSource randomSource, int chance, int total)
+		{
+			if (chance <= 0) return true;
+			if (chance >= total) return false;
+
+			var luck = QuantumMaster.LuckyLevelFactor[QuantumMaster.LuckyLevel];
+			var randomValue = QuantumMaster.Random.Next(0, total);
+			DebugLog.Info($"randomValue = {randomValue}");
+
+			if (luck > 0)
 			{
-				return false;
+				// 提高失败概率（降低成功概率）
+				var adjustedChance = Math.Max(0, chance - chance * luck);
+				return randomValue >= adjustedChance;
 			}
-			return true;
+			if (luck < 0)
+			{
+				// 降低失败概率（提高成功概率）
+				var adjustedChance = Math.Min(total, chance + (total - chance) * (-luck));
+				return randomValue >= adjustedChance;
+			}
+			return randomValue >= chance;
 		}
 
-		sbyte Custom_GetRandomResourceLevel()
+		public static bool Random_CheckProb_False(IRandomSource randomSource, int chance, int total)
 		{
-			return 5;
+			var result = Calc_Random_CheckProb_False_By_Luck(randomSource, chance, total);
+			DebugLog.Info($"Random_CheckProb_False chance {chance} total {total} result {result}");
+			return result;
 		}
 
-		sbyte Custom_GetRandomUselessResourceLevel()
+		public static int Calc_Random_Next_2Args_Max_By_Luck_Static(int min, int max)
 		{
-			return 20;
+			var luck = QuantumMaster.LuckyLevelFactor[QuantumMaster.LuckyLevel];
+			// 先随机一个结果
+			var randomValue = QuantumMaster.Random.Next(min, max);
+			DebugLog.Info($"randomValue = {randomValue}");
+			if (luck > 0)
+			{
+				// 获取的数量/概率 = Math.min(当前 + (最大-当前) * 因子, 最大)
+				return (int)Math.Min(max - 1, randomValue + (max - 1 - randomValue) * luck);
+			}
+			if (luck < 0)
+			{
+				// 获取的数量/概率 = 最小 + (当前-最小) * (1 + 因子)
+				return Math.Max(min, min + (int)((randomValue - min) * (1 + luck)));
+			}
+			return randomValue;
 		}
+
+		public static int Random_Calculate_Max(Config.Common.IConfigFormula type)
+		{
+			var result = 20;
+			var buildingFormulaItem = type as Config.BuildingFormulaItem;
+			if (buildingFormulaItem != null)
+			{
+				if (buildingFormulaItem.TemplateId == 9)
+				{
+					// 1-5
+					result = Calc_Random_Next_2Args_Max_By_Luck_Static(1, 6);
+				}
+				else if (buildingFormulaItem.TemplateId == 10)
+				{
+					// 10-20
+					result = Calc_Random_Next_2Args_Max_By_Luck_Static(10, 21);
+				}
+				else
+				{
+					// 1-20
+					result = Calc_Random_Next_2Args_Max_By_Luck_Static(1, 21);
+				}
+			}
+			
+			DebugLog.Info($"Random_Calculate_5 result {result}");
+			return result;
+		}
+
 	}
 }

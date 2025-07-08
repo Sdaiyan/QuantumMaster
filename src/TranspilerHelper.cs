@@ -167,7 +167,7 @@ public static class GenericTranspiler
                 
                 if (targetMethod == null)
                 {
-                    DebugLog.Info($"找不到本地函数，部分名称: {replacement.LocalFunctionPartialName}，参数: {string.Join(", ", replacement.TargetMethodParameters?.Select(p => p?.Name ?? "null") ?? new string[0])}");
+                    DebugLog.Warning($"找不到本地函数，部分名称: {replacement.LocalFunctionPartialName}，参数: {string.Join(", ", replacement.TargetMethodParameters?.Select(p => p?.Name ?? "null") ?? new string[0])}");
                     continue;
                 }
                 
@@ -184,7 +184,7 @@ public static class GenericTranspiler
                 // 如果找不到方法，记录日志并跳过
                 if (targetMethod == null)
                 {
-                    DebugLog.Info($"找不到目标方法 {replacement.TargetMethodDeclaringType.Name}.{replacement.TargetMethodName}，参数: {string.Join(", ", replacement.TargetMethodParameters.Select(p => p?.Name ?? "null"))}");
+                    DebugLog.Warning($"找不到目标方法 {replacement.TargetMethodDeclaringType.Name}.{replacement.TargetMethodName}，参数: {string.Join(", ", replacement.TargetMethodParameters.Select(p => p?.Name ?? "null"))}");
                     
                     // 输出类型中所有可能的方法
                     DebugLog.Info($"可用方法列表:");

@@ -34,6 +34,16 @@ namespace QuantumMaster
                 MethodName = "CheckProb",
                 Parameters = new Type[] { typeof(IRandomSource), typeof(int), typeof(int) }
             };
+
+            /// <summary>
+            /// call int32 Config.Common.ConfigFormulaExtensions::Calculate(class Config.Common.IConfigFormula)
+            /// </summary>
+            public static readonly ExtensionMethodInfo CalculateFormula0Arg = new ExtensionMethodInfo
+            {
+                Type = typeof(Config.Common.ConfigFormulaExtensions),
+                MethodName = "Calculate",
+                Parameters = new Type[] { typeof(Config.Common.IConfigFormula) }
+            };
         }
         
         /// <summary>
@@ -67,37 +77,37 @@ namespace QuantumMaster
         /// </summary>
         public static class LocalFunctions
         {
-            // 这里可以添加常用的本地函数预设
-            // 由于本地函数通常是动态生成的，预设可能不如其他类型的方法那么固定
-            // 用户主要通过 AddLocalFunctionReplacement 方法传入具体的本地函数信息
-            // sbyte GetRandomResourceLevel()
+            // // 这里可以添加常用的本地函数预设
+            // // 由于本地函数通常是动态生成的，预设可能不如其他类型的方法那么固定
+            // // 用户主要通过 AddLocalFunctionReplacement 方法传入具体的本地函数信息
+            // // sbyte GetRandomResourceLevel()
+            // // {
+            // //     sbyte b = (sbyte)random.Next(100);
+            // //     if (1 == 0)
+            // //     {
+            // //     }
+            // //     sbyte result = (sbyte)((b < 50) ? 1 : ((sbyte)random.Next(2, 6)));
+            // //     if (1 == 0)
+            // //     {
+            // //     }
+            // //     return result;
+            // // }
+            // public static readonly LocalFunctionInfo GetRandomResourceLevel = new LocalFunctionInfo
             // {
-            //     sbyte b = (sbyte)random.Next(100);
-            //     if (1 == 0)
-            //     {
-            //     }
-            //     sbyte result = (sbyte)((b < 50) ? 1 : ((sbyte)random.Next(2, 6)));
-            //     if (1 == 0)
-            //     {
-            //     }
-            //     return result;
-            // }
-            public static readonly LocalFunctionInfo GetRandomResourceLevel = new LocalFunctionInfo
-            {
-                PartialName = "GetRandomResourceLevel",
-                ReturnType = typeof(sbyte)
-            };
+            //     PartialName = "GetRandomResourceLevel",
+            //     ReturnType = typeof(sbyte)
+            // };
 
             
-            // sbyte GetRandomUselessResourceLevel()
+            // // sbyte GetRandomUselessResourceLevel()
+            // // {
+            // //     return (sbyte)random.Next(1, 20);
+            // // }
+            // public static readonly LocalFunctionInfo GetRandomUselessResourceLevel = new LocalFunctionInfo
             // {
-            //     return (sbyte)random.Next(1, 20);
-            // }
-            public static readonly LocalFunctionInfo GetRandomUselessResourceLevel = new LocalFunctionInfo
-            {
-                PartialName = "GetRandomUselessResourceLevel",
-                ReturnType = typeof(sbyte)
-            };
+            //     PartialName = "GetRandomUselessResourceLevel",
+            //     ReturnType = typeof(sbyte)
+            // };
         }
 
         /// <summary>
@@ -177,16 +187,25 @@ namespace QuantumMaster
                 MethodName = "Random_CheckProb_False"
             };
 
-            public static readonly ReplacementMethodInfo GetRandomResourceLevel5 = new ReplacementMethodInfo
+            // public static readonly ReplacementMethodInfo GetRandomResourceLevel5 = new ReplacementMethodInfo
+            // {
+            //     Type = typeof(RandomPath),
+            //     MethodName = "Custom_GetRandomResourceLevel"
+            // };
+            // public static readonly ReplacementMethodInfo GetRandomUselessResourceLevel20 = new ReplacementMethodInfo
+            // {
+            //     Type = typeof(RandomPath),
+            //     MethodName = "Custom_GetRandomUselessResourceLevel"
+            // };
+
+            // public static int Config.Common.ConfigFormulaExtensions.Calculate(this Config.Common.IConfigFormula formula)
+            // Random_Calculate_Max
+            public static readonly ReplacementMethodInfo RandomCalculateMax = new ReplacementMethodInfo
             {
                 Type = typeof(RandomPath),
-                MethodName = "Custom_GetRandomResourceLevel"
+                MethodName = "Random_Calculate_Max"
             };
-            public static readonly ReplacementMethodInfo GetRandomUselessResourceLevel20 = new ReplacementMethodInfo
-            {
-                Type = typeof(RandomPath),
-                MethodName = "Custom_GetRandomUselessResourceLevel"
-            };
+
         }
 
     }

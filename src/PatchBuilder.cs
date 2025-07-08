@@ -44,7 +44,7 @@ public class PatchBuilder
             
         if (extensionMethodInfo == null)
         {
-            DebugLog.Info($"找不到扩展方法 {extensionMethod.Type.Name}.{extensionMethod.MethodName}");
+            DebugLog.Warning($"找不到扩展方法 {extensionMethod.Type.Name}.{extensionMethod.MethodName}");
             
             // 列出所有可能的方法
             var methods = extensionMethod.Type.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static);
@@ -99,7 +99,7 @@ public class PatchBuilder
             
         if (instanceMethodInfo == null)
         {
-            DebugLog.Info($"找不到实例方法 {instanceMethod.Type.Name}.{instanceMethod.MethodName}");
+            DebugLog.Warning($"找不到实例方法 {instanceMethod.Type.Name}.{instanceMethod.MethodName}");
             
             // 列出所有可能的方法
             var methods = instanceMethod.Type.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
