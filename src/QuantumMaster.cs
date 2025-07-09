@@ -280,6 +280,12 @@ namespace QuantumMaster
 			UpdateConfig();
 			harmony = new Harmony("QuantumMaster");
 
+			if (LuckyLevel == 2)
+			{
+				DebugLog.Info($"选择了顺风顺水气运，MOD将不会生效");
+				return;
+			}
+
 			// 不再使用 harmony.PatchAll() 直接应用所有补丁
 			// 而是根据配置选择性应用
 			ApplyClassPatches();
@@ -2031,16 +2037,19 @@ namespace QuantumMaster
 			var buildingFormulaItem = type as Config.BuildingFormulaItem;
 			if (buildingFormulaItem != null)
 			{
+				// 9 = 太吾村 资源等级
 				if (buildingFormulaItem.TemplateId == 9)
 				{
 					// 1-5
 					result = Calc_Random_Next_2Args_Max_By_Luck_Static(1, 6);
 				}
+				// 10 = 非太吾村资源等级
 				else if (buildingFormulaItem.TemplateId == 10)
 				{
 					// 10-20
 					result = Calc_Random_Next_2Args_Max_By_Luck_Static(10, 21);
 				}
+				// 其他的应该只有 8 = 太吾村杂草石头之类的等级
 				else
 				{
 					// 1-20
