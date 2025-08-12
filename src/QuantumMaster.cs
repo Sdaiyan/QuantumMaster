@@ -153,7 +153,7 @@ namespace QuantumMaster
 				{ "GetStealCombatSkillActionPhase", () => ConfigManager.stealCombatSkill },
 				{ "GetPoisonActionPhase", () => ConfigManager.poison },
 				{ "GetPlotHarmActionPhase", () => ConfigManager.plotHarm },
-				{ "GenderGetRandom", () => ConfigManager.gender0 || ConfigManager.gender1 },
+				{ "GenderGetRandom", () => ConfigManager.genderControl > 0 },
 				{ "CheckRopeOrSwordHit", () => ConfigManager.ropeOrSword },
 				{ "CheckRopeOrSwordHitOutofCombat", () => ConfigManager.ropeOrSword },
 				{ "GetAskToTeachSkillRespondChance", () => ConfigManager.GetAskToTeachSkillRespondChance },
@@ -164,10 +164,15 @@ namespace QuantumMaster
 				{ "GeneratePageIncompleteState", () => ConfigManager.GeneratePageIncompleteState },
 				{ "Cricket_Initialize", () => ConfigManager.CricketInitialize },
 				{ "TryAddLoopingEvent", () => ConfigManager.TryAddLoopingEvent },
-				{ "SetAvailableReadingStrategies", () => ConfigManager.BookStrategies },
+				{ "SetAvailableReadingStrategies", () => 
+					ConfigManager.BookStrategiesSelect1 > 0 || ConfigManager.BookStrategiesSelect2 > 0 || 
+					ConfigManager.BookStrategiesSelect3 > 0 || ConfigManager.BookStrategiesSelect4 > 0 || 
+					ConfigManager.BookStrategiesSelect5 > 0 || ConfigManager.BookStrategiesSelect6 > 0 || 
+					ConfigManager.BookStrategiesSelect7 > 0 || ConfigManager.BookStrategiesSelect8 > 0 || 
+					ConfigManager.BookStrategiesSelect9 > 0 },
 				{ "MapBlockData_InitResources", () => ConfigManager.InitResources },
 				{ "SetSectMemberApproveTaiwu", () => ConfigManager.SetSectMemberApproveTaiwu },
-				{ "GetBisexual", () => ConfigManager.GetBisexualTrue || ConfigManager.GetBisexualFalse },
+				{ "GetBisexual", () => ConfigManager.sexualOrientationControl > 0 },
 				{ "GetQiArtStrategyDeltaNeiliBonus", () => ConfigManager.GetQiArtStrategyDeltaNeiliBonus },
 				{ "GetQiArtStrategyExtraNeiliAllocationBonus", () => ConfigManager.GetQiArtStrategyDeltaNeiliBonus }
 			};
@@ -407,18 +412,18 @@ namespace QuantumMaster
 			[HarmonyPrefix]
 			public static bool Prefix(ref sbyte __result)
 			{
-				if (ConfigManager.gender0)
+				switch (ConfigManager.genderControl)
 				{
-					// 0 = 女 1 = 男
-					__result = (sbyte)0;
-					return false;
+					case 1: // 修改为女
+						// 0 = 女 1 = 男
+						__result = (sbyte)0;
+						return false;
+					case 2: // 修改为男
+						__result = (sbyte)1;
+						return false;
+					default: // 关闭功能
+						return true;
 				}
-				if (ConfigManager.gender1)
-				{
-					__result = (sbyte)1;
-					return false;
-				}
-				return true;
 			}
 		}
 
@@ -680,18 +685,37 @@ namespace QuantumMaster
 			[HarmonyPrefix]
 			public static void Prefix(ref SByteList strategyIds)
 			{
-				if (ConfigManager.BookStrategies)
+				// 检查是否有任何策略被设置为非"关闭随机"（即 > 0）
+				bool hasEnabledStrategies = ConfigManager.BookStrategiesSelect1 > 0 || ConfigManager.BookStrategiesSelect2 > 0 || 
+											ConfigManager.BookStrategiesSelect3 > 0 || ConfigManager.BookStrategiesSelect4 > 0 || 
+											ConfigManager.BookStrategiesSelect5 > 0 || ConfigManager.BookStrategiesSelect6 > 0 || 
+											ConfigManager.BookStrategiesSelect7 > 0 || ConfigManager.BookStrategiesSelect8 > 0 || 
+											ConfigManager.BookStrategiesSelect9 > 0;
+
+				if (hasEnabledStrategies)
 				{
 					SByteList ids = SByteList.Create();
-					ids.Items.Add((sbyte)(ConfigManager.BookStrategiesSelect1));
-					ids.Items.Add((sbyte)(ConfigManager.BookStrategiesSelect2));
-					ids.Items.Add((sbyte)(ConfigManager.BookStrategiesSelect3));
-					ids.Items.Add((sbyte)(ConfigManager.BookStrategiesSelect4));
-					ids.Items.Add((sbyte)(ConfigManager.BookStrategiesSelect5));
-					ids.Items.Add((sbyte)(ConfigManager.BookStrategiesSelect6));
-					ids.Items.Add((sbyte)(ConfigManager.BookStrategiesSelect7));
-					ids.Items.Add((sbyte)(ConfigManager.BookStrategiesSelect8));
-					ids.Items.Add((sbyte)(ConfigManager.BookStrategiesSelect9));
+					
+					// 只添加非"关闭随机"的策略（值 > 0），并且需要减 1 因为第一个选项是"关闭随机"
+					if (ConfigManager.BookStrategiesSelect1 > 0)
+						ids.Items.Add((sbyte)(ConfigManager.BookStrategiesSelect1 - 1));
+					if (ConfigManager.BookStrategiesSelect2 > 0)
+						ids.Items.Add((sbyte)(ConfigManager.BookStrategiesSelect2 - 1));
+					if (ConfigManager.BookStrategiesSelect3 > 0)
+						ids.Items.Add((sbyte)(ConfigManager.BookStrategiesSelect3 - 1));
+					if (ConfigManager.BookStrategiesSelect4 > 0)
+						ids.Items.Add((sbyte)(ConfigManager.BookStrategiesSelect4 - 1));
+					if (ConfigManager.BookStrategiesSelect5 > 0)
+						ids.Items.Add((sbyte)(ConfigManager.BookStrategiesSelect5 - 1));
+					if (ConfigManager.BookStrategiesSelect6 > 0)
+						ids.Items.Add((sbyte)(ConfigManager.BookStrategiesSelect6 - 1));
+					if (ConfigManager.BookStrategiesSelect7 > 0)
+						ids.Items.Add((sbyte)(ConfigManager.BookStrategiesSelect7 - 1));
+					if (ConfigManager.BookStrategiesSelect8 > 0)
+						ids.Items.Add((sbyte)(ConfigManager.BookStrategiesSelect8 - 1));
+					if (ConfigManager.BookStrategiesSelect9 > 0)
+						ids.Items.Add((sbyte)(ConfigManager.BookStrategiesSelect9 - 1));
+					
 					strategyIds = ids;
 				}
 			}
@@ -789,21 +813,17 @@ namespace QuantumMaster
 			[HarmonyPrefix]
 			public static bool Prefix(ref bool __result)
 			{
-				if (ConfigManager.GetBisexualTrue || ConfigManager.GetBisexualFalse)
+				switch (ConfigManager.sexualOrientationControl)
 				{
-					// 如果 GetBisexualTrue 为 true，则强制返回 true
-					if (ConfigManager.GetBisexualTrue)
-					{
+					case 1: // 全体双性恋
 						__result = true;
-					}
-					// 如果 GetBisexualFalse 为 true，则强制返回 false
-					else if (ConfigManager.GetBisexualFalse)
-					{
+						return false; // 跳过原始方法
+					case 2: // 禁止双性恋
 						__result = false;
-					}
-					return false; // 跳过原始方法
+						return false; // 跳过原始方法
+					default: // 关闭功能
+						return true; // 默认行为
 				}
-				return true; // 默认行为
 			}
 		}
 

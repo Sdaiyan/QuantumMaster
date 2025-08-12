@@ -82,32 +82,28 @@ return {
             DefaultValue = true,
         },
         {
-            SettingType = "Toggle",
-            Key = "gender0",
-            DisplayName = "生成性别修改为女",
-            Description = "生成角色时，如果是随机的性别，则指定为女性，对于指定性别的NPC生成无效",
-            DefaultValue = true,
+            SettingType = "Dropdown",
+            Key = "genderControl",
+            DisplayName = "生成性别控制",
+            Description = "生成角色时，如果是随机的性别，则按照选择进行修改。对于指定性别的NPC生成无效",
+            Options = {
+                "关闭功能",
+                "修改为女",
+                "修改为男"
+            },
+            DefaultValue = 1,
         },
         {
-            SettingType = "Toggle",
-            Key = "gender1",
-            DisplayName = "生成性别修改为男",
-            Description = "生成角色时，如果是随机的性别，则指定为男性，对于指定性别的NPC生成无效",
-            DefaultValue = false,
-        },
-        {
-            SettingType = "Toggle",
-            Key = "GetBisexualTrue",
-            DisplayName = "全体双性恋",
-            Description = "太吾世界中每个人在诞生的时候都有20%概率是双性恋，开启这个功能以后可以让所有人（包括开启这个功能之前出生的人）都视为双性恋。双性恋会影响表白结婚之类的概率。",
-            DefaultValue = false,
-        },
-        {
-            SettingType = "Toggle",
-            Key = "GetBisexualFalse",
-            DisplayName = "禁止双性恋",
-            Description = "太吾世界中每个人在诞生的时候都有20%概率是双性恋，开启这个功能以后可以让所有人（包括开启这个功能之前出生的人）都视为单性恋。双性恋会影响表白结婚之类的概率。",
-            DefaultValue = false,
+            SettingType = "Dropdown",
+            Key = "sexualOrientationControl",
+            DisplayName = "性取向控制",
+            Description = "太吾世界中每个人在诞生的时候都有20%概率是双性恋，可以通过此设置控制所有人（包括开启这个功能之前出生的人）的性取向。性取向会影响表白结婚之类的概率。",
+            Options = {
+                "关闭功能",
+                "全体双性恋",
+                "禁止双性恋"
+            },
+            DefaultValue = 0,
         },
         {
             SettingType = "Toggle",
@@ -191,13 +187,6 @@ return {
             Key = "ApplyImmediateReadingStrategyEffectForLifeSkill",
             DisplayName = "【气运】技艺读书效率策略",
             Description = "【气运】技艺书籍的效率增加策略（奇思妙想）进度增加为浮动区间的上限值",
-            DefaultValue = true,
-        },
-        {
-            SettingType = "Toggle",
-            Key = "ApplyImmediateReadingStrategyEffectForCombatSkill",
-            DisplayName = "功法读书效率策略",
-            Description = "功法书籍的效率增加策略（奇思妙想）进度增加为浮动区间的上限值",
             DefaultValue = true,
         },
         {
@@ -306,18 +295,12 @@ return {
             DefaultValue = true,
         },
         {
-            SettingType = "Toggle",
-            Key = "BookStrategies",
-            DisplayName = "读书策略",
-            Description = "是否指定读书策略",
-            DefaultValue = true,
-        },
-        {
             SettingType = "Dropdown",
             Key = "BookStrategiesSelect1",
             DisplayName = "第一个策略指定",
             Description = "第一个策略指定",
             Options = {
+                "使用原版",
                 "口诵心惟",
                 "行思坐忆",
                 "独见独知",
@@ -338,7 +321,7 @@ return {
                 "大智若愚",
                 "义父注解",
             },
-            DefaultValue = 0,
+            DefaultValue = 1,
         },
         {
             SettingType = "Dropdown",
@@ -346,6 +329,7 @@ return {
             DisplayName = "第二个策略指定",
             Description = "第二个策略指定",
             Options = {
+                "使用原版",
                 "口诵心惟",
                 "行思坐忆",
                 "独见独知",
@@ -366,7 +350,7 @@ return {
                 "大智若愚",
                 "义父注解",
             },
-            DefaultValue = 0,
+            DefaultValue = 1,
         },
         {
             SettingType = "Dropdown",
@@ -374,6 +358,7 @@ return {
             DisplayName = "第三个策略指定",
             Description = "第三个策略指定",
             Options = {
+                "使用原版",
                 "口诵心惟",
                 "行思坐忆",
                 "独见独知",
@@ -394,7 +379,7 @@ return {
                 "大智若愚",
                 "义父注解",
             },
-            DefaultValue = 0,
+            DefaultValue = 1,
         },
         {
             SettingType = "Dropdown",
@@ -402,6 +387,7 @@ return {
             DisplayName = "第四个策略指定",
             Description = "第四个策略指定",
             Options = {
+                "使用原版",
                 "口诵心惟",
                 "行思坐忆",
                 "独见独知",
@@ -422,7 +408,7 @@ return {
                 "大智若愚",
                 "义父注解",
             },
-            DefaultValue = 2,
+            DefaultValue = 3,
         },
         {
             SettingType = "Dropdown",
@@ -430,6 +416,7 @@ return {
             DisplayName = "第五个策略指定",
             Description = "第五个策略指定",
             Options = {
+                "使用原版",
                 "口诵心惟",
                 "行思坐忆",
                 "独见独知",
@@ -450,7 +437,7 @@ return {
                 "大智若愚",
                 "义父注解",
             },
-            DefaultValue = 2,
+            DefaultValue = 3,
         },
         {
             SettingType = "Dropdown",
@@ -458,6 +445,7 @@ return {
             DisplayName = "第六个策略指定",
             Description = "第六个策略指定",
             Options = {
+                "使用原版",
                 "口诵心惟",
                 "行思坐忆",
                 "独见独知",
@@ -478,7 +466,7 @@ return {
                 "大智若愚",
                 "义父注解",
             },
-            DefaultValue = 2,
+            DefaultValue = 3,
         },
         {
             SettingType = "Dropdown",
@@ -486,6 +474,7 @@ return {
             DisplayName = "第七个策略指定",
             Description = "第七个策略指定",
             Options = {
+                "使用原版",
                 "口诵心惟",
                 "行思坐忆",
                 "独见独知",
@@ -506,7 +495,7 @@ return {
                 "大智若愚",
                 "义父注解",
             },
-            DefaultValue = 4,
+            DefaultValue = 5,
         },
         {
             SettingType = "Dropdown",
@@ -514,6 +503,7 @@ return {
             DisplayName = "第八个策略指定",
             Description = "第八个策略指定",
             Options = {
+                "使用原版",
                 "口诵心惟",
                 "行思坐忆",
                 "独见独知",
@@ -534,7 +524,7 @@ return {
                 "大智若愚",
                 "义父注解",
             },
-            DefaultValue = 4,
+            DefaultValue = 5,
         },
         {
             SettingType = "Dropdown",
@@ -542,6 +532,7 @@ return {
             DisplayName = "第九个策略指定",
             Description = "第九个策略指定",
             Options = {
+                "使用原版",
                 "口诵心惟",
                 "行思坐忆",
                 "独见独知",
@@ -562,7 +553,7 @@ return {
                 "大智若愚",
                 "义父注解",
             },
-            DefaultValue = 4,
+            DefaultValue = 5,
         },
         {
             SettingType = "Toggle",

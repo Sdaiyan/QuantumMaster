@@ -16,10 +16,8 @@ namespace QuantumMaster
         public static bool stealCombatSkill; // 偷学战斗技能必定成功
         public static bool poison; // 下毒必定成功
         public static bool plotHarm; // 暗害必定成功
-        public static bool gender0; // 生成性别
-        public static bool gender1; // 生成性别
+        public static int genderControl; // 生成性别控制：0=关闭功能，1=修改为女，2=修改为男
         public static bool ropeOrSword; // 如果概率不为0，绳子绑架或者煎饼救人必定成功
-        public static bool ApplyImmediateReadingStrategyEffectForCombatSkill; // 功法书籍的效率增加策略（奇思妙想）进度增加为浮动区间的上限值
         public static bool GetAskToTeachSkillRespondChance; // 如果概率不是0，则必定会指点别人
         public static bool GetTaughtNewSkillSuccessRate; // 如果概率不为0，接受指点的人必定能学习成功
         public static bool CatchCricket; // 抓蛐蛐必定成功
@@ -30,7 +28,6 @@ namespace QuantumMaster
         public static bool FixedPagePos; // 位置固定在靠前
         public static bool CricketInitialize; // 生成蛐蛐时，必定生成耐久上限为理论上限值的，不受伤的蛐蛐
         public static bool TryAddLoopingEvent; // 如果概率不为0，尝试触发天人感应时必定成功
-        public static bool BookStrategies; // 指定读书策略
         public static bool SetSectMemberApproveTaiwu; // 送上拜帖时，必定是尽可能高阶的门派成员会认可太吾
         public static int BookStrategiesSelect1; // 第 1 个策略
         public static int BookStrategiesSelect2; // 第 2 个策略
@@ -41,8 +38,7 @@ namespace QuantumMaster
         public static int BookStrategiesSelect7; // 第 7 个策略
         public static int BookStrategiesSelect8; // 第 8 个策略
         public static int BookStrategiesSelect9; // 第 9 个策略
-        public static bool GetBisexualTrue; // 强制所有人双性恋
-        public static bool GetBisexualFalse; // 强制所有人单性恋
+        public static int sexualOrientationControl; // 性取向控制：0=关闭功能，1=全体双性恋，2=禁止双性恋
         public static bool GetQiArtStrategyDeltaNeiliBonus; // 周天内力策略收益最大
 
         // 通过 PatchBuilder 应用的补丁配置
@@ -93,17 +89,11 @@ namespace QuantumMaster
             DomainManager.Mod.GetSetting(modIdStr, "plotHarm", ref plotHarm);
             DebugLog.Info($"配置加载: plotHarm = {plotHarm}");
 
-            DomainManager.Mod.GetSetting(modIdStr, "gender0", ref gender0);
-            DebugLog.Info($"配置加载: gender0 = {gender0}");
-
-            DomainManager.Mod.GetSetting(modIdStr, "gender1", ref gender1);
-            DebugLog.Info($"配置加载: gender1 = {gender1}");
+            DomainManager.Mod.GetSetting(modIdStr, "genderControl", ref genderControl);
+            DebugLog.Info($"配置加载: genderControl = {genderControl}");
 
             DomainManager.Mod.GetSetting(modIdStr, "ropeOrSword", ref ropeOrSword);
             DebugLog.Info($"配置加载: ropeOrSword = {ropeOrSword}");
-
-            DomainManager.Mod.GetSetting(modIdStr, "ApplyImmediateReadingStrategyEffectForCombatSkill", ref ApplyImmediateReadingStrategyEffectForCombatSkill);
-            DebugLog.Info($"配置加载: ApplyImmediateReadingStrategyEffectForCombatSkill = {ApplyImmediateReadingStrategyEffectForCombatSkill}");
 
             DomainManager.Mod.GetSetting(modIdStr, "GetAskToTeachSkillRespondChance", ref GetAskToTeachSkillRespondChance);
             DebugLog.Info($"配置加载: GetAskToTeachSkillRespondChance = {GetAskToTeachSkillRespondChance}");
@@ -135,9 +125,6 @@ namespace QuantumMaster
             DomainManager.Mod.GetSetting(modIdStr, "TryAddLoopingEvent", ref TryAddLoopingEvent);
             DebugLog.Info($"配置加载: TryAddLoopingEvent = {TryAddLoopingEvent}");
 
-            DomainManager.Mod.GetSetting(modIdStr, "BookStrategies", ref BookStrategies);
-            DebugLog.Info($"配置加载: BookStrategies = {BookStrategies}");
-
             DomainManager.Mod.GetSetting(modIdStr, "SetSectMemberApproveTaiwu", ref SetSectMemberApproveTaiwu);
             DebugLog.Info($"配置加载: SetSectMemberApproveTaiwu = {SetSectMemberApproveTaiwu}");
 
@@ -168,11 +155,8 @@ namespace QuantumMaster
             DomainManager.Mod.GetSetting(modIdStr, "BookStrategiesSelect9", ref BookStrategiesSelect9);
             DebugLog.Info($"配置加载: BookStrategiesSelect9 = {BookStrategiesSelect9}");
 
-            DomainManager.Mod.GetSetting(modIdStr, "GetBisexualTrue", ref GetBisexualTrue);
-            DebugLog.Info($"配置加载: GetBisexualTrue = {GetBisexualTrue}");
-
-            DomainManager.Mod.GetSetting(modIdStr, "GetBisexualFalse", ref GetBisexualFalse);
-            DebugLog.Info($"配置加载: GetBisexualFalse = {GetBisexualFalse}");
+            DomainManager.Mod.GetSetting(modIdStr, "sexualOrientationControl", ref sexualOrientationControl);
+            DebugLog.Info($"配置加载: sexualOrientationControl = {sexualOrientationControl}");
 
             DomainManager.Mod.GetSetting(modIdStr, "GetQiArtStrategyDeltaNeiliBonus", ref GetQiArtStrategyDeltaNeiliBonus);
             DebugLog.Info($"配置加载: GetQiArtStrategyDeltaNeiliBonus = {GetQiArtStrategyDeltaNeiliBonus}");
