@@ -143,6 +143,35 @@ namespace QuantumMaster
 			int appliedClassPatches = 0;
 			int skippedClassPatches = 0;
 
+			// 定义补丁类名称模式到配置项的映射
+			var patchConfigMappings = new Dictionary<string, Func<bool>>
+			{
+				{ "GetStealActionPhase", () => ConfigManager.steal },
+				{ "GetScamActionPhase", () => ConfigManager.scam },
+				{ "GetRobActionPhase", () => ConfigManager.rob },
+				{ "GetStealLifeSkillActionPhase", () => ConfigManager.stealLifeSkill },
+				{ "GetStealCombatSkillActionPhase", () => ConfigManager.stealCombatSkill },
+				{ "GetPoisonActionPhase", () => ConfigManager.poison },
+				{ "GetPlotHarmActionPhase", () => ConfigManager.plotHarm },
+				{ "GenderGetRandom", () => ConfigManager.gender0 || ConfigManager.gender1 },
+				{ "CheckRopeOrSwordHit", () => ConfigManager.ropeOrSword },
+				{ "CheckRopeOrSwordHitOutofCombat", () => ConfigManager.ropeOrSword },
+				{ "GetAskToTeachSkillRespondChance", () => ConfigManager.GetAskToTeachSkillRespondChance },
+				{ "GetTaughtNewSkillSuccessRate", () => ConfigManager.GetTaughtNewSkillSuccessRate },
+				{ "CatchCricket", () => ConfigManager.CatchCricket },
+				{ "CheckCricketIsSmart", () => ConfigManager.CheckCricketIsSmart },
+				{ "GetCurrReadingEventBonusRate", () => ConfigManager.GetCurrReadingEventBonusRate },
+				{ "GeneratePageIncompleteState", () => ConfigManager.GeneratePageIncompleteState },
+				{ "Cricket_Initialize", () => ConfigManager.CricketInitialize },
+				{ "TryAddLoopingEvent", () => ConfigManager.TryAddLoopingEvent },
+				{ "SetAvailableReadingStrategies", () => ConfigManager.BookStrategies },
+				{ "MapBlockData_InitResources", () => ConfigManager.InitResources },
+				{ "SetSectMemberApproveTaiwu", () => ConfigManager.SetSectMemberApproveTaiwu },
+				{ "GetBisexual", () => ConfigManager.GetBisexualTrue || ConfigManager.GetBisexualFalse },
+				{ "GetQiArtStrategyDeltaNeiliBonus", () => ConfigManager.GetQiArtStrategyDeltaNeiliBonus },
+				{ "GetQiArtStrategyExtraNeiliAllocationBonus", () => ConfigManager.GetQiArtStrategyDeltaNeiliBonus }
+			};
+
 			// 获取所有带有 HarmonyPatch 特性的嵌套类
 			var patchClasses = this.GetType().GetNestedTypes(BindingFlags.Public | BindingFlags.NonPublic)
 				.Where(t => t.GetCustomAttributes(typeof(HarmonyPatch), false).Length > 0)
@@ -157,58 +186,21 @@ namespace QuantumMaster
 					string patchName = patchClass.Name;
 					bool shouldApply = false;
 
-					// 根据补丁类名称判断对应的开关
-					if (patchName.Contains("GetStealActionPhase"))
-						shouldApply = ConfigManager.steal || openAll;
-					else if (patchName.Contains("GetScamActionPhase"))
-						shouldApply = ConfigManager.scam || openAll;
-					else if (patchName.Contains("GetRobActionPhase"))
-						shouldApply = ConfigManager.rob || openAll;
-					else if (patchName.Contains("GetStealLifeSkillActionPhase"))
-						shouldApply = ConfigManager.stealLifeSkill || openAll;
-					else if (patchName.Contains("GetStealCombatSkillActionPhase"))
-						shouldApply = ConfigManager.stealCombatSkill || openAll;
-					else if (patchName.Contains("GetPoisonActionPhase"))
-						shouldApply = ConfigManager.poison || openAll;
-					else if (patchName.Contains("GetPlotHarmActionPhase"))
-						shouldApply = ConfigManager.plotHarm || openAll;
-					else if (patchName.Contains("GenderGetRandom"))
-						shouldApply = (ConfigManager.gender0 || ConfigManager.gender1) || openAll;
-					else if (patchName.Contains("CheckRopeOrSwordHit") || patchName.Contains("CheckRopeOrSwordHitOutofCombat"))
-						shouldApply = ConfigManager.ropeOrSword || openAll;
-					else if (patchName.Contains("GetAskToTeachSkillRespondChance"))
-						shouldApply = ConfigManager.GetAskToTeachSkillRespondChance || openAll;
-					else if (patchName.Contains("GetTaughtNewSkillSuccessRate"))
-						shouldApply = ConfigManager.GetTaughtNewSkillSuccessRate || openAll;
-					else if (patchName.Contains("CatchCricket"))
-						shouldApply = ConfigManager.CatchCricket || openAll;
-					else if (patchName.Contains("CheckCricketIsSmart"))
-						shouldApply = ConfigManager.CheckCricketIsSmart || openAll;
-					else if (patchName.Contains("GetCurrReadingEventBonusRate"))
-						shouldApply = ConfigManager.GetCurrReadingEventBonusRate || openAll;
-					// else if (patchName.Contains("GetDropRate"))
-					// 	shouldApply = true; // 这个似乎总是应用的
-					else if (patchName.Contains("GeneratePageIncompleteState"))
-						shouldApply = ConfigManager.GeneratePageIncompleteState || openAll;
-					else if (patchName.Contains("Cricket_Initialize"))
-						shouldApply = ConfigManager.CricketInitialize || openAll;
-					else if (patchName.Contains("TryAddLoopingEvent"))
-						shouldApply = ConfigManager.TryAddLoopingEvent || openAll;
-					else if (patchName.Contains("SetAvailableReadingStrategies"))
-						shouldApply = ConfigManager.BookStrategies || openAll;
-					else if (patchName.Contains("MapBlockData_InitResources"))
-						shouldApply = ConfigManager.InitResources || openAll;
-					else if (patchName.Contains("SetSectMemberApproveTaiwu"))
-						shouldApply = ConfigManager.SetSectMemberApproveTaiwu || openAll;
-					// GetBisexualTrue
-					// GetBisexualFalse
-					else if (patchName.Contains("GetBisexual"))
-						shouldApply = ConfigManager.GetBisexualTrue || ConfigManager.GetBisexualFalse || openAll;
-					// GetQiArtStrategyDeltaNeiliBonus
-					else if (patchName.Contains("GetQiArtStrategyDeltaNeiliBonus") || patchName.Contains("GetQiArtStrategyExtraNeiliAllocationBonus"))
-						shouldApply = ConfigManager.GetQiArtStrategyDeltaNeiliBonus || openAll;
-					else
+					// 根据补丁类名称查找对应的配置项
+					foreach (var mapping in patchConfigMappings)
+					{
+						if (patchName.Contains(mapping.Key))
+						{
+							shouldApply = mapping.Value() || openAll;
+							break;
+						}
+					}
+
+					// 如果没有找到匹配的配置，默认应用
+					if (!shouldApply && !patchConfigMappings.Any(m => patchName.Contains(m.Key)))
+					{
 						shouldApply = true; // 默认应用，如果没有明确的开关
+					}
 
 					if (shouldApply)
 					{
