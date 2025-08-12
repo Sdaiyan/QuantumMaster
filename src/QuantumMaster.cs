@@ -1145,39 +1145,6 @@ namespace QuantumMaster
 			return true;
 		}
 
-		// public bool patchUpdateResourceBlock()
-		// {
-		// 	if (!UpdateResourceBlock && !openAll) return false;
-
-		// 	var OriginalMethod = new OriginalMethodInfo
-		// 	{
-		// 		Type = typeof(GameData.Domains.Building.BuildingDomain),
-		// 		MethodName = "UpdateResourceBlock",
-		// 		// DataContext context, short settlementId, BuildingBlockKey blockKey, BuildingBlockData blockData, List<short> neighborList, List<short> expandedResourceList, List<int> neighborDistanceList, List<short> neighborRangeOneList
-		// 		Parameters = new Type[] { typeof(GameData.Common.DataContext), typeof(short), typeof(GameData.Domains.Building.BuildingBlockKey), typeof(GameData.Domains.Building.BuildingBlockData), typeof(List<short>), typeof(List<short>), typeof(List<int>), typeof(List<short>) }
-		// 	};
-
-		// 	patchBuilder = GenericTranspiler.CreatePatchBuilder(
-		// 			"UpdateResourceBlock",
-		// 			OriginalMethod);
-
-		// 	// 1 if (random.CheckPercentProb(growOdds))
-		// 	patchBuilder.AddExtensionMethodReplacement(
-		// 			PatchPresets.Extensions.CheckPercentProb,
-		// 			PatchPresets.Replacements.CheckPercentProbTrue,
-		// 			1);
-
-		// 	// 2 if (neighborBlock2.TemplateId == 0 && neighborBlock2.RootBlockIndex < 0 && random.CheckPercentProb(expandOdds))
-		// 	patchBuilder.AddExtensionMethodReplacement(
-		// 			PatchPresets.Extensions.CheckPercentProb,
-		// 			PatchPresets.Replacements.CheckPercentProbTrue,
-		// 			2);
-
-		// 	patchBuilder.Apply(harmony);
-
-		// 	return true;
-		// }
-
 		public bool patchOfflineUpdateShopManagement()
 		{
 			if (!ConfigManager.OfflineUpdateShopManagement && !openAll) return false;

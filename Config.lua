@@ -139,13 +139,6 @@ return {
         },
         {
             SettingType = "Toggle",
-            Key = "UpdateResourceBlock",
-            DisplayName = "（已弃用）太吾村资源点升级扩张",
-            Description = "事件触发时，如果概率不为0，过月时，对应的产业资源必定升级与扩张",
-            DefaultValue = true,
-        },
-        {
-            SettingType = "Toggle",
             Key = "OfflineUpdateShopManagement",
             DisplayName = "【气运】太吾村经营",
             Description = "【气运】事件触发时，如果概率不为0，产业建筑经营、招募必然成功、村民技艺必定提升",
