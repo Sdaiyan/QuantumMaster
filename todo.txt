@@ -1,0 +1,87 @@
+TaiwuDomain.cs: 太吾相关的功能
+
+AiHelper.cs: AI 行为
+GetStartRelationSuccessRate_Adored
+GetStartRelationSuccessRate_BoyOrGirlFriend
+GetStartRelationSuccessRate_HusbandOrWife
+GetStartRelationSuccessRate_SexRelationBaseRate
+我感觉 AI 的爱慕之类的行为有太多可以操作的地方了，天机秘术还是不改这类功能了，专门开一个新的MOD去弄
+
+Character.cs: NPC 属性以及行为
+OfflineCreateProtagonist
+OfflineCreateIntelligentCharacter
+OfflineCreateTemporaryIntelligentCharacter
+PeriAdvanceMonth_RelationsUpdate 尝试生成新的关系
+GetStartOrEndRelationTarget 具体判断生成新关系的函数 可以patch这个
+关系：
+64 养父母
+128 养子
+512 姐妹
+1024 夫妻
+8192 朋友
+16384 爱慕
+32768 敌人
+
+需求
+0,恢复心情
+1,恢复健康
+2,调理内息
+3,恢复内力
+4,治疗伤势
+5,驱除毒素
+6,恢复属性
+7,杀灭蛊虫
+8,获取资源
+9,花费资源
+10,需要道具
+11,修理道具
+12,淬毒道具
+13,花费道具
+14,学习武学
+15,学习技艺
+16,需要历练
+17,请教研读
+18,请教突破
+19,关怀人物
+20,组成队伍
+21,寻仇报复
+22,祭拜故人
+23,共度春宵
+24,寻找宝藏
+25,结成关系
+26,加入组织
+
+CharacterCreation.cs: NPC 生成
+CreateMainAttributes
+CreateLifeSkillQualifications
+CreateCombatSkillQualifications
+
+WorldDomain.cs
+AdvanceMonth 过月函数
+UpdateReadingProgressOnMonthChange 过月读书
+
+CharacterDomain.cs
+GetPotentialRelatedCharactersInSet 这个函数会收集当前地块所以可以开始变化关系的人员
+
+准备添加指定气运的功能
+
+命途多舛 因子 = 33%
+时运不济 因子 = 66%
+顺风顺水 因子 = 100%
+
+目标是 成功或者最大值时：
+获取的数量/概率 = 最小 + (当前-最小) * 因子
+目标是 失败或者最小值时：
+获取的数量/概率 = Math.min(当前 + (最大-当前) * (1-因子), 最大)
+
+左右逢源 因子 = 20%
+心想事成 因子 = 40%
+福星高照 因子 = 60%
+洪福齐天 因子 = 80%
+气运之子 因子 = 100% （就是当前MOD的效果）
+
+目标是 成功或者最大值时：
+获取的数量/概率 = Math.min(当前 + (最大-当前) * 因子, 最大)
+
+目标是 失败或者最小值时：
+获取的数量/概率 = 最小 + (当前-最小) * (1-因子)

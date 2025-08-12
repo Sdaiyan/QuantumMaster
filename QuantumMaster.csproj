@@ -4,9 +4,10 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>annotations</Nullable>
-	  <OutputPath>C:\Program Files (x86)\Steam\steamapps\common\The Scroll Of Taiwu\Mod\Gumi\Plugins</OutputPath>
+    <TaiwuPath>C:\Program Files (x86)\Steam\steamapps\common\The Scroll Of Taiwu</TaiwuPath>
+    <OutputPath>$(TaiwuPath)\Mod\[测试]天机秘术(Reborn)\Plugins</OutputPath>
     <ProduceReferenceAssembly>False</ProduceReferenceAssembly>
-    <PackageOutputPath>C:\Program Files (x86)\Steam\steamapps\common\The Scroll Of Taiwu\Mod\Gumi\Plugins</PackageOutputPath>
+    <PackageOutputPath>$(TaiwuPath)\Mod\[测试]天机秘术(Reborn)\Plugins</PackageOutputPath>
     <BaseIntermediateOutputPath></BaseIntermediateOutputPath>
     <AnalysisLevel>none</AnalysisLevel>
     <EnableNETAnalyzers>False</EnableNETAnalyzers>
@@ -19,16 +20,19 @@
 
   <ItemGroup>
     <Reference Include="0Harmony">
-      <HintPath>C:\Program Files (x86)\Steam\steamapps\common\The Scroll Of Taiwu\The Scroll of Taiwu_Data\Managed\0Harmony.dll</HintPath>
+      <HintPath>$(TaiwuPath)\The Scroll of Taiwu_Data\Managed\0Harmony.dll</HintPath>
     </Reference>
     <Reference Include="GameData">
-      <HintPath>C:\Program Files (x86)\Steam\steamapps\common\The Scroll Of Taiwu\Backend\GameData.dll</HintPath>
+      <HintPath>$(TaiwuPath)\Backend\GameData.dll</HintPath>
+    </Reference>
+    <Reference Include="GameData.Utilities">
+      <HintPath>$(TaiwuPath)\Backend\GameData.Utilities.dll</HintPath>
     </Reference>
     <Reference Include="Redzen">
-      <HintPath>C:\Program Files (x86)\Steam\steamapps\common\The Scroll Of Taiwu\Backend\Redzen.dll</HintPath>
+      <HintPath>$(TaiwuPath)\Backend\Redzen.dll</HintPath>
     </Reference>
     <Reference Include="TaiwuModdingLib">
-      <HintPath>C:\Program Files (x86)\Steam\steamapps\common\The Scroll Of Taiwu\The Scroll of Taiwu_Data\Managed\TaiwuModdingLib.dll</HintPath>
+      <HintPath>$(TaiwuPath)\The Scroll of Taiwu_Data\Managed\TaiwuModdingLib.dll</HintPath>
     </Reference>
   </ItemGroup>
 
