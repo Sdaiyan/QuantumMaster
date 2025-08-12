@@ -297,7 +297,7 @@ return {
         {
             SettingType = "Dropdown",
             Key = "BookStrategiesSelect1",
-            DisplayName = "第一个策略指定",
+            DisplayName = "读书策略，第一个策略指定",
             Description = "第一个策略指定",
             Options = {
                 "使用原版",
@@ -326,7 +326,7 @@ return {
         {
             SettingType = "Dropdown",
             Key = "BookStrategiesSelect2",
-            DisplayName = "第二个策略指定",
+            DisplayName = "读书策略，第二个策略指定",
             Description = "第二个策略指定",
             Options = {
                 "使用原版",
@@ -355,7 +355,7 @@ return {
         {
             SettingType = "Dropdown",
             Key = "BookStrategiesSelect3",
-            DisplayName = "第三个策略指定",
+            DisplayName = "读书策略，第三个策略指定",
             Description = "第三个策略指定",
             Options = {
                 "使用原版",
@@ -384,7 +384,7 @@ return {
         {
             SettingType = "Dropdown",
             Key = "BookStrategiesSelect4",
-            DisplayName = "第四个策略指定",
+            DisplayName = "读书策略，第四个策略指定",
             Description = "第四个策略指定",
             Options = {
                 "使用原版",
@@ -413,7 +413,7 @@ return {
         {
             SettingType = "Dropdown",
             Key = "BookStrategiesSelect5",
-            DisplayName = "第五个策略指定",
+            DisplayName = "读书策略，第五个策略指定",
             Description = "第五个策略指定",
             Options = {
                 "使用原版",
@@ -442,7 +442,7 @@ return {
         {
             SettingType = "Dropdown",
             Key = "BookStrategiesSelect6",
-            DisplayName = "第六个策略指定",
+            DisplayName = "读书策略，第六个策略指定",
             Description = "第六个策略指定",
             Options = {
                 "使用原版",
@@ -471,7 +471,7 @@ return {
         {
             SettingType = "Dropdown",
             Key = "BookStrategiesSelect7",
-            DisplayName = "第七个策略指定",
+            DisplayName = "读书策略，第七个策略指定",
             Description = "第七个策略指定",
             Options = {
                 "使用原版",
@@ -500,7 +500,7 @@ return {
         {
             SettingType = "Dropdown",
             Key = "BookStrategiesSelect8",
-            DisplayName = "第八个策略指定",
+            DisplayName = "读书策略，第八个策略指定",
             Description = "第八个策略指定",
             Options = {
                 "使用原版",
@@ -529,7 +529,7 @@ return {
         {
             SettingType = "Dropdown",
             Key = "BookStrategiesSelect9",
-            DisplayName = "第九个策略指定",
+            DisplayName = "读书策略，第九个策略指定",
             Description = "第九个策略指定",
             Options = {
                 "使用原版",
