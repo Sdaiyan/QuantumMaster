@@ -120,7 +120,7 @@ namespace QuantumMaster
             /// </summary>
             public static readonly ReplacementMethodInfo CheckPercentProbTrue = new ReplacementMethodInfo
             {
-                Type = typeof(RandomPath),
+                Type = typeof(LuckyRandomHelper),
                 MethodName = "Random_CheckPercentProb_True"
             };
 
@@ -129,7 +129,7 @@ namespace QuantumMaster
             /// </summary>
             public static readonly ReplacementMethodInfo CheckPercentProbFalse = new ReplacementMethodInfo
             {
-                Type = typeof(RandomPath),
+                Type = typeof(LuckyRandomHelper),
                 MethodName = "Random_CheckPercentProb_False"
             };
 
@@ -138,7 +138,7 @@ namespace QuantumMaster
             /// </summary>
             public static readonly ReplacementMethodInfo Next2ArgsMax = new ReplacementMethodInfo
             {
-                Type = typeof(RandomPath),
+                Type = typeof(LuckyRandomHelper),
                 MethodName = "Random_Next_2Args_Max"
             };
 
@@ -147,7 +147,7 @@ namespace QuantumMaster
             /// </summary>
             public static readonly ReplacementMethodInfo Next2ArgsMin = new ReplacementMethodInfo
             {
-                Type = typeof(RandomPath),
+                Type = typeof(LuckyRandomHelper),
                 MethodName = "Random_Next_2Args_Min"
             };
 
@@ -156,7 +156,7 @@ namespace QuantumMaster
             /// </summary>
             public static readonly ReplacementMethodInfo Next1ArgMax = new ReplacementMethodInfo
             {
-                Type = typeof(RandomPath),
+                Type = typeof(LuckyRandomHelper),
                 MethodName = "Random_Next_1Arg_Max"
             };
 
@@ -165,7 +165,7 @@ namespace QuantumMaster
             /// </summary>
             public static readonly ReplacementMethodInfo Next1Arg0 = new ReplacementMethodInfo
             {
-                Type = typeof(RandomPath),
+                Type = typeof(LuckyRandomHelper),
                 MethodName = "Random_Next_1Arg_0"
             };
 
@@ -174,7 +174,7 @@ namespace QuantumMaster
             /// </summary>
             public static readonly ReplacementMethodInfo CheckProbTrue = new ReplacementMethodInfo
             {
-                Type = typeof(RandomPath),
+                Type = typeof(LuckyRandomHelper),
                 MethodName = "Random_CheckProb_True"
             };
 
@@ -183,18 +183,18 @@ namespace QuantumMaster
             /// </summary>
             public static readonly ReplacementMethodInfo CheckProbFalse = new ReplacementMethodInfo
             {
-                Type = typeof(RandomPath),
+                Type = typeof(LuckyRandomHelper),
                 MethodName = "Random_CheckProb_False"
             };
 
             // public static readonly ReplacementMethodInfo GetRandomResourceLevel5 = new ReplacementMethodInfo
             // {
-            //     Type = typeof(RandomPath),
+            //     Type = typeof(LuckyRandomHelper),
             //     MethodName = "Custom_GetRandomResourceLevel"
             // };
             // public static readonly ReplacementMethodInfo GetRandomUselessResourceLevel20 = new ReplacementMethodInfo
             // {
-            //     Type = typeof(RandomPath),
+            //     Type = typeof(LuckyRandomHelper),
             //     MethodName = "Custom_GetRandomUselessResourceLevel"
             // };
 
@@ -202,7 +202,7 @@ namespace QuantumMaster
             // Random_Calculate_Max
             public static readonly ReplacementMethodInfo RandomCalculateMax = new ReplacementMethodInfo
             {
-                Type = typeof(RandomPath),
+                Type = typeof(LuckyRandomHelper),
                 MethodName = "Random_Calculate_Max"
             };
 
