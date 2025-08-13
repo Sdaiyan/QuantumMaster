@@ -76,11 +76,19 @@ namespace QuantumMaster.Features.Actions
                     DebugLog.Info($"[{actionName}] 太吾{actionName}结果: {result}");
                     return result;
                 }
+                // 如果目标是太吾，使用气运减成（对太吾不利）
+                else if (targetCharId == taiwuId)
+                {
+                    DebugLog.Info($"[{actionName}] 针对太吾的{actionName}（{currentCharId} -> 太吾）- 使用倾向失败的气运函数（对太吾不利）");
+                    var result = LuckyRandomHelper.Calc_Random_CheckPercentProb_False_By_Luck(random, probability);
+                    DebugLog.Info($"[{actionName}] 针对太吾{actionName}结果: {result}");
+                    return result;
+                }
                 else
                 {
-                    DebugLog.Info($"[{actionName}] 非太吾发起{actionName}（{currentCharId} -> {targetCharId}）- 使用原始概率逻辑");
+                    DebugLog.Info($"[{actionName}] 非太吾相关{actionName}（{currentCharId} -> {targetCharId}）- 使用原始概率逻辑");
                     var result = RedzenHelper.CheckPercentProb(random, probability);
-                    DebugLog.Info($"[{actionName}] 非太吾{actionName}结果: {result}");
+                    DebugLog.Info($"[{actionName}] 非太吾相关{actionName}结果: {result}");
                     return result;
                 }
             }
