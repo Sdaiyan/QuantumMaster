@@ -81,15 +81,6 @@ namespace QuantumMaster
 		// 补丁配置映射表 - 定义哪些配置项对应哪些补丁类
 		private readonly Dictionary<string, (System.Type patchType, System.Func<bool> condition)> patchConfigMappings = new Dictionary<string, (System.Type, System.Func<bool>)>
 		{
-			// Actions 模块
-			{ "StealPatch", (typeof(Features.Actions.StealPatch), () => ConfigManager.steal) },
-			{ "ScamPatch", (typeof(Features.Actions.ScamPatch), () => ConfigManager.scam) },
-			{ "RobPatch", (typeof(Features.Actions.RobPatch), () => ConfigManager.rob) },
-			{ "StealLifeSkillPatch", (typeof(Features.Actions.StealLifeSkillPatch), () => ConfigManager.stealLifeSkill) },
-			{ "StealCombatSkillPatch", (typeof(Features.Actions.StealCombatSkillPatch), () => ConfigManager.stealCombatSkill) },
-			{ "PoisonPatch", (typeof(Features.Actions.PoisonPatch), () => ConfigManager.poison) },
-			{ "PlotHarmPatch", (typeof(Features.Actions.PlotHarmPatch), () => ConfigManager.plotHarm) },
-			
 			// Character 模块
 			{ "GenderControlPatch", (typeof(Features.Character.GenderControlPatch), () => ConfigManager.genderControl > 0) },
 			{ "NPCTeachingPatch", (typeof(Features.Character.NPCTeachingPatch), () => ConfigManager.GetAskToTeachSkillRespondChance || ConfigManager.GetTaughtNewSkillSuccessRate) },
@@ -123,6 +114,15 @@ namespace QuantumMaster
 		// PatchBuilder 补丁配置映射表 - 定义哪些配置项对应哪些方法调用
 		private readonly Dictionary<string, (System.Func<Harmony, bool> patchMethod, System.Func<bool> condition)> patchBuilderMappings = new Dictionary<string, (System.Func<Harmony, bool>, System.Func<bool>)>
 		{
+			// Actions 模块
+			{ "GetStealActionPhase", (Features.Actions.StealPatch.PatchGetStealActionPhase, () => ConfigManager.steal) },
+			{ "GetScamActionPhase", (Features.Actions.ScamPatch.PatchGetScamActionPhase, () => ConfigManager.scam) },
+			{ "GetRobActionPhase", (Features.Actions.RobPatch.PatchGetRobActionPhase, () => ConfigManager.rob) },
+			{ "GetStealLifeSkillActionPhase", (Features.Actions.StealLifeSkillPatch.PatchGetStealLifeSkillActionPhase, () => ConfigManager.stealLifeSkill) },
+			{ "GetStealCombatSkillActionPhase", (Features.Actions.StealCombatSkillPatch.PatchGetStealCombatSkillActionPhase, () => ConfigManager.stealCombatSkill) },
+			{ "GetPoisonActionPhase", (Features.Actions.PoisonPatch.PatchGetPoisonActionPhase, () => ConfigManager.poison) },
+			{ "GetPlotHarmActionPhase", (Features.Actions.PlotHarmPatch.PatchGetPlotHarmActionPhase, () => ConfigManager.plotHarm) },
+			
 			// Building 模块
 			{ "CreateBuildingArea", (Features.Building.BuildingPatch.PatchCreateBuildingArea, () => ConfigManager.CreateBuildingArea) },
 			{ "OfflineUpdateShopManagement", (Features.Building.BuildingPatch.PatchOfflineUpdateShopManagement, () => ConfigManager.OfflineUpdateShopManagement) },

@@ -4,28 +4,72 @@
  * Licensed under GPL-3.0 - see LICENSE file for details
  */
 
-using GameData.Domains;
-using GameData.Domains.Character;
-using GameData.Domains.TaiwuEvent.DisplayEvent;
+using System;
 using HarmonyLib;
-using Redzen.Random;
 
 namespace QuantumMaster.Features.Actions
 {
     /// <summary>
     /// 偷窃功能补丁
     /// 配置项: steal
-    /// 功能: 偷窃必定成功，假如目标是太吾必定失败，如果发起者是太吾则必定成功
+    /// 功能: 偷窃必定成功，通过修改 CheckPercentProb 的第1-5次调用返回 true
     /// </summary>
-    [HarmonyPatch(typeof(GameData.Domains.Character.Character), "GetStealActionPhase")]
-    public class StealPatch
+    public static class StealPatch
     {
-        [HarmonyPrefix]
-        public static bool Prefix(IRandomSource random, GameData.Domains.Character.Character targetChar, int alertFactor, bool showCheckAnim, ref sbyte __result, GameData.Domains.Character.Character __instance)
+        /// <summary>
+        /// 应用偷窃补丁
+        /// </summary>
+        /// <param name="harmony">Harmony 实例</param>
+        /// <returns>补丁应用是否成功</returns>
+        public static bool PatchGetStealActionPhase(Harmony harmony)
         {
-            if (!ConfigManager.steal) return true;
+            if (!ConfigManager.steal && !QuantumMaster.openAll) return false;
 
-            return ActionPatchHelper.HandleActionPhase(random, targetChar, alertFactor, showCheckAnim, 1, ref __result, __instance);
+            var OriginalMethod = new OriginalMethodInfo
+            {
+                Type = typeof(GameData.Domains.Character.Character),
+                MethodName = "GetStealActionPhase",
+                Parameters = new Type[] { typeof(Redzen.Random.IRandomSource), typeof(GameData.Domains.Character.Character), typeof(int), typeof(bool) }
+            };
+
+            var patchBuilder = GenericTranspiler.CreatePatchBuilder(
+                "GetStealActionPhase",
+                OriginalMethod);
+
+            // CheckPercentProb 方法替换 - 第1-5次调用都返回 true
+            // 1 if (random.CheckPercentProb(...))
+            patchBuilder.AddExtensionMethodReplacement(
+                PatchPresets.Extensions.CheckPercentProb,
+                PatchPresets.Replacements.CheckPercentProbTrue,
+                1);
+
+            // 2 if (random.CheckPercentProb(...))
+            patchBuilder.AddExtensionMethodReplacement(
+                PatchPresets.Extensions.CheckPercentProb,
+                PatchPresets.Replacements.CheckPercentProbTrue,
+                2);
+
+            // 3 if (random.CheckPercentProb(...))
+            patchBuilder.AddExtensionMethodReplacement(
+                PatchPresets.Extensions.CheckPercentProb,
+                PatchPresets.Replacements.CheckPercentProbTrue,
+                3);
+
+            // 4 if (random.CheckPercentProb(...))
+            patchBuilder.AddExtensionMethodReplacement(
+                PatchPresets.Extensions.CheckPercentProb,
+                PatchPresets.Replacements.CheckPercentProbTrue,
+                4);
+
+            // 5 if (random.CheckPercentProb(...))
+            patchBuilder.AddExtensionMethodReplacement(
+                PatchPresets.Extensions.CheckPercentProb,
+                PatchPresets.Replacements.CheckPercentProbTrue,
+                5);
+
+            patchBuilder.Apply(harmony);
+
+            return true;
         }
     }
 }
