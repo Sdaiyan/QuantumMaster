@@ -5,17 +5,52 @@
  */
 
 using System;
+using System.Collections.Generic;
+using System.Reflection;
+using System.Reflection.Emit;
 using HarmonyLib;
+using GameData.Domains.Character;
+using GameData.Domains.Taiwu;
 
 namespace QuantumMaster.Features.Actions
 {
     /// <summary>
     /// 暗害功能补丁
     /// 配置项: plotHarm
-    /// 功能: 暗害必定成功，通过修改 CheckPercentProb 的第1-5次调用返回 true
+    /// 功能: 暗害必定成功，针对太吾角色进行概率修改
     /// </summary>
     public static class PlotHarmPatch
     {
+        /// <summary>
+        /// 暗害方法前缀：设置角色上下文
+        /// </summary>
+        [HarmonyPatch(typeof(GameData.Domains.Character.Character), "GetPlotHarmActionPhase")]
+        [HarmonyPrefix]
+        public static void GetPlotHarmActionPhase_Prefix(GameData.Domains.Character.Character __instance, GameData.Domains.Character.Character targetChar)
+        {
+            if (!ConfigManager.plotHarm && !QuantumMaster.openAll) return;
+            ActionPatchBase.SetCharacterContext(__instance, targetChar, "PlotHarmPatch");
+        }
+
+        /// <summary>
+        /// 暗害方法后缀：清理角色上下文
+        /// </summary>
+        [HarmonyPatch(typeof(GameData.Domains.Character.Character), "GetPlotHarmActionPhase")]
+        [HarmonyPostfix]
+        public static void GetPlotHarmActionPhase_Postfix()
+        {
+            if (!ConfigManager.plotHarm && !QuantumMaster.openAll) return;
+            ActionPatchBase.ClearCharacterContext("PlotHarmPatch");
+        }
+
+        /// <summary>
+        /// 检查概率，使用静态上下文判断
+        /// </summary>
+        public static bool CheckPercentProbWithStaticContext(Redzen.Random.IRandomSource random, int probability)
+        {
+            return ActionPatchBase.CheckPercentProbWithStaticContext(random, probability, "PlotHarmPatch");
+        }
+
         /// <summary>
         /// 应用暗害补丁
         /// </summary>
@@ -36,39 +71,23 @@ namespace QuantumMaster.Features.Actions
                 "GetPlotHarmActionPhase",
                 OriginalMethod);
 
-            // CheckPercentProb 方法替换 - 第1-5次调用都返回 true
-            // 1 if (random.CheckPercentProb(...))
-            patchBuilder.AddExtensionMethodReplacement(
-                PatchPresets.Extensions.CheckPercentProb,
-                PatchPresets.Replacements.CheckPercentProbTrue,
-                1);
+            // 替换方法：带静态上下文的概率检查
+            var replacementMethod = new ReplacementMethodInfo
+            {
+                Type = typeof(PlotHarmPatch),
+                MethodName = nameof(CheckPercentProbWithStaticContext)
+            };
 
-            // 2 if (random.CheckPercentProb(...))
-            patchBuilder.AddExtensionMethodReplacement(
-                PatchPresets.Extensions.CheckPercentProb,
-                PatchPresets.Replacements.CheckPercentProbTrue,
-                2);
-
-            // 3 if (random.CheckPercentProb(...))
-            patchBuilder.AddExtensionMethodReplacement(
-                PatchPresets.Extensions.CheckPercentProb,
-                PatchPresets.Replacements.CheckPercentProbTrue,
-                3);
-
-            // 4 if (random.CheckPercentProb(...))
-            patchBuilder.AddExtensionMethodReplacement(
-                PatchPresets.Extensions.CheckPercentProb,
-                PatchPresets.Replacements.CheckPercentProbTrue,
-                4);
-
-            // 5 if (random.CheckPercentProb(...))
-            patchBuilder.AddExtensionMethodReplacement(
-                PatchPresets.Extensions.CheckPercentProb,
-                PatchPresets.Replacements.CheckPercentProbTrue,
-                5);
+            // CheckPercentProb 方法替换 - 第1-5次调用都使用静态上下文判断
+            for (int i = 1; i <= 5; i++)
+            {
+                patchBuilder.AddExtensionMethodReplacement(
+                    PatchPresets.Extensions.CheckPercentProb,
+                    replacementMethod,
+                    i);
+            }
 
             patchBuilder.Apply(harmony);
-
             return true;
         }
     }

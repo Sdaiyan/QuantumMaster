@@ -81,6 +81,15 @@ namespace QuantumMaster
 		// 补丁配置映射表 - 定义哪些配置项对应哪些补丁类
 		private readonly Dictionary<string, (System.Type patchType, System.Func<bool> condition)> patchConfigMappings = new Dictionary<string, (System.Type, System.Func<bool>)>
 		{
+			// Actions 模块 - 静态上下文支持的Prefix/Postfix补丁
+			{ "StealPatch", (typeof(Features.Actions.StealPatch), () => ConfigManager.steal) },
+			{ "RobPatch", (typeof(Features.Actions.RobPatch), () => ConfigManager.rob) },
+			{ "ScamPatch", (typeof(Features.Actions.ScamPatch), () => ConfigManager.scam) },
+			{ "PoisonPatch", (typeof(Features.Actions.PoisonPatch), () => ConfigManager.poison) },
+			{ "PlotHarmPatch", (typeof(Features.Actions.PlotHarmPatch), () => ConfigManager.plotHarm) },
+			{ "StealLifeSkillPatch", (typeof(Features.Actions.StealLifeSkillPatch), () => ConfigManager.stealLifeSkill) },
+			{ "StealCombatSkillPatch", (typeof(Features.Actions.StealCombatSkillPatch), () => ConfigManager.stealCombatSkill) },
+			
 			// Character 模块
 			{ "GenderControlPatch", (typeof(Features.Character.GenderControlPatch), () => ConfigManager.genderControl > 0) },
 			{ "NPCTeachingPatch", (typeof(Features.Character.NPCTeachingPatch), () => ConfigManager.GetAskToTeachSkillRespondChance || ConfigManager.GetTaughtNewSkillSuccessRate) },
@@ -114,7 +123,7 @@ namespace QuantumMaster
 		// PatchBuilder 补丁配置映射表 - 定义哪些配置项对应哪些方法调用
 		private readonly Dictionary<string, (System.Func<Harmony, bool> patchMethod, System.Func<bool> condition)> patchBuilderMappings = new Dictionary<string, (System.Func<Harmony, bool>, System.Func<bool>)>
 		{
-			// Actions 模块
+			// Actions 模块 - 使用静态上下文版本测试所有5次替换和双角色判断
 			{ "GetStealActionPhase", (Features.Actions.StealPatch.PatchGetStealActionPhase, () => ConfigManager.steal) },
 			{ "GetScamActionPhase", (Features.Actions.ScamPatch.PatchGetScamActionPhase, () => ConfigManager.scam) },
 			{ "GetRobActionPhase", (Features.Actions.RobPatch.PatchGetRobActionPhase, () => ConfigManager.rob) },
@@ -234,6 +243,11 @@ namespace QuantumMaster
 			}
 
 			DebugLog.Info($"PatchBuilder 补丁应用完成: 成功 {appliedBuilderPatches} 个, 跳过 {skippedBuilderPatches} 个");
+			
+			// 应用所有已注册的 GenericTranspiler 补丁
+			DebugLog.Info("开始应用 GenericTranspiler 补丁...");
+			GenericTranspiler.ApplyPatches(harmony);
+			DebugLog.Info("GenericTranspiler 补丁应用完成");
 		}
 
 		public override void Dispose()
