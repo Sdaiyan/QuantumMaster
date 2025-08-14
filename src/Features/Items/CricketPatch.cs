@@ -20,13 +20,41 @@ namespace QuantumMaster.Features.Items
     public static class CricketPatch
     {
         /// <summary>
-        /// 抓蛐蛐成功率补丁
+        /// 抓蛐蛐基础成功率补丁
         /// 配置项: CatchCricket
-        /// 功能: 【气运】根据气运影响抓蛐蛐的成功率，替换CheckPercentProb调用
+        /// 功能: 【气运】根据气运调整唱级，影响基础抓捕成功率
         /// </summary>
-        public static bool PatchCatchCricket(Harmony harmony)
+        [HarmonyPatch(typeof(ItemDomain), "CatchCricket")]
+        public class CatchCricketSuccessRatePatch
         {
-            if (!ConfigManager.CatchCricket && !QuantumMaster.openAll) return false;
+            [HarmonyPrefix]
+            public static void Prefix(ref short singLevel)
+            {
+                if (!ConfigManager.CatchCricket)
+                {
+                    return; // 使用原版逻辑
+                }
+
+                var originalSingLevel = singLevel;
+                // 使用LuckyRandomHelper的静态方法
+                // 正气运：最小值是当前值，最大值是100
+                // 负气运：最小值是0，最大值是当前值
+                singLevel = (short)LuckyRandomHelper.Calc_Random_Next_2Args_Max_By_Luck_Static(
+                    originalSingLevel,
+                    101); // Next方法是左闭右开区间，所以max用101
+                
+                DebugLog.Info($"【气运】抓蛐蛐基础成功率: 原始唱级{originalSingLevel} -> 气运调整后唱级{singLevel}");
+            }
+        }
+
+        /// <summary>
+        /// 抓到双蛐蛐概率补丁
+        /// 配置项: CatchCricketDouble  
+        /// 功能: 【气运】根据气运影响抓到2只蛐蛐的概率，替换CheckPercentProb调用
+        /// </summary>
+        public static bool PatchCatchCricketDouble(Harmony harmony)
+        {
+            if (!ConfigManager.CatchCricketDouble && !QuantumMaster.openAll) return false;
 
             var OriginalMethod = new OriginalMethodInfo
             {
@@ -42,17 +70,11 @@ namespace QuantumMaster.Features.Items
             };
 
             var patchBuilder = GenericTranspiler.CreatePatchBuilder(
-                    "CatchCricket",
+                    "CatchCricketDouble",
                     OriginalMethod);
 
-            // CheckPercentProb 方法替换 - 期望成功，使用气运提高成功率
-            // 1 第1个 CheckPercentProb 调用 影响成功率
-            patchBuilder.AddExtensionMethodReplacement(
-                    PatchPresets.Extensions.CheckPercentProb,
-                    PatchPresets.Replacements.CheckPercentProbTrue,
-                    1);
-
-            // 3 第3个 CheckPercentProb 调用 影响抓到双蛐蛐概率
+            // CheckPercentProb 方法替换 - 第3个调用是抓到2只蛐蛐的概率
+            // 3 第3个 CheckPercentProb 调用 - 抓到额外蛐蛐的概率
             patchBuilder.AddExtensionMethodReplacement(
                     PatchPresets.Extensions.CheckPercentProb,
                     PatchPresets.Replacements.CheckPercentProbTrue,

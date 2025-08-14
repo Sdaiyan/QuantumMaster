@@ -211,8 +211,15 @@ return {
         {
             SettingType = "Toggle",
             Key = "CatchCricket",
-            DisplayName = "【气运】抓蛐蛐捕捉成功率",
-            Description = "【气运】抓蛐蛐时，捕捉成功率、抓到双蛐蛐的概率根据气运增加。",
+            DisplayName = "【气运】抓蛐蛐基础成功率",
+            Description = "【气运】抓蛐蛐时，基础成功率根据气运调整。",
+            DefaultValue = true,
+        },
+        {
+            SettingType = "Toggle",
+            Key = "CatchCricketDouble",
+            DisplayName = "【气运】抓到双蛐蛐概率",
+            Description = "【气运】抓蛐蛐时，抓到2只蛐蛐的概率根据气运增加",
             DefaultValue = true,
         },
         {

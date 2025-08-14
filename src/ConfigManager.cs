@@ -20,6 +20,7 @@ namespace QuantumMaster
         public static bool ropeOrSword; // 如果概率不为0，绳子绑架或者煎饼救人必定成功
         public static bool OfflineCalcGeneralAction_TeachSkill; // 如果概率不是0，则必定会指点别人
         public static bool CatchCricket; // 抓蛐蛐必定成功
+        public static bool CatchCricketDouble; // 抓蛐蛐时获得双只蛐蛐
         public static bool InitResources; // 生成世界时，每个地块上的资源为浮动区间的最大值，受到难度的影响
         public static bool CheckCricketIsSmart; // 蛐蛐是否可以升级，如果符合条件必定升级
         public static bool GetCurrReadingEventBonusRate; // 灵光一闪概率不为0时，必定灵光一闪
@@ -99,6 +100,9 @@ namespace QuantumMaster
 
             DomainManager.Mod.GetSetting(modIdStr, "CatchCricket", ref CatchCricket);
             DebugLog.Info($"配置加载: CatchCricket = {CatchCricket}");
+
+            DomainManager.Mod.GetSetting(modIdStr, "CatchCricketDouble", ref CatchCricketDouble);
+            DebugLog.Info($"配置加载: CatchCricketDouble = {CatchCricketDouble}");
 
             DomainManager.Mod.GetSetting(modIdStr, "InitResources", ref InitResources);
             DebugLog.Info($"配置加载: InitResources = {InitResources}");

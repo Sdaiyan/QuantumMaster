@@ -91,7 +91,7 @@ namespace QuantumMaster
 			{ "StealCombatSkillPatch", (typeof(Features.Actions.StealCombatSkillPatch), () => ConfigManager.stealCombatSkill) },
 			
 			// Character 模块
-			{ "GenderControlPatch", (typeof(Features.Character.GenderControlPatch), () => ConfigManager.genderControl > 0) },
+			{ "GenderControlPatch", (typeof(Features.Character.GenderControlPatch), () => ConfigManager.genderControl != 50) },
 			{ "SectApprovalPatch", (typeof(Features.Character.SectApprovalPatch), () => ConfigManager.SetSectMemberApproveTaiwu) },
 			{ "SexualOrientationControlPatch", (typeof(Features.Character.SexualOrientationControlPatch), () => ConfigManager.sexualOrientationControl > 0) },
 			
@@ -103,7 +103,7 @@ namespace QuantumMaster
 			{ "QiArtStrategyPatch", (typeof(Features.Core.QiArtStrategyPatch), () => ConfigManager.GetQiArtStrategyDeltaNeiliBonus) },
 			
 			// Items 模块
-			{ "CricketPatch", (typeof(Features.Items.CricketPatch), () => ConfigManager.CheckCricketIsSmart || ConfigManager.CricketInitialize) },
+			{ "CricketPatch", (typeof(Features.Items.CricketPatch), () => ConfigManager.CatchCricket || ConfigManager.CheckCricketIsSmart || ConfigManager.CricketInitialize) },
 			{ "BookGenerationPatch", (typeof(Features.Items.BookGenerationPatch), () => ConfigManager.GeneratePageIncompleteState) },
 			
 			// Reading 模块
@@ -163,7 +163,7 @@ namespace QuantumMaster
 			{ "ApplyImmediateReadingStrategyEffectForLifeSkill", (Features.Reading.ReadingBuilderPatch.PatchApplyImmediateReadingStrategyEffectForLifeSkill, () => ConfigManager.ApplyImmediateReadingStrategyEffectForLifeSkill) },
 			
 			// Items 模块
-			{ "CatchCricket", (Features.Items.CricketPatch.PatchCatchCricket, () => ConfigManager.CatchCricket) }
+			{ "CatchCricketDouble", (Features.Items.CricketPatch.PatchCatchCricketDouble, () => ConfigManager.CatchCricketDouble) }
 		};
 
 		// 新增方法，根据配置选择性应用 class 形式的补丁
