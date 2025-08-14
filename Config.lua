@@ -274,8 +274,8 @@ return {
         {
             SettingType = "Toggle",
             Key = "TryAddLoopingEvent",
-            DisplayName = "天人感应",
-            Description = "如果概率不为0，尝试触发天人感应时必定成功",
+            DisplayName = "【气运】天人感应",
+            Description = "【气运】尝试触发天人感应时，成功率根据设置的气运增加或者减少",
             DefaultValue = true,
         },
         {

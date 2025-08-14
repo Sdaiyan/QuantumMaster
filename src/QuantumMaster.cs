@@ -96,7 +96,6 @@ namespace QuantumMaster
 			{ "SexualOrientationControlPatch", (typeof(Features.Character.SexualOrientationControlPatch), () => ConfigManager.sexualOrientationControl > 0) },
 			
 			// Core 模块
-			{ "LoopingEventPatch", (typeof(Features.Core.LoopingEventPatch), () => ConfigManager.TryAddLoopingEvent) },
 			{ "QiArtStrategyPatch", (typeof(Features.Core.QiArtStrategyPatch), () => ConfigManager.GetQiArtStrategyDeltaNeiliBonus) },
 			
 			// Items 模块
@@ -130,6 +129,9 @@ namespace QuantumMaster
 			
 			// Character 模块
 			{ "OfflineCalcGeneralActionTeachSkill", (Features.Character.OfflineCalcGeneralActionTeachSkillPatch.PatchOfflineCalcGeneralActionTeachSkill, () => ConfigManager.OfflineCalcGeneralAction_TeachSkill) },
+			
+			// Core 模块
+			{ "TryAddLoopingEvent", (Features.Core.LoopingEventPatch.PatchTryAddLoopingEvent, () => ConfigManager.TryAddLoopingEvent) },
 			
 			// Building 模块
 			{ "CreateBuildingArea", (Features.Building.BuildingPatch.PatchCreateBuildingArea, () => ConfigManager.CreateBuildingArea) },
