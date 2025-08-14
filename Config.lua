@@ -232,8 +232,8 @@ return {
         {
             SettingType = "Toggle",
             Key = "GetCurrReadingEventBonusRate",
-            DisplayName = "灵光一闪",
-            Description = "灵光一闪概率不为0时，必定灵光一闪",
+            DisplayName = "【气运】灵光一闪",
+            Description = "【气运】灵光一闪触发概率根据设置的气运影响，成功时100%触发，失败时0%触发",
             DefaultValue = true,
         },
         {

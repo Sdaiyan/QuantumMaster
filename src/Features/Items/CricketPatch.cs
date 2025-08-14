@@ -22,7 +22,7 @@ namespace QuantumMaster.Features.Items
         /// <summary>
         /// 抓蛐蛐基础成功率补丁
         /// 配置项: CatchCricket
-        /// 功能: 【气运】根据气运调整唱级，影响基础抓捕成功率
+        /// 功能: 【气运】根据气运影响抓蛐蛐的成功率，成功返回100，失败返回0
         /// </summary>
         [HarmonyPatch(typeof(ItemDomain), "CatchCricket")]
         public class CatchCricketSuccessRatePatch
@@ -36,14 +36,14 @@ namespace QuantumMaster.Features.Items
                 }
 
                 var originalSingLevel = singLevel;
-                // 使用LuckyRandomHelper的静态方法
-                // 正气运：最小值是当前值，最大值是100
-                // 负气运：最小值是0，最大值是当前值
-                singLevel = (short)LuckyRandomHelper.Calc_Random_Next_2Args_Max_By_Luck_Static(
-                    originalSingLevel,
-                    101); // Next方法是左闭右开区间，所以max用101
                 
-                DebugLog.Info($"【气运】抓蛐蛐基础成功率: 原始唱级{originalSingLevel} -> 气运调整后唱级{singLevel}");
+                // 使用气运系统进行成功判断，基于原始唱级作为成功概率
+                // 唱级范围通常是0-100，直接当作百分比概率使用
+                bool success = LuckyRandomHelper.Calc_Random_CheckPercentProb_True_By_Luck(null, originalSingLevel);
+                short newSingLevel = success ? (short)100 : (short)0;
+                
+                DebugLog.Info($"【气运】抓蛐蛐基础成功率: 原始唱级{originalSingLevel}% -> 气运判定{(success ? "成功" : "失败")} -> {newSingLevel}");
+                singLevel = newSingLevel;
             }
         }
 

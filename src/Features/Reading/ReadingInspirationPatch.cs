@@ -12,8 +12,7 @@ namespace QuantumMaster.Features.Reading
     /// <summary>
     /// 灵光一闪功能补丁
     /// 配置项: GetCurrReadingEventBonusRate
-    /// 功能: 控制灵光一闪的触发概率
-    /// 注意: 当概率不为0时，必定灵光一闪
+    /// 功能: 【气运】控制灵光一闪的触发概率，根据气运影响成功率
     /// </summary>
     [HarmonyPatch(typeof(TaiwuDomain), "GetCurrReadingEventBonusRate")]
     public class ReadingInspirationPatch
@@ -29,11 +28,14 @@ namespace QuantumMaster.Features.Reading
                 return; // 使用原版逻辑
             }
 
-            // 如果原概率大于0，则设为100%
+            // 如果原概率大于0，则使用气运系统进行判断
             if (__result > 0)
             {
-                DebugLog.Info($"灵光一闪概率: 原值{__result}% -> 强制触发100%");
-                __result = 100;
+                bool success = LuckyRandomHelper.Calc_Random_CheckPercentProb_True_By_Luck(null, __result);
+                short newResult = success ? (short)100 : (short)0;
+                
+                DebugLog.Info($"【气运】灵光一闪: 原概率{__result}% -> 气运判定{(success ? "成功" : "失败")} -> {newResult}%");
+                __result = newResult;
             }
         }
     }
