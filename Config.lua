@@ -248,7 +248,7 @@ return {
             Key = "FixedPagePos",
             DisplayName = "完整书页固定靠前",
             Description = "需要开启生成书籍参数的功能，开启这个功能完整的书页会出现在书本的前篇位置",
-            DefaultValue = true,
+            DefaultValue = false,
         },
         {
             SettingType = "Toggle",
