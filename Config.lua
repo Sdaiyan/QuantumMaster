@@ -82,16 +82,14 @@ return {
             DefaultValue = true,
         },
         {
-            SettingType = "Dropdown",
+            SettingType = "Slider",
             Key = "genderControl",
             DisplayName = "生成性别控制",
-            Description = "生成角色时，如果是随机的性别，则按照选择进行修改。对于指定性别的NPC生成无效",
-            Options = {
-                "关闭功能",
-                "修改为女",
-                "修改为男"
-            },
-            DefaultValue = 0,
+            Description = "生成角色时，如果是随机的性别，则按照选择进行修改。对于指定性别的NPC生成无效。这个选项控制的是男性的概率，女性的概率就是100%减去男性的概率。（此处控制的是真实性别）",
+			MinValue = 0,
+			MaxValue = 100,
+			StepSize = 1,
+			DefaultValue = 50,
         },
         {
             SettingType = "Dropdown",

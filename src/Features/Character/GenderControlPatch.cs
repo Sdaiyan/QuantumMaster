@@ -20,20 +20,37 @@ namespace QuantumMaster.Features.Character
         [HarmonyPrefix]
         public static bool Prefix(ref sbyte __result)
         {
-            switch (ConfigManager.genderControl)
+            int maleProb = ConfigManager.genderControl;
+            if (maleProb < 0 || maleProb > 100)
             {
-                case 1: // 修改为女
-                    // 0 = 女 1 = 男
-                    __result = (sbyte)0;
-                    DebugLog.Info("GenderControlPatch: 强制设置性别为女性");
-                    return false;
-                case 2: // 修改为男
-                    __result = (sbyte)1;
-                    DebugLog.Info("GenderControlPatch: 强制设置性别为男性");
-                    return false;
-                default: // 关闭功能
-                    return true;
+                // 非法值，走原版
+                return true;
             }
+            if (maleProb == 0)
+            {
+                __result = (sbyte)0; // 全女
+                DebugLog.Info("GenderControlPatch: 强制设置性别为女性 (0%)");
+                return false;
+            }
+            if (maleProb == 100)
+            {
+                __result = (sbyte)1; // 全男
+                DebugLog.Info("GenderControlPatch: 强制设置性别为男性 (100%)");
+                return false;
+            }
+            // 1~99之间，按概率
+            int rand = QuantumMaster.Random.Next(0, 100);
+            if (rand < maleProb)
+            {
+                __result = (sbyte)1;
+                DebugLog.Info($"GenderControlPatch: 按概率设置性别为男性 ({maleProb}%) rand={rand}");
+            }
+            else
+            {
+                __result = (sbyte)0;
+                DebugLog.Info($"GenderControlPatch: 按概率设置性别为女性 ({100-maleProb}%) rand={rand}");
+            }
+            return false;
         }
     }
 }
