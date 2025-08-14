@@ -113,8 +113,8 @@ return {
         {
             SettingType = "Toggle",
             Key = "ropeOrSword",
-            DisplayName = "绑人/剑柄救人",
-            Description = "事件触发时，如果概率不为0，绳子绑架或者煎饼救人必定成功",
+            DisplayName = "【气运】绳子/剑柄救人",
+            Description = "【气运】事件触发时，绳子绑架或者剑柄救人的成功率根据气运增加",
             DefaultValue = true,
         },
         {

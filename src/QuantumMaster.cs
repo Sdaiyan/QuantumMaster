@@ -95,9 +95,6 @@ namespace QuantumMaster
 			{ "SectApprovalPatch", (typeof(Features.Character.SectApprovalPatch), () => ConfigManager.SetSectMemberApproveTaiwu) },
 			{ "SexualOrientationControlPatch", (typeof(Features.Character.SexualOrientationControlPatch), () => ConfigManager.sexualOrientationControl > 0) },
 			
-			// Combat 模块
-			{ "RopeAndSwordPatch", (typeof(Features.Combat.RopeAndSwordPatch), () => ConfigManager.ropeOrSword) },
-			
 			// Core 模块
 			{ "LoopingEventPatch", (typeof(Features.Core.LoopingEventPatch), () => ConfigManager.TryAddLoopingEvent) },
 			{ "QiArtStrategyPatch", (typeof(Features.Core.QiArtStrategyPatch), () => ConfigManager.GetQiArtStrategyDeltaNeiliBonus) },
@@ -154,6 +151,8 @@ namespace QuantumMaster
 			{ "CalcReadInCombat", (Features.Combat.CombatPatch.PatchCalcReadInCombat, () => ConfigManager.CalcReadInCombat) },
 			{ "CalcLootItem", (Features.Combat.CombatPatch.PatchCalcLootItem, () => ConfigManager.CalcLootItem) },
 			{ "CalcQiQrtInCombat", (Features.Combat.CombatPatch.PatchCalcQiQrtInCombat, () => ConfigManager.CalcQiQrtInCombat) },
+			{ "CheckRopeOrSwordHit", (Features.Combat.RopeAndSwordPatch.PatchCheckRopeOrSwordHit, () => ConfigManager.ropeOrSword) },
+			{ "CheckRopeOrSwordHitOutofCombat", (Features.Combat.RopeAndSwordPatch.PatchCheckRopeOrSwordHitOutofCombat, () => ConfigManager.ropeOrSword) },
 			
 			// Adventure 模块
 			{ "InitPathContent", (Features.Adventure.AdventurePatch.PatchInitPathContent, () => ConfigManager.InitPathContent) },

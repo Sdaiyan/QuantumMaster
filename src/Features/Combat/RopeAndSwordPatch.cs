@@ -4,57 +4,90 @@
  * Licensed under GPL-3.0 - see LICENSE file for details
  */
 
+using System;
 using HarmonyLib;
 using GameData.Domains.Combat;
 
 namespace QuantumMaster.Features.Combat
 {
     /// <summary>
-    /// 绳子和剑柄相关功能补丁
-    /// 配置项: ropeOrSword
-    /// 功能: 控制绳子绑架和剑柄救人的成功率
-    /// 注意: 当概率不为0时，必定成功
+    /// 绳子和剑柄相关功能补丁集合
+    /// 使用 PatchBuilder 和传统 Harmony 补丁
     /// </summary>
-    public class RopeAndSwordPatch
+    public static class RopeAndSwordPatch
     {
         /// <summary>
         /// 绳子和剑柄命中检查补丁
+        /// 配置项: ropeOrSword
+        /// 功能: 【气运】根据气运影响绳子绑架和剑柄救人的成功率
         /// </summary>
-        [HarmonyPatch(typeof(CombatDomain), "CheckRopeOrSwordHit")]
-        public class CheckRopeOrSwordHitPatch
+        public static bool PatchCheckRopeOrSwordHit(Harmony harmony)
         {
-            [HarmonyPrefix]
-            public static bool Prefix(ref bool __result)
-            {
-                if (!ConfigManager.ropeOrSword)
-                {
-                    return true; // 使用原版逻辑
-                }
+            if (!ConfigManager.ropeOrSword && !QuantumMaster.openAll) return false;
 
-                DebugLog.Info("绳子/剑柄命中检查: 强制成功");
-                __result = true;
-                return false; // 跳过原方法
-            }
+            var OriginalMethod = new OriginalMethodInfo
+            {
+                Type = typeof(GameData.Domains.Combat.CombatDomain),
+                MethodName = "CheckRopeOrSwordHit",
+                Parameters = new Type[] { 
+                    typeof(Redzen.Random.IRandomSource), 
+                    typeof(int) 
+                }
+            };
+
+            var patchBuilder = GenericTranspiler.CreatePatchBuilder(
+                    "CheckRopeOrSwordHit",
+                    OriginalMethod);
+
+            // CheckPercentProb 方法替换 - 期望成功，使用气运提高成功率
+            // 第1个 CheckPercentProb 调用
+            patchBuilder.AddExtensionMethodReplacement(
+                    PatchPresets.Extensions.CheckPercentProb,
+                    PatchPresets.Replacements.CheckPercentProbTrue,
+                    1);
+
+            patchBuilder.Apply(harmony);
+
+            return true;
         }
 
         /// <summary>
         /// 战斗外绳子和剑柄命中检查补丁
+        /// 配置项: ropeOrSword
+        /// 功能: 【气运】根据气运影响战斗外绳子和剑柄的成功率
         /// </summary>
-        [HarmonyPatch(typeof(CombatDomain), "CheckRopeOrSwordHitOutofCombat")]
-        public class CheckRopeOrSwordHitOutofCombatPatch
+        public static bool PatchCheckRopeOrSwordHitOutofCombat(Harmony harmony)
         {
-            [HarmonyPrefix]
-            public static bool Prefix(ref bool __result)
-            {
-                if (!ConfigManager.ropeOrSword)
-                {
-                    return true; // 使用原版逻辑
-                }
+            if (!ConfigManager.ropeOrSword && !QuantumMaster.openAll) return false;
 
-                DebugLog.Info("战斗外绳子/剑柄命中检查: 强制成功");
-                __result = true;
-                return false; // 跳过原方法
-            }
+            var OriginalMethod = new OriginalMethodInfo
+            {
+                Type = typeof(GameData.Domains.Combat.CombatDomain),
+                MethodName = "CheckRopeOrSwordHitOutofCombat",
+                Parameters = new Type[] { 
+                    typeof(Redzen.Random.IRandomSource), 
+                    typeof(GameData.Domains.Character.Character),
+                    typeof(GameData.Domains.Character.Character),
+                    typeof(sbyte),
+                    typeof(bool),
+                    typeof(int)
+                }
+            };
+
+            var patchBuilder = GenericTranspiler.CreatePatchBuilder(
+                    "CheckRopeOrSwordHitOutofCombat",
+                    OriginalMethod);
+
+            // CheckPercentProb 方法替换 - 期望成功，使用气运提高成功率
+            // 第1个 CheckPercentProb 调用
+            patchBuilder.AddExtensionMethodReplacement(
+                    PatchPresets.Extensions.CheckPercentProb,
+                    PatchPresets.Replacements.CheckPercentProbTrue,
+                    1);
+
+            patchBuilder.Apply(harmony);
+
+            return true;
         }
     }
 }
