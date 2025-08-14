@@ -94,12 +94,14 @@ namespace QuantumMaster
 			{ "GenderControlPatch", (typeof(Features.Character.GenderControlPatch), () => ConfigManager.genderControl != 50) },
 			{ "SectApprovalPatch", (typeof(Features.Character.SectApprovalPatch), () => ConfigManager.SetSectMemberApproveTaiwu) },
 			{ "SexualOrientationControlPatch", (typeof(Features.Character.SexualOrientationControlPatch), () => ConfigManager.sexualOrientationControl > 0) },
-			
-			// Core 模块
-			{ "QiArtStrategyPatch", (typeof(Features.Core.QiArtStrategyPatch), () => ConfigManager.GetQiArtStrategyDeltaNeiliBonus) },
-			
-			// Items 模块
-			{ "CricketPatch", (typeof(Features.Items.CricketPatch), () => ConfigManager.CatchCricket || ConfigManager.CheckCricketIsSmart || ConfigManager.CricketInitialize) },
+					// Core 模块
+			{ "GetQiArtStrategyDeltaNeiliBonusPatch", (typeof(Features.Core.GetQiArtStrategyDeltaNeiliBonusPatch), () => ConfigManager.GetQiArtStrategyDeltaNeiliBonus) },
+			{ "GetQiArtStrategyExtraNeiliAllocationBonusPatch", (typeof(Features.Core.GetQiArtStrategyExtraNeiliAllocationBonusPatch), () => ConfigManager.GetQiArtStrategyDeltaNeiliBonus) },
+
+			// Items 模块 - 蛐蛐相关补丁
+			{ "CatchCricketSuccessRatePatch", (typeof(Features.Items.CatchCricketSuccessRatePatch), () => ConfigManager.CatchCricket) },
+			{ "CheckCricketIsSmartPatch", (typeof(Features.Items.CheckCricketIsSmartPatch), () => ConfigManager.CheckCricketIsSmart) },
+			{ "CricketInitializePatch", (typeof(Features.Items.CricketInitializePatch), () => ConfigManager.CricketInitialize) },
 			{ "BookGenerationPatch", (typeof(Features.Items.BookGenerationPatch), () => ConfigManager.GeneratePageIncompleteState) },
 			
 			// Reading 模块
