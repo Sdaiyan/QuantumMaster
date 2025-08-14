@@ -91,7 +91,7 @@ return {
                 "修改为女",
                 "修改为男"
             },
-            DefaultValue = 1,
+            DefaultValue = 0,
         },
         {
             SettingType = "Dropdown",
@@ -198,16 +198,9 @@ return {
         },
         {
             SettingType = "Toggle",
-            Key = "GetAskToTeachSkillRespondChance",
-            DisplayName = "NPC过月指点概率",
-            Description = "事件触发时，如果概率不为0，则必定会指点别人",
-            DefaultValue = true,
-        },
-        {
-            SettingType = "Toggle",
-            Key = "GetTaughtNewSkillSuccessRate",
-            DisplayName = "NPC接受指点成功率",
-            Description = "事件触发时，如果概率不为0，接受指点的人必定能学习成功",
+            Key = "OfflineCalcGeneralAction_TeachSkill",
+            DisplayName = "【气运】太吾受到指点的成功率",
+            Description = "【气运】如果太吾受到NPC指点，指点的成功率根据气运增加",
             DefaultValue = true,
         },
         {

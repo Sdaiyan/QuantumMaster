@@ -18,8 +18,7 @@ namespace QuantumMaster
         public static bool plotHarm; // 暗害必定成功
         public static int genderControl; // 生成性别控制：0=关闭功能，1=修改为女，2=修改为男
         public static bool ropeOrSword; // 如果概率不为0，绳子绑架或者煎饼救人必定成功
-        public static bool GetAskToTeachSkillRespondChance; // 如果概率不是0，则必定会指点别人
-        public static bool GetTaughtNewSkillSuccessRate; // 如果概率不为0，接受指点的人必定能学习成功
+        public static bool OfflineCalcGeneralAction_TeachSkill; // 如果概率不是0，则必定会指点别人
         public static bool CatchCricket; // 抓蛐蛐必定成功
         public static bool InitResources; // 生成世界时，每个地块上的资源为浮动区间的最大值，受到难度的影响
         public static bool CheckCricketIsSmart; // 蛐蛐是否可以升级，如果符合条件必定升级
@@ -95,11 +94,8 @@ namespace QuantumMaster
             DomainManager.Mod.GetSetting(modIdStr, "ropeOrSword", ref ropeOrSword);
             DebugLog.Info($"配置加载: ropeOrSword = {ropeOrSword}");
 
-            DomainManager.Mod.GetSetting(modIdStr, "GetAskToTeachSkillRespondChance", ref GetAskToTeachSkillRespondChance);
-            DebugLog.Info($"配置加载: GetAskToTeachSkillRespondChance = {GetAskToTeachSkillRespondChance}");
-
-            DomainManager.Mod.GetSetting(modIdStr, "GetTaughtNewSkillSuccessRate", ref GetTaughtNewSkillSuccessRate);
-            DebugLog.Info($"配置加载: GetTaughtNewSkillSuccessRate = {GetTaughtNewSkillSuccessRate}");
+            DomainManager.Mod.GetSetting(modIdStr, "OfflineCalcGeneralAction_TeachSkill", ref OfflineCalcGeneralAction_TeachSkill);
+            DebugLog.Info($"配置加载: OfflineCalcGeneralAction_TeachSkill = {OfflineCalcGeneralAction_TeachSkill}");
 
             DomainManager.Mod.GetSetting(modIdStr, "CatchCricket", ref CatchCricket);
             DebugLog.Info($"配置加载: CatchCricket = {CatchCricket}");

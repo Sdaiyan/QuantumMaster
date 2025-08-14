@@ -78,7 +78,7 @@ namespace QuantumMaster
 			GenericTranspiler.ResetProcessedMethods();
 		}
 
-		// 补丁配置映射表 - 定义哪些配置项对应哪些补丁类
+		// Class Patch 补丁配置映射表 - 定义哪些配置项对应哪些补丁类
 		private readonly Dictionary<string, (System.Type patchType, System.Func<bool> condition)> patchConfigMappings = new Dictionary<string, (System.Type, System.Func<bool>)>
 		{
 			// Actions 模块 - 静态上下文支持的Prefix/Postfix补丁
@@ -92,7 +92,6 @@ namespace QuantumMaster
 			
 			// Character 模块
 			{ "GenderControlPatch", (typeof(Features.Character.GenderControlPatch), () => ConfigManager.genderControl > 0) },
-			{ "NPCTeachingPatch", (typeof(Features.Character.NPCTeachingPatch), () => ConfigManager.GetAskToTeachSkillRespondChance || ConfigManager.GetTaughtNewSkillSuccessRate) },
 			{ "SectApprovalPatch", (typeof(Features.Character.SectApprovalPatch), () => ConfigManager.SetSectMemberApproveTaiwu) },
 			{ "SexualOrientationControlPatch", (typeof(Features.Character.SexualOrientationControlPatch), () => ConfigManager.sexualOrientationControl > 0) },
 			
@@ -131,6 +130,9 @@ namespace QuantumMaster
 			{ "GetStealCombatSkillActionPhase", (Features.Actions.StealCombatSkillPatch.PatchGetStealCombatSkillActionPhase, () => ConfigManager.stealCombatSkill) },
 			{ "GetPoisonActionPhase", (Features.Actions.PoisonPatch.PatchGetPoisonActionPhase, () => ConfigManager.poison) },
 			{ "GetPlotHarmActionPhase", (Features.Actions.PlotHarmPatch.PatchGetPlotHarmActionPhase, () => ConfigManager.plotHarm) },
+			
+			// Character 模块
+			{ "OfflineCalcGeneralActionTeachSkill", (Features.Character.OfflineCalcGeneralActionTeachSkillPatch.PatchOfflineCalcGeneralActionTeachSkill, () => ConfigManager.OfflineCalcGeneralAction_TeachSkill) },
 			
 			// Building 模块
 			{ "CreateBuildingArea", (Features.Building.BuildingPatch.PatchCreateBuildingArea, () => ConfigManager.CreateBuildingArea) },
