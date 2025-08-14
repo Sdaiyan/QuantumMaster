@@ -50,12 +50,12 @@ namespace QuantumMaster.Features.Reading
 
         /// <summary>
         /// 应用生活技能立即读书策略效果补丁
-        /// 配置项: ApplyImmediateReadingStrategyEffectForLifeSkill
+        /// 配置项: GetStrategyProgressAddValue
         /// 功能: 修改生活技能读书策略效果的随机计算
         /// </summary>
         public static bool PatchApplyImmediateReadingStrategyEffectForLifeSkill(Harmony harmony)
         {
-            if (!ConfigManager.ApplyImmediateReadingStrategyEffectForLifeSkill && !QuantumMaster.openAll) return false;
+            if (!ConfigManager.GetStrategyProgressAddValue && !QuantumMaster.openAll) return false;
 
             var OriginalMethod = new OriginalMethodInfo
             {
@@ -70,6 +70,43 @@ namespace QuantumMaster.Features.Reading
                     OriginalMethod);
 
             // 1 sbyte currPageAddValue = (sbyte)((strategyCfg.MaxProgressAddValue > strategyCfg.MinProgressAddValue) ? context.Random.Next(strategyCfg.MinProgressAddValue, strategyCfg.MaxProgressAddValue + 1) : strategyCfg.MaxProgressAddValue);
+            patchBuilder.AddInstanceMethodReplacement(
+                    PatchPresets.InstanceMethods.Next2Args,
+                    PatchPresets.Replacements.Next2ArgsMax,
+                    1);
+
+            patchBuilder.Apply(harmony);
+
+            return true;
+        }
+
+        /// <summary>
+        /// 设置读书策略补丁
+        /// 配置项: SetReadingStrategy
+        /// 功能: 【气运】读书效率策略 - 修改策略效率的随机计算，根据气运影响结果
+        /// </summary>
+        public static bool PatchSetReadingStrategy(Harmony harmony)
+        {
+            if (!ConfigManager.SetReadingStrategy && !QuantumMaster.openAll) return false;
+
+            var OriginalMethod = new OriginalMethodInfo
+            {
+                Type = typeof(GameData.Domains.Taiwu.TaiwuDomain),
+                MethodName = "SetReadingStrategy",
+                // DataContext context, byte pageIndex, int strategyIndex, sbyte strategyId
+                Parameters = new Type[] { 
+                    typeof(GameData.Common.DataContext), 
+                    typeof(byte), 
+                    typeof(int), 
+                    typeof(sbyte) 
+                }
+            };
+
+            var patchBuilder = GenericTranspiler.CreatePatchBuilder(
+                    "SetReadingStrategy",
+                    OriginalMethod);
+
+            // 替换第1个 random.Next 2参数版本调用 - 期望好结果，使用气运提升效果
             patchBuilder.AddInstanceMethodReplacement(
                     PatchPresets.InstanceMethods.Next2Args,
                     PatchPresets.Replacements.Next2ArgsMax,

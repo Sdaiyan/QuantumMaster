@@ -53,8 +53,8 @@ namespace QuantumMaster
         public static bool CalcQiQrtInCombat; // 如果概率不为0，战斗周天运转必定触发
         public static bool CalcLootItem; // 如果概率不为0，战利品掉落判定必定通过（原本逻辑是对每个战利品进行判断是否掉落）
         public static bool InitPathContent; // 奇遇收获资源时，数量为浮动区间的上限
-        public static bool GetStrategyProgressAddValue; // 读书策略进度增加为浮动区间的上限
-        public static bool ApplyImmediateReadingStrategyEffectForLifeSkill; // 技艺读书策略进度增加为浮动区间的上限
+        public static bool GetStrategyProgressAddValue; // 读书进度策略
+        public static bool SetReadingStrategy; // 读书效率策略
         public static bool ChoosyGetMaterial; // 精挑细选，品质升级判定概率最大
         public static bool AddChoosyRemainUpgradeData; // 精挑细选过月累计最大
         public static bool ParallelUpdateOnMonthChange; // 地块每月资源恢复数量为浮动区间的上限
@@ -198,8 +198,8 @@ namespace QuantumMaster
             DomainManager.Mod.GetSetting(modIdStr, "GetStrategyProgressAddValue", ref GetStrategyProgressAddValue);
             DebugLog.Info($"配置加载: GetStrategyProgressAddValue = {GetStrategyProgressAddValue}");
 
-            DomainManager.Mod.GetSetting(modIdStr, "ApplyImmediateReadingStrategyEffectForLifeSkill", ref ApplyImmediateReadingStrategyEffectForLifeSkill);
-            DebugLog.Info($"配置加载: ApplyImmediateReadingStrategyEffectForLifeSkill = {ApplyImmediateReadingStrategyEffectForLifeSkill}");
+            DomainManager.Mod.GetSetting(modIdStr, "SetReadingStrategy", ref SetReadingStrategy);
+            DebugLog.Info($"配置加载: SetReadingStrategy = {SetReadingStrategy}");
 
             DomainManager.Mod.GetSetting(modIdStr, "ChoosyGetMaterial", ref ChoosyGetMaterial);
             DebugLog.Info($"配置加载: ChoosyGetMaterial = {ChoosyGetMaterial}");

@@ -177,14 +177,14 @@ return {
             SettingType = "Toggle",
             Key = "GetStrategyProgressAddValue",
             DisplayName = "【气运】读书进度策略",
-            Description = "【气运】读书策略（独见独知）进度增加为浮动区间的上限",
+            Description = "【气运】读书策略进度增加值根据设置的气运在浮动区间内增加或者减少",
             DefaultValue = true,
         },
         {
             SettingType = "Toggle",
-            Key = "ApplyImmediateReadingStrategyEffectForLifeSkill",
-            DisplayName = "【气运】技艺读书效率策略",
-            Description = "【气运】技艺书籍的效率增加策略（奇思妙想）进度增加为浮动区间的上限值",
+            Key = "SetReadingStrategy",
+            DisplayName = "【气运】读书效率策略",
+            Description = "【气运】技艺书籍的效率增加策略进度增加值根据设置的气运在浮动区间内增加或者减少",
             DefaultValue = true,
         },
         {

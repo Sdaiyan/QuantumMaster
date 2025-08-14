@@ -160,8 +160,10 @@ namespace QuantumMaster
 			{ "InitPathContent", (Features.Adventure.AdventurePatch.PatchInitPathContent, () => ConfigManager.InitPathContent) },
 			
 			// Reading 模块
+			// 下面这两项都是书籍进度进度增加策略
 			{ "GetStrategyProgressAddValue", (Features.Reading.ReadingBuilderPatch.PatchGetStrategyProgressAddValue, () => ConfigManager.GetStrategyProgressAddValue) },
-			{ "ApplyImmediateReadingStrategyEffectForLifeSkill", (Features.Reading.ReadingBuilderPatch.PatchApplyImmediateReadingStrategyEffectForLifeSkill, () => ConfigManager.ApplyImmediateReadingStrategyEffectForLifeSkill) },
+			{ "ApplyImmediateReadingStrategyEffectForLifeSkill", (Features.Reading.ReadingBuilderPatch.PatchApplyImmediateReadingStrategyEffectForLifeSkill, () => ConfigManager.GetStrategyProgressAddValue) },
+			{ "SetReadingStrategy", (Features.Reading.ReadingBuilderPatch.PatchSetReadingStrategy, () => ConfigManager.SetReadingStrategy) },
 			
 			// Items 模块
 			{ "CatchCricketDouble", (Features.Items.CricketPatch.PatchCatchCricketDouble, () => ConfigManager.CatchCricketDouble) }
