@@ -4,6 +4,7 @@
  * Licensed under GPL-3.0 - see LICENSE file for details
  */
 
+using System;
 using HarmonyLib;
 using GameData.Domains.Item;
 using GameData.Domains;
@@ -13,36 +14,59 @@ using Config;
 namespace QuantumMaster.Features.Items
 {
     /// <summary>
-    /// 蛐蛐相关功能补丁
-    /// 配置项: CatchCricket, CheckCricketIsSmart, CricketInitialize
-    /// 功能: 控制蛐蛐捕捉、升级和初始化
-    /// 注意: 确保蛐蛐相关操作必定成功且生成最优属性
+    /// 蛐蛐相关功能补丁集合
+    /// 使用 PatchBuilder 和传统 Harmony 补丁
     /// </summary>
-    public class CricketPatch
+    public static class CricketPatch
     {
         /// <summary>
         /// 抓蛐蛐成功率补丁
         /// 配置项: CatchCricket
+        /// 功能: 【气运】根据气运影响抓蛐蛐的成功率，替换CheckPercentProb调用
         /// </summary>
-        [HarmonyPatch(typeof(ItemDomain), "CatchCricket")]
-        public class CatchCricketPatch
+        public static bool PatchCatchCricket(Harmony harmony)
         {
-            [HarmonyPrefix]
-            public static void Prefix(ref short singLevel)
-            {
-                if (!ConfigManager.CatchCricket)
-                {
-                    return; // 使用原版逻辑
-                }
+            if (!ConfigManager.CatchCricket && !QuantumMaster.openAll) return false;
 
-                DebugLog.Info($"抓蛐蛐: 原唱级{singLevel} -> 强制成功100");
-                singLevel = 100; // 设置为100确保必定成功
-            }
+            var OriginalMethod = new OriginalMethodInfo
+            {
+                Type = typeof(GameData.Domains.Item.ItemDomain),
+                MethodName = "CatchCricket",
+                Parameters = new Type[] { 
+                    typeof(GameData.Common.DataContext), 
+                    typeof(short), 
+                    typeof(short), 
+                    typeof(short), 
+                    typeof(sbyte) 
+                }
+            };
+
+            var patchBuilder = GenericTranspiler.CreatePatchBuilder(
+                    "CatchCricket",
+                    OriginalMethod);
+
+            // CheckPercentProb 方法替换 - 期望成功，使用气运提高成功率
+            // 1 第1个 CheckPercentProb 调用 影响成功率
+            patchBuilder.AddExtensionMethodReplacement(
+                    PatchPresets.Extensions.CheckPercentProb,
+                    PatchPresets.Replacements.CheckPercentProbTrue,
+                    1);
+
+            // 3 第3个 CheckPercentProb 调用 影响抓到双蛐蛐概率
+            patchBuilder.AddExtensionMethodReplacement(
+                    PatchPresets.Extensions.CheckPercentProb,
+                    PatchPresets.Replacements.CheckPercentProbTrue,
+                    3);
+
+            patchBuilder.Apply(harmony);
+
+            return true;
         }
 
         /// <summary>
         /// 蛐蛐升级检查补丁
         /// 配置项: CheckCricketIsSmart
+        /// 功能: 【气运】根据气运影响蛐蛐升级的成功率
         /// </summary>
         [HarmonyPatch(typeof(GameData.Domains.Extra.ExtraDomain), "CheckCricketIsSmart")]
         public class CheckCricketIsSmartPatch
@@ -62,14 +86,17 @@ namespace QuantumMaster.Features.Items
                 if (ItemTemplateHelper.GetCricketGrade(cricket.GetColorId(), cricket.GetPartId()) >= 7 ||
                     CricketParts.Instance[cricket.GetColorId()].Type == ECricketPartsType.Trash)
                 {
-                    DebugLog.Info("蛐蛐升级检查: 不满足升级条件，返回false");
+                    DebugLog.Info("【气运】蛐蛐升级检查: 不满足升级条件，返回false");
                     __result = false;
                     return false; // 跳过原始方法
                 }
                 
-                // 如果满足升级条件，则必定升级
-                DebugLog.Info("蛐蛐升级检查: 满足升级条件，强制升级成功");
-                __result = true;
+                // 原版默认概率 20%，使用气运影响
+                int originalPercent = 20;
+                bool success = LuckyRandomHelper.Calc_Random_CheckPercentProb_True_By_Luck(random, originalPercent);
+                
+                DebugLog.Info($"【气运】蛐蛐升级检查: 满足升级条件，原始概率{originalPercent}%, 气运影响后结果={success}");
+                __result = success;
                 return false; // 跳过原始方法
             }
         }
@@ -77,6 +104,7 @@ namespace QuantumMaster.Features.Items
         /// <summary>
         /// 蛐蛐初始化补丁
         /// 配置项: CricketInitialize
+        /// 功能: 生成健康的蛐蛐（最大耐久、无伤势、年龄0）
         /// </summary>
         [HarmonyPatch(typeof(GameData.Domains.Item.Cricket), "Initialize", new System.Type[] { typeof(IRandomSource), typeof(short), typeof(short), typeof(int) })]
         public class CricketInitializePatch

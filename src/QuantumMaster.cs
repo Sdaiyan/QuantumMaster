@@ -103,7 +103,7 @@ namespace QuantumMaster
 			{ "QiArtStrategyPatch", (typeof(Features.Core.QiArtStrategyPatch), () => ConfigManager.GetQiArtStrategyDeltaNeiliBonus) },
 			
 			// Items 模块
-			{ "CricketPatch", (typeof(Features.Items.CricketPatch), () => ConfigManager.CatchCricket || ConfigManager.CheckCricketIsSmart || ConfigManager.CricketInitialize) },
+			{ "CricketPatch", (typeof(Features.Items.CricketPatch), () => ConfigManager.CheckCricketIsSmart || ConfigManager.CricketInitialize) },
 			{ "BookGenerationPatch", (typeof(Features.Items.BookGenerationPatch), () => ConfigManager.GeneratePageIncompleteState) },
 			
 			// Reading 模块
@@ -160,7 +160,10 @@ namespace QuantumMaster
 			
 			// Reading 模块
 			{ "GetStrategyProgressAddValue", (Features.Reading.ReadingBuilderPatch.PatchGetStrategyProgressAddValue, () => ConfigManager.GetStrategyProgressAddValue) },
-			{ "ApplyImmediateReadingStrategyEffectForLifeSkill", (Features.Reading.ReadingBuilderPatch.PatchApplyImmediateReadingStrategyEffectForLifeSkill, () => ConfigManager.ApplyImmediateReadingStrategyEffectForLifeSkill) }
+			{ "ApplyImmediateReadingStrategyEffectForLifeSkill", (Features.Reading.ReadingBuilderPatch.PatchApplyImmediateReadingStrategyEffectForLifeSkill, () => ConfigManager.ApplyImmediateReadingStrategyEffectForLifeSkill) },
+			
+			// Items 模块
+			{ "CatchCricket", (Features.Items.CricketPatch.PatchCatchCricket, () => ConfigManager.CatchCricket) }
 		};
 
 		// 新增方法，根据配置选择性应用 class 形式的补丁

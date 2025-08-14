@@ -203,13 +203,6 @@ return {
         },
         {
             SettingType = "Toggle",
-            Key = "CatchCricket",
-            DisplayName = "抓蛐蛐捕捉成功率",
-            Description = "抓蛐蛐必定成功",
-            DefaultValue = true,
-        },
-        {
-            SettingType = "Toggle",
             Key = "InitResources",
             DisplayName = "初始生成地格资源最大",
             Description = "生成世界时，每个地块上的资源为浮动区间的最大值以及地块上当前可采集的资源，受到难度的影响",
@@ -217,9 +210,16 @@ return {
         },
         {
             SettingType = "Toggle",
+            Key = "CatchCricket",
+            DisplayName = "【气运】抓蛐蛐捕捉成功率",
+            Description = "【气运】抓蛐蛐时，捕捉成功率、抓到双蛐蛐的概率根据气运增加。",
+            DefaultValue = true,
+        },
+        {
+            SettingType = "Toggle",
             Key = "CheckCricketIsSmart",
-            DisplayName = "蛐蛐升级成功率",
-            Description = "蛐蛐是否可以升级，如果符合条件必定升级",
+            DisplayName = "【气运】蛐蛐神采非凡概率",
+            Description = "【气运】蛐蛐进行神采非凡判定时，成功率根据气运增加。原版为20%的概率。但是需要注意，必须部位符合的蛐蛐才有可能神采非凡，这是原版的逻辑。",
             DefaultValue = true,
         },
         {
