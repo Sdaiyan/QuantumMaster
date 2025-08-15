@@ -179,5 +179,69 @@ namespace QuantumMaster.Features.Building
 
             return true;
         }
+
+        /// <summary>
+        /// 建筑随机收益修正补丁
+        /// 配置项: BuildingRandomCorrection
+        /// 功能: 修改第一个出现的 random.next 2个参数版本，使其受到气运影响，期望为最大值
+        /// 目标方法: internal int BuildingRandomCorrection(int value, IRandomSource randomSource)
+        /// </summary>
+        public static bool PatchBuildingRandomCorrection(Harmony harmony)
+        {
+            if (!ConfigManager.BuildingRandomCorrection && !QuantumMaster.openAll) return false;
+
+            // 目标方法：internal int BuildingRandomCorrection(int value, IRandomSource randomSource)
+            var OriginalMethod = new OriginalMethodInfo
+            {
+                Type = typeof(GameData.Domains.Building.BuildingDomain),
+                MethodName = "BuildingRandomCorrection",
+                Parameters = new Type[] { typeof(int), typeof(Redzen.Random.IRandomSource) }
+            };
+
+            var patchBuilder = GenericTranspiler.CreatePatchBuilder(
+                    "BuildingRandomCorrection",
+                    OriginalMethod);
+
+            // 替换第一个出现的 random.Next(min, max) 为返回最大值的版本
+            // 这样可以确保建筑收益（木材、金铁、金币、威望等）达到随机范围的上限
+            patchBuilder.AddInstanceMethodReplacement(
+                    PatchPresets.InstanceMethods.Next2Args,
+                    PatchPresets.Replacements.Next2ArgsMax,
+                    1);
+
+            patchBuilder.Apply(harmony);
+
+            return true;
+        }
+    }
+
+    /// <summary>
+    /// 赌坊与青楼暴击率补丁
+    /// 配置项: BuildingManageHarvestSpecialSuccessRate
+    /// 功能: 【气运】根据气运影响赌坊与青楼的暴击概率，成功返回100，失败返回0
+    /// 目标方法: internal int BuildingManageHarvestSpecialSuccessRate(BuildingBlockKey blockKey, int charId)
+    /// </summary>
+    [HarmonyPatch(typeof(GameData.Domains.Building.BuildingDomain), "BuildingManageHarvestSpecialSuccessRate")]
+    public static class BuildingManageHarvestSpecialSuccessRatePatch
+    {
+        [HarmonyPostfix]
+        public static void Postfix(ref int __result, GameData.Domains.Building.BuildingBlockKey blockKey, int charId)
+        {
+            if (!ConfigManager.BuildingManageHarvestSpecialSuccessRate && !QuantumMaster.openAll)
+            {
+                DebugLog.Info("【气运】赌坊与青楼基础暴击率: 使用原版逻辑");
+                return; // 使用原版逻辑
+            }
+
+            var originalResult = __result;
+            
+            // 使用气运系统进行成功判断，基于原始概率值
+            // 原始返回值通常是0-100的百分比概率
+            bool success = LuckyRandomHelper.Calc_Random_CheckPercentProb_True_By_Luck(null, originalResult);
+            int newResult = success ? 100 : 0;
+            
+            DebugLog.Info($"【气运】赌坊与青楼基础暴击率: 原始概率{originalResult}% -> 气运判定{(success ? "成功" : "失败")} -> {newResult}%");
+            __result = newResult;
+        }
     }
 }

@@ -134,8 +134,22 @@ return {
         {
             SettingType = "Toggle",
             Key = "OfflineUpdateShopManagement",
-            DisplayName = "【气运】太吾村经营",
-            Description = "【气运】事件触发时，如果概率不为0，产业建筑经营、招募必然成功、村民技艺必定提升",
+            DisplayName = "【气运】太吾村经营成功率",
+            Description = "【气运】产业建筑经营、招募必然成功、村民技艺必定提升",
+            DefaultValue = true,
+        },
+        {
+            SettingType = "Toggle",
+            Key = "BuildingRandomCorrection",
+            DisplayName = "【气运】太吾村经营收益",
+            Description = "【气运】产业收益（木材、金铁、金币、威望等）的数量根据气运增加或减少",
+            DefaultValue = true,
+        },
+        {
+            SettingType = "Toggle",
+            Key = "BuildingManageHarvestSpecialSuccessRate",
+            DisplayName = "【气运】赌坊与青楼基础暴击率",
+            Description = "【气运】赌坊与青楼根据气运增加或减少",
             DefaultValue = true,
         },
         {

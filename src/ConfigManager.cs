@@ -58,6 +58,8 @@ namespace QuantumMaster
         public static bool ChoosyGetMaterial; // 精挑细选，品质升级判定概率最大
         public static bool AddChoosyRemainUpgradeData; // 精挑细选过月累计最大
         public static bool ParallelUpdateOnMonthChange; // 地块每月资源恢复数量为浮动区间的上限
+        public static bool BuildingRandomCorrection; // 【气运】太吾村经营收益
+        public static bool BuildingManageHarvestSpecialSuccessRate; // 【气运】赌坊与青楼基础暴击率
 
         /// <summary>
         /// 从游戏配置中读取所有 MOD 设置
@@ -209,6 +211,12 @@ namespace QuantumMaster
 
             DomainManager.Mod.GetSetting(modIdStr, "AddChoosyRemainUpgradeData", ref AddChoosyRemainUpgradeData);
             DebugLog.Info($"配置加载: AddChoosyRemainUpgradeData = {AddChoosyRemainUpgradeData}");
+
+            DomainManager.Mod.GetSetting(modIdStr, "BuildingRandomCorrection", ref BuildingRandomCorrection);
+            DebugLog.Info($"配置加载: BuildingRandomCorrection = {BuildingRandomCorrection}");
+
+            DomainManager.Mod.GetSetting(modIdStr, "BuildingManageHarvestSpecialSuccessRate", ref BuildingManageHarvestSpecialSuccessRate);
+            DebugLog.Info($"配置加载: BuildingManageHarvestSpecialSuccessRate = {BuildingManageHarvestSpecialSuccessRate}");
 
             DebugLog.Info("所有配置项加载完成");
         }

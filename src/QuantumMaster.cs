@@ -104,6 +104,9 @@ namespace QuantumMaster
 			{ "CricketInitializePatch", (typeof(Features.Items.CricketInitializePatch), () => ConfigManager.CricketInitialize) },
 			{ "BookGenerationPatch", (typeof(Features.Items.BookGenerationPatch), () => ConfigManager.GeneratePageIncompleteState) },
 			
+			// Building 模块 - 建筑相关补丁
+			{ "BuildingManageHarvestSpecialSuccessRatePatch", (typeof(Features.Building.BuildingManageHarvestSpecialSuccessRatePatch), () => ConfigManager.BuildingManageHarvestSpecialSuccessRate) },
+			
 			// Reading 模块
 			{ "ReadingInspirationPatch", (typeof(Features.Reading.ReadingInspirationPatch), () => ConfigManager.GetCurrReadingEventBonusRate) },
 			{ "ReadingStrategyPatch", (typeof(Features.Reading.ReadingStrategyPatch), () => 
@@ -138,6 +141,7 @@ namespace QuantumMaster
 			// Building 模块
 			{ "CreateBuildingArea", (Features.Building.BuildingPatch.PatchCreateBuildingArea, () => ConfigManager.CreateBuildingArea) },
 			{ "OfflineUpdateShopManagement", (Features.Building.BuildingPatch.PatchOfflineUpdateShopManagement, () => ConfigManager.OfflineUpdateShopManagement) },
+			{ "BuildingRandomCorrection", (Features.Building.BuildingPatch.PatchBuildingRandomCorrection, () => ConfigManager.BuildingRandomCorrection) },
 			
 			// Skills 模块
 			{ "CalcNeigongLoopingEffect", (Features.Skills.SkillsPatch.PatchCalcNeigongLoopingEffect, () => ConfigManager.CalcNeigongLoopingEffect) },
