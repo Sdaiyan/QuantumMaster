@@ -135,7 +135,7 @@ return {
             SettingType = "Toggle",
             Key = "OfflineUpdateShopManagement",
             DisplayName = "【气运】太吾村经营成功率",
-            Description = "【气运】产业建筑经营、招募必然成功、村民技艺必定提升",
+            Description = "【气运】出售物品成功率、采集物品成功率和品级根据气运增加或减少",
             DefaultValue = true,
         },
         {
