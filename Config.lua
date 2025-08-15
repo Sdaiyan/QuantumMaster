@@ -147,6 +147,13 @@ return {
         },
         {
             SettingType = "Toggle",
+            Key = "UpdateShopBuildingTeach",
+            DisplayName = "【气运】村民经营资质增加概率",
+            Description = "【气运】村名在经营时，资质增加的概率根据气运增加或减少",
+            DefaultValue = true,
+        },
+        {
+            SettingType = "Toggle",
             Key = "BuildingManageHarvestSpecialSuccessRate",
             DisplayName = "【气运】赌坊与青楼基础暴击率",
             Description = "【气运】赌坊与青楼根据气运增加或减少",

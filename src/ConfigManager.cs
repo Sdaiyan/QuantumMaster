@@ -60,6 +60,7 @@ namespace QuantumMaster
         public static bool ParallelUpdateOnMonthChange; // 地块每月资源恢复数量为浮动区间的上限
         public static bool BuildingRandomCorrection; // 【气运】太吾村经营收益
         public static bool BuildingManageHarvestSpecialSuccessRate; // 【气运】赌坊与青楼基础暴击率
+        public static bool UpdateShopBuildingTeach; // 【气运】村民经营资质增加概率
 
         /// <summary>
         /// 从游戏配置中读取所有 MOD 设置
@@ -217,6 +218,9 @@ namespace QuantumMaster
 
             DomainManager.Mod.GetSetting(modIdStr, "BuildingManageHarvestSpecialSuccessRate", ref BuildingManageHarvestSpecialSuccessRate);
             DebugLog.Info($"配置加载: BuildingManageHarvestSpecialSuccessRate = {BuildingManageHarvestSpecialSuccessRate}");
+
+            DomainManager.Mod.GetSetting(modIdStr, "UpdateShopBuildingTeach", ref UpdateShopBuildingTeach);
+            DebugLog.Info($"配置加载: UpdateShopBuildingTeach = {UpdateShopBuildingTeach}");
 
             DebugLog.Info("所有配置项加载完成");
         }

@@ -213,6 +213,49 @@ namespace QuantumMaster.Features.Building
 
             return true;
         }
+
+        /// <summary>
+        /// 村民经营资质增加概率补丁
+        /// 配置项: UpdateShopBuildingTeach
+        /// 功能: 修改村民经营时资质增加的概率，替换第1和第2个CheckPercentProb调用
+        /// 目标方法: private void UpdateShopBuildingTeach(DataContext context, ParallelBuildingModification modification, BuildingBlockKey blockKey, BuildingBlockData blockData)
+        /// </summary>
+        public static bool PatchUpdateShopBuildingTeach(Harmony harmony)
+        {
+            if (!ConfigManager.UpdateShopBuildingTeach && !QuantumMaster.openAll) return false;
+
+            var OriginalMethod = new OriginalMethodInfo
+            {
+                Type = typeof(GameData.Domains.Building.BuildingDomain),
+                MethodName = "UpdateShopBuildingTeach",
+                Parameters = new Type[] { 
+                    typeof(GameData.Common.DataContext), 
+                    typeof(GameData.Domains.Building.ParallelBuildingModification), 
+                    typeof(GameData.Domains.Building.BuildingBlockKey), 
+                    typeof(GameData.Domains.Building.BuildingBlockData) 
+                }
+            };
+
+            var patchBuilder = GenericTranspiler.CreatePatchBuilder(
+                    "UpdateShopBuildingTeach",
+                    OriginalMethod);
+
+            // 替换第1个CheckPercentProb调用 - 村民经营资质增加概率
+            patchBuilder.AddExtensionMethodReplacement(
+                    PatchPresets.Extensions.CheckPercentProb,
+                    PatchPresets.Replacements.CheckPercentProbTrue,
+                    1);
+
+            // 替换第2个CheckPercentProb调用 - 村民经营资质增加概率
+            patchBuilder.AddExtensionMethodReplacement(
+                    PatchPresets.Extensions.CheckPercentProb,
+                    PatchPresets.Replacements.CheckPercentProbTrue,
+                    2);
+
+            patchBuilder.Apply(harmony);
+
+            return true;
+        }
     }
 
     /// <summary>
