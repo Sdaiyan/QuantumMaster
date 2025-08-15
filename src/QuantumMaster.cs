@@ -26,7 +26,7 @@ namespace QuantumMaster
 	{
 		Harmony harmony;
 		PatchBuilder patchBuilder;
-		public static bool debug = true;
+		public static bool debug = false;
 		public static bool openAll = false; // 是否开启所有补丁
 
 		public static Random Random = new Random();
