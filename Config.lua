@@ -622,7 +622,7 @@ return {
                 "祛虚还实",
                 "返本归元",
             },
-            DefaultValue = 1,
+            DefaultValue = 0,
         },
         {
             SettingType = "Dropdown",
@@ -673,7 +673,7 @@ return {
                 "祛虚还实",
                 "返本归元",
             },
-            DefaultValue = 1,
+            DefaultValue = 0,
         },
         {
             SettingType = "Dropdown",
@@ -724,7 +724,7 @@ return {
                 "祛虚还实",
                 "返本归元",
             },
-            DefaultValue = 1,
+            DefaultValue = 0,
         },
         {
             SettingType = "Dropdown",
@@ -775,7 +775,7 @@ return {
                 "祛虚还实",
                 "返本归元",
             },
-            DefaultValue = 1,
+            DefaultValue = 0,
         },
         {
             SettingType = "Dropdown",
@@ -826,7 +826,7 @@ return {
                 "祛虚还实",
                 "返本归元",
             },
-            DefaultValue = 1,
+            DefaultValue = 0,
         },
         {
             SettingType = "Dropdown",
@@ -877,7 +877,7 @@ return {
                 "祛虚还实",
                 "返本归元",
             },
-            DefaultValue = 1,
+            DefaultValue = 0,
         },
         {
             SettingType = "Toggle",
