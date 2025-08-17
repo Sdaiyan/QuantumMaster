@@ -94,9 +94,10 @@ namespace QuantumMaster
 			{ "GenderControlPatch", (typeof(Features.Character.GenderControlPatch), () => ConfigManager.genderControl != 50) },
 			{ "SectApprovalPatch", (typeof(Features.Character.SectApprovalPatch), () => ConfigManager.SetSectMemberApproveTaiwu) },
 			{ "SexualOrientationControlPatch", (typeof(Features.Character.SexualOrientationControlPatch), () => ConfigManager.sexualOrientationControl > 0) },
-					// Core 模块
+			// Core 模块
 			{ "GetQiArtStrategyDeltaNeiliBonusPatch", (typeof(Features.Core.GetQiArtStrategyDeltaNeiliBonusPatch), () => ConfigManager.GetQiArtStrategyDeltaNeiliBonus) },
 			{ "GetQiArtStrategyExtraNeiliAllocationBonusPatch", (typeof(Features.Core.GetQiArtStrategyExtraNeiliAllocationBonusPatch), () => ConfigManager.GetQiArtStrategyDeltaNeiliBonus) },
+			{ "QiArtStrategyControlPatch", (typeof(Features.Core.QiArtStrategyControlPatch), () => ConfigManager.QiArtStrategiesSelect1 > 0 || ConfigManager.QiArtStrategiesSelect2 > 0 || ConfigManager.QiArtStrategiesSelect3 > 0 || ConfigManager.QiArtStrategiesSelect4 > 0 || ConfigManager.QiArtStrategiesSelect5 > 0 || ConfigManager.QiArtStrategiesSelect6 > 0) },
 
 			// Items 模块 - 蛐蛐相关补丁
 			{ "CatchCricketSuccessRatePatch", (typeof(Features.Items.CatchCricketSuccessRatePatch), () => ConfigManager.CatchCricket) },
@@ -167,6 +168,8 @@ namespace QuantumMaster
 			{ "InitPathContent", (Features.Adventure.AdventurePatch.PatchInitPathContent, () => ConfigManager.InitPathContent) },
 			
 			// Reading 模块
+			{ "ReadingInspirationPatch", (Features.Reading.ReadingInspirationPatch.PatchUpdateReadingProgressOnce, () => ConfigManager.GetCurrReadingEventBonusRate) },
+			
 			// 下面这两项都是书籍进度进度增加策略
 			{ "GetStrategyProgressAddValue", (Features.Reading.ReadingBuilderPatch.PatchGetStrategyProgressAddValue, () => ConfigManager.GetStrategyProgressAddValue) },
 			{ "ApplyImmediateReadingStrategyEffectForLifeSkill", (Features.Reading.ReadingBuilderPatch.PatchApplyImmediateReadingStrategyEffectForLifeSkill, () => ConfigManager.GetStrategyProgressAddValue) },

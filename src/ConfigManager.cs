@@ -40,6 +40,14 @@ namespace QuantumMaster
         public static int BookStrategiesSelect9; // 第 9 个策略
         public static int sexualOrientationControl; // 性取向控制：0=关闭功能，1=全体双性恋，2=禁止双性恋
         public static bool GetQiArtStrategyDeltaNeiliBonus; // 周天内力策略收益最大
+        
+        // 周天策略控制配置
+        public static int QiArtStrategiesSelect1; // 第 1 个周天策略
+        public static int QiArtStrategiesSelect2; // 第 2 个周天策略
+        public static int QiArtStrategiesSelect3; // 第 3 个周天策略
+        public static int QiArtStrategiesSelect4; // 第 4 个周天策略
+        public static int QiArtStrategiesSelect5; // 第 5 个周天策略
+        public static int QiArtStrategiesSelect6; // 第 6 个周天策略
 
         // 通过 PatchBuilder 应用的补丁配置
         public static int LuckyLevel;
@@ -163,6 +171,25 @@ namespace QuantumMaster
 
             DomainManager.Mod.GetSetting(modIdStr, "GetQiArtStrategyDeltaNeiliBonus", ref GetQiArtStrategyDeltaNeiliBonus);
             DebugLog.Info($"配置加载: GetQiArtStrategyDeltaNeiliBonus = {GetQiArtStrategyDeltaNeiliBonus}");
+
+            // 周天策略控制配置加载
+            DomainManager.Mod.GetSetting(modIdStr, "QiArtStrategiesSelect1", ref QiArtStrategiesSelect1);
+            DebugLog.Info($"配置加载: QiArtStrategiesSelect1 = {QiArtStrategiesSelect1}");
+
+            DomainManager.Mod.GetSetting(modIdStr, "QiArtStrategiesSelect2", ref QiArtStrategiesSelect2);
+            DebugLog.Info($"配置加载: QiArtStrategiesSelect2 = {QiArtStrategiesSelect2}");
+
+            DomainManager.Mod.GetSetting(modIdStr, "QiArtStrategiesSelect3", ref QiArtStrategiesSelect3);
+            DebugLog.Info($"配置加载: QiArtStrategiesSelect3 = {QiArtStrategiesSelect3}");
+
+            DomainManager.Mod.GetSetting(modIdStr, "QiArtStrategiesSelect4", ref QiArtStrategiesSelect4);
+            DebugLog.Info($"配置加载: QiArtStrategiesSelect4 = {QiArtStrategiesSelect4}");
+
+            DomainManager.Mod.GetSetting(modIdStr, "QiArtStrategiesSelect5", ref QiArtStrategiesSelect5);
+            DebugLog.Info($"配置加载: QiArtStrategiesSelect5 = {QiArtStrategiesSelect5}");
+
+            DomainManager.Mod.GetSetting(modIdStr, "QiArtStrategiesSelect6", ref QiArtStrategiesSelect6);
+            DebugLog.Info($"配置加载: QiArtStrategiesSelect6 = {QiArtStrategiesSelect6}");
 
             // 通过 PatchBuilder 应用的补丁配置
             DomainManager.Mod.GetSetting(modIdStr, "LuckyLevel", ref LuckyLevel);

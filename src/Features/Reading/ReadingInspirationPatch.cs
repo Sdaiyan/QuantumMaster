@@ -33,10 +33,43 @@ namespace QuantumMaster.Features.Reading
             {
                 bool success = LuckyRandomHelper.Calc_Random_CheckPercentProb_True_By_Luck(null, __result);
                 short newResult = success ? (short)100 : (short)0;
-                
                 DebugLog.Info($"【气运】灵光一闪: 原概率{__result}% -> 气运判定{(success ? "成功" : "失败")} -> {newResult}%");
                 __result = newResult;
             }
+        }
+
+
+        /// <summary>
+        /// 地图上捡起书籍的灵光一闪
+        /// </summary>
+        /// <param name="harmony">Harmony 实例</param>
+        /// <returns>补丁应用是否成功</returns>
+        public static bool PatchUpdateReadingProgressOnce(Harmony harmony)
+        {
+            if (!ConfigManager.GetCurrReadingEventBonusRate && !QuantumMaster.openAll) return false;
+
+            DebugLog.Info("[ReadingInspirationPatch] 开始应用地图上捡起书籍的灵光一闪补丁");
+
+            var OriginalMethod = new OriginalMethodInfo
+            {
+                Type = typeof(GameData.Domains.Taiwu.TaiwuDomain),
+                MethodName = "UpdateReadingProgressOnce",
+                Parameters = new Type[] { typeof(GameData.Common.DataContext), typeof(bool), typeof(bool) }
+            };
+
+            var patchBuilder = GenericTranspiler.CreatePatchBuilder(
+                "UpdateReadingProgressOnce",
+                OriginalMethod);
+                
+            
+            patchBuilder.AddExtensionMethodReplacement(
+                    PatchPresets.Extensions.CheckProb,
+                    PatchPresets.Replacements.CheckProbTrue,
+                    1);
+
+            patchBuilder.Apply(harmony);
+
+            return true;
         }
     }
 }
