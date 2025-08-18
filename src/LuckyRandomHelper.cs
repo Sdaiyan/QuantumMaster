@@ -19,27 +19,21 @@ namespace QuantumMaster
         public int Calc_Random_Next_2Args_Max_By_Luck(int min, int max)
         {
             var luck = QuantumMaster.LuckyLevelFactor[ConfigManager.LuckyLevel];
-            // 先随机一个结果
             var randomValue = QuantumMaster.Random.Next(min, max);
-            
-            DebugLog.Info($"[LuckyRandom] Next_2Args_Max: 原始范围=[{min},{max}), 气运因子={luck}, 随机值={randomValue}");
             
             if (luck > 0)
             {
-                // 获取的数量/概率 = Math.min(当前 + (最大-1-当前) * 因子, 最大-1)
                 var result = (int)Math.Min(max - 1, randomValue + (max - 1 - randomValue) * luck);
-                DebugLog.Info($"[LuckyRandom] Next_2Args_Max: 正气运调整 {randomValue} -> {result} (向最大值{max-1}倾斜)");
+                DebugLog.Info($"[LuckyRandom] *** 气运调整结果: 范围=[{min},{max}), 原始值={randomValue}, 新值={result}, luck={luck:F2} ***");
                 return result;
             }
             if (luck < 0)
             {
-                // 获取的数量/概率 = 最小 + (当前-最小) * (1 + 因子)
                 var result = Math.Max(min, min + (int)((randomValue - min) * (1 + luck)));
-                DebugLog.Info($"[LuckyRandom] Next_2Args_Max: 负气运调整 {randomValue} -> {result} (向最小值{min}倾斜)");
+                DebugLog.Info($"[LuckyRandom] *** 气运调整结果: 范围=[{min},{max}), 原始值={randomValue}, 新值={result}, luck={luck:F2} ***");
                 return result;
             }
             
-            DebugLog.Info($"[LuckyRandom] Next_2Args_Max: 无气运影响，返回原始值={randomValue}");
             return randomValue;
         }
 
@@ -49,7 +43,6 @@ namespace QuantumMaster
         public int Random_Next_2Args_Max(int min, int max)
         {
             var result = Calc_Random_Next_2Args_Max_By_Luck(min, max);
-            DebugLog.Info($"Random_Next_2Args_Max min {min} max {max} result {result}");
             return result;
         }
 
@@ -59,19 +52,21 @@ namespace QuantumMaster
         public int Calc_Random_Next_2Args_Min_By_Luck(int min, int max)
         {
             var luck = QuantumMaster.LuckyLevelFactor[ConfigManager.LuckyLevel];
-            // 先随机一个结果
             var randomValue = QuantumMaster.Random.Next(min, max);
-            DebugLog.Info($"randomValue = {randomValue}");
+            
             if (luck > 0)
             {
-                // 获取的数量/概率 = Math.max(当前 - (当前-最小) * 因子, 最小)
-                return Math.Max(min, (int)(randomValue - (randomValue - min) * luck));
+                var result = Math.Max(min, (int)(randomValue - (randomValue - min) * luck));
+                DebugLog.Info($"[LuckyRandom] *** 气运调整结果: 范围=[{min},{max}), 原始值={randomValue}, 新值={result}, luck={luck:F2} ***");
+                return result;
             }
             if (luck < 0)
             {
-                // 获取的数量/概率 = 最小 + (当前-最小) * (1 - 因子)
-                return Math.Min(max - 1, min + (int)((randomValue - min) * (1 - luck)));
+                var result = Math.Min(max - 1, min + (int)((randomValue - min) * (1 - luck)));
+                DebugLog.Info($"[LuckyRandom] *** 气运调整结果: 范围=[{min},{max}), 原始值={randomValue}, 新值={result}, luck={luck:F2} ***");
+                return result;
             }
+            
             return randomValue;
         }
 
@@ -81,7 +76,6 @@ namespace QuantumMaster
         public int Random_Next_2Args_Min(int min, int max)
         {
             var result = Calc_Random_Next_2Args_Min_By_Luck(min, max);
-            DebugLog.Info($"Random_Next_2Args_Min min {min} max {max} result {result}");
             return result;
         }
 
@@ -91,36 +85,21 @@ namespace QuantumMaster
         public int Calc_Random_Next_1Arg_Max_By_Luck(int max)
         {
             var luck = QuantumMaster.LuckyLevelFactor[ConfigManager.LuckyLevel];
-            // 先随机一个结果
             var randomValue = QuantumMaster.Random.Next(0, max);
-            
-            DebugLog.Info($"[LuckyRandom] Next_1Arg_Max: 原始范围=[0,{max}), 气运因子={luck}, 随机值={randomValue}");
             
             if (luck > 0)
             {
-                // 获取的数量/概率 = Math.min(当前 + (最大-1-当前) * 因子, 最大-1)
                 var result = Math.Min(max - 1, randomValue + (int)((max - 1 - randomValue) * luck));
-                DebugLog.Info($"[LuckyRandom] Next_1Arg_Max: 正气运调整 {randomValue} -> {result} (向最大值{max-1}倾斜)");
+                DebugLog.Info($"[LuckyRandom] *** 气运调整结果: 范围=[0,{max}), 原始值={randomValue}, 新值={result}, luck={luck:F2} ***");
                 return result;
-
-                // max = 100 randomValue = 50 luck = 0.2
-                // 50 + (99 - 50) * 0.2 = 50 + 9.8 = 59.8
-
-                // max = 100 randomValue = 50 luck = 1
-                // 50 + (99 - 50) * 1 = 50 + 49 = 99
             }
             if (luck < 0)
             {
-                // 获取的数量/概率 = 0 + (当前-0) * (1 + 因子)
                 var result = Math.Max(0, (int)(randomValue * (1 + luck)));
-                DebugLog.Info($"[LuckyRandom] Next_1Arg_Max: 负气运调整 {randomValue} -> {result} (向最小值0倾斜)");
+                DebugLog.Info($"[LuckyRandom] *** 气运调整结果: 范围=[0,{max}), 原始值={randomValue}, 新值={result}, luck={luck:F2} ***");
                 return result;
-
-                // max = 100 randomValue = 50 luck = -0.33
-                // 50 * (1 - 0.33) = 50 * 0.67 = 33.5
             }
             
-            DebugLog.Info($"[LuckyRandom] Next_1Arg_Max: 无气运影响，返回原始值={randomValue}");
             return randomValue;
         }
 
@@ -130,7 +109,6 @@ namespace QuantumMaster
         public int Random_Next_1Arg_Max(int max)
         {
             var result = Calc_Random_Next_1Arg_Max_By_Luck(max);
-            DebugLog.Info($"Random_Next_1Arg_Max max {max} result {result}");
             return result;
         }
 
@@ -140,28 +118,21 @@ namespace QuantumMaster
         public int Calc_Random_Next_1Arg_0_By_Luck(int max)
         {
             var luck = QuantumMaster.LuckyLevelFactor[ConfigManager.LuckyLevel];
-            // 先随机一个结果
             var randomValue = QuantumMaster.Random.Next(0, max);
-            DebugLog.Info($"randomValue = {randomValue}");
+            
             if (luck > 0)
             {
-                // 获取的数量/概率 = Math.max(当前 - 当前 * 因子, 0)
-                return Math.Max(0, randomValue - (int)(randomValue * luck));
-
-                // max = 100 randomValue = 50 luck = 0.2
-                // 50 - 50 * 0.2 = 50 - 10 = 40
-
-                // max = 100 randomValue = 50 luck = 1
-                // 50 - 50 * 1 = 50 - 50 = 0
+                var result = Math.Max(0, randomValue - (int)(randomValue * luck));
+                DebugLog.Info($"[LuckyRandom] *** 气运调整结果: 范围=[0,{max}), 原始值={randomValue}, 新值={result}, luck={luck:F2} ***");
+                return result;
             }
             if (luck < 0)
             {
-                // 获取的数量/概率 = 当前 * (1 - 因子)，因为luck<0，所以1-luck实际上是1+|luck|
-                return Math.Min(max - 1, (int)(randomValue * (1 - luck)));
-
-                // max = 100 randomValue = 50 luck = -0.33
-                // 50 * (1 - (-0.33)) = 50 * 1.33 = 66.5
+                var result = Math.Min(max - 1, (int)(randomValue * (1 - luck)));
+                DebugLog.Info($"[LuckyRandom] *** 气运调整结果: 范围=[0,{max}), 原始值={randomValue}, 新值={result}, luck={luck:F2} ***");
+                return result;
             }
+            
             return randomValue;
         }
 
@@ -171,7 +142,6 @@ namespace QuantumMaster
         public int Random_Next_1Arg_0(int max)
         {
             var result = Calc_Random_Next_1Arg_0_By_Luck(max);
-            DebugLog.Info($"Random_Next_1Arg_0 max {max} result {result}");
             return result;
         }
 
@@ -180,28 +150,23 @@ namespace QuantumMaster
         /// </summary>
         public static bool Calc_Random_CheckPercentProb_True_By_Luck(IRandomSource randomSource, int percent)
         {
-            if (percent <= 0) 
-            {
-                DebugLog.Info($"[LuckyRandom] CheckPercentProb_True: 原始概率={percent}% (≤0) -> 直接返回false");
-                return false;
-            }
-            if (percent >= 100) 
-            {
-                DebugLog.Info($"[LuckyRandom] CheckPercentProb_True: 原始概率={percent}% (≥100) -> 直接返回true");
-                return true;
-            }
+            if (percent <= 0) return false;
+            if (percent >= 100) return true;
 
             var luck = QuantumMaster.LuckyLevelFactor[ConfigManager.LuckyLevel];
             var randomValue = QuantumMaster.Random.Next(0, 100);
-            
-            DebugLog.Info($"[LuckyRandom] CheckPercentProb_True: 原始概率={percent}%, 气运因子={luck}, 随机值={randomValue}");
+            var originalResult = randomValue < percent;
 
             if (luck > 0)
             {
                 // 提高成功概率
                 var adjustedPercent = Math.Min(100, percent + (100 - percent) * luck);
                 var result = randomValue < adjustedPercent;
-                DebugLog.Info($"[LuckyRandom] CheckPercentProb_True: 正气运调整后概率={adjustedPercent:F2}%, 判定={randomValue}<{adjustedPercent:F2} -> {result}");
+                
+                if (originalResult != result)
+                {
+                    DebugLog.Info($"[LuckyRandom] *** 气运改写结果: 原始概率={percent}%, 判定值={randomValue}, 新概率={adjustedPercent:F2}%, luck={luck:F2}, 原始判定={originalResult} -> 气运调整后={result} ***");
+                }
                 return result;
             }
             if (luck < 0)
@@ -209,13 +174,15 @@ namespace QuantumMaster
                 // 降低成功概率
                 var adjustedPercent = Math.Max(0, percent * (1 + luck));
                 var result = randomValue < adjustedPercent;
-                DebugLog.Info($"[LuckyRandom] CheckPercentProb_True: 负气运调整后概率={adjustedPercent:F2}%, 判定={randomValue}<{adjustedPercent:F2} -> {result}");
+                
+                if (originalResult != result)
+                {
+                    DebugLog.Info($"[LuckyRandom] *** 气运改写结果: 原始概率={percent}%, 判定值={randomValue}, 新概率={adjustedPercent:F2}%, luck={luck:F2}, 原始判定={originalResult} -> 气运调整后={result} ***");
+                }
                 return result;
             }
             
-            var normalResult = randomValue < percent;
-            DebugLog.Info($"[LuckyRandom] CheckPercentProb_True: 无气运影响，判定={randomValue}<{percent} -> {normalResult}");
-            return normalResult;
+            return originalResult;
         }
 
         /// <summary>
@@ -224,7 +191,6 @@ namespace QuantumMaster
         public static bool Random_CheckPercentProb_True(IRandomSource randomSource, int percent)
         {
             var result = Calc_Random_CheckPercentProb_True_By_Luck(randomSource, percent);
-            DebugLog.Info($"Random_CheckPercentProb_True percent {percent} result {result}");
             return result;
         }
 
@@ -233,28 +199,23 @@ namespace QuantumMaster
         /// </summary>
         public static bool Calc_Random_CheckPercentProb_False_By_Luck(IRandomSource randomSource, int percent)
         {
-            if (percent <= 0) 
-            {
-                DebugLog.Info($"[LuckyRandom] CheckPercentProb_False: 原始概率={percent}% (≤0) -> 直接返回true");
-                return true;
-            }
-            if (percent >= 100) 
-            {
-                DebugLog.Info($"[LuckyRandom] CheckPercentProb_False: 原始概率={percent}% (≥100) -> 直接返回false");
-                return false;
-            }
+            if (percent <= 0) return true;
+            if (percent >= 100) return false;
 
             var luck = QuantumMaster.LuckyLevelFactor[ConfigManager.LuckyLevel];
             var randomValue = QuantumMaster.Random.Next(0, 100);
-            
-            DebugLog.Info($"[LuckyRandom] CheckPercentProb_False: 原始概率={percent}%, 气运因子={luck}, 随机值={randomValue}");
+            var originalResult = randomValue >= percent;
 
             if (luck > 0)
             {
                 // 提高失败概率（降低成功概率）
                 var adjustedPercent = Math.Max(0, percent - percent * luck);
                 var result = randomValue >= adjustedPercent;
-                DebugLog.Info($"[LuckyRandom] CheckPercentProb_False: 正气运调整后概率={adjustedPercent:F2}%, 判定={randomValue}>={adjustedPercent:F2} -> {result}");
+                
+                if (originalResult != result)
+                {
+                    DebugLog.Info($"[LuckyRandom] *** 气运改写结果: 原始概率={percent}%, 判定值={randomValue}, 新概率={adjustedPercent:F2}%, luck={luck:F2}, 原始判定={originalResult} -> 气运调整后={result} ***");
+                }
                 return result;
             }
             if (luck < 0)
@@ -262,13 +223,15 @@ namespace QuantumMaster
                 // 降低失败概率（提高成功概率）
                 var adjustedPercent = Math.Min(100, percent + (100 - percent) * (-luck));
                 var result = randomValue >= adjustedPercent;
-                DebugLog.Info($"[LuckyRandom] CheckPercentProb_False: 负气运调整后概率={adjustedPercent:F2}%, 判定={randomValue}>={adjustedPercent:F2} -> {result}");
+                
+                if (originalResult != result)
+                {
+                    DebugLog.Info($"[LuckyRandom] *** 气运改写结果: 原始概率={percent}%, 判定值={randomValue}, 新概率={adjustedPercent:F2}%, luck={luck:F2}, 原始判定={originalResult} -> 气运调整后={result} ***");
+                }
                 return result;
             }
             
-            var normalResult = randomValue >= percent;
-            DebugLog.Info($"[LuckyRandom] CheckPercentProb_False: 无气运影响，判定={randomValue}>={percent} -> {normalResult}");
-            return normalResult;
+            return originalResult;
         }
 
         /// <summary>
@@ -277,7 +240,6 @@ namespace QuantumMaster
         public static bool Random_CheckPercentProb_False(IRandomSource randomSource, int percent)
         {
             var result = Calc_Random_CheckPercentProb_False_By_Luck(randomSource, percent);
-            DebugLog.Info($"Random_CheckPercentProb_False percent {percent} result {result}");
             return result;
         }
 
@@ -286,22 +248,13 @@ namespace QuantumMaster
         /// </summary>
         public static bool Calc_Random_CheckProb_True_By_Luck(IRandomSource randomSource, int chance, int total)
         {
-            if (chance <= 0) 
-            {
-                DebugLog.Info($"[LuckyRandom] CheckProb_True: 原始概率={chance}/{total} (≤0) -> 直接返回false");
-                return false;
-            }
-            if (chance >= total) 
-            {
-                DebugLog.Info($"[LuckyRandom] CheckProb_True: 原始概率={chance}/{total} (≥total) -> 直接返回true");
-                return true;
-            }
+            if (chance <= 0) return false;
+            if (chance >= total) return true;
 
             var luck = QuantumMaster.LuckyLevelFactor[ConfigManager.LuckyLevel];
             var randomValue = QuantumMaster.Random.Next(0, total);
             var originalPercent = (float)chance / total * 100;
-            
-            DebugLog.Info($"[LuckyRandom] CheckProb_True: 原始概率={chance}/{total}({originalPercent:F1}%), 气运因子={luck}, 随机值={randomValue}");
+            var originalResult = randomValue < chance;
 
             if (luck > 0)
             {
@@ -309,7 +262,11 @@ namespace QuantumMaster
                 var adjustedChance = Math.Min(total, chance + (total - chance) * luck);
                 var result = randomValue < adjustedChance;
                 var adjustedPercent = (float)adjustedChance / total * 100;
-                DebugLog.Info($"[LuckyRandom] CheckProb_True: 正气运调整后概率={adjustedChance:F2}/{total}({adjustedPercent:F1}%), 判定={randomValue}<{adjustedChance:F2} -> {result}");
+                
+                if (originalResult != result)
+                {
+                    DebugLog.Info($"[LuckyRandom] *** 气运改写结果: 原始概率={originalPercent:F1}%({chance}/{total}), 判定值={randomValue}, 新概率={adjustedPercent:F1}%({adjustedChance:F2}/{total}), luck={luck:F2}, 原始判定={originalResult} -> 气运调整后={result} ***");
+                }
                 return result;
             }
             if (luck < 0)
@@ -318,13 +275,15 @@ namespace QuantumMaster
                 var adjustedChance = Math.Max(0, chance * (1 + luck));
                 var result = randomValue < adjustedChance;
                 var adjustedPercent = (float)adjustedChance / total * 100;
-                DebugLog.Info($"[LuckyRandom] CheckProb_True: 负气运调整后概率={adjustedChance:F2}/{total}({adjustedPercent:F1}%), 判定={randomValue}<{adjustedChance:F2} -> {result}");
+                
+                if (originalResult != result)
+                {
+                    DebugLog.Info($"[LuckyRandom] *** 气运改写结果: 原始概率={originalPercent:F1}%({chance}/{total}), 判定值={randomValue}, 新概率={adjustedPercent:F1}%({adjustedChance:F2}/{total}), luck={luck:F2}, 原始判定={originalResult} -> 气运调整后={result} ***");
+                }
                 return result;
             }
             
-            var normalResult = randomValue < chance;
-            DebugLog.Info($"[LuckyRandom] CheckProb_True: 无气运影响，判定={randomValue}<{chance} -> {normalResult}");
-            return normalResult;
+            return originalResult;
         }
 
         /// <summary>
@@ -333,7 +292,6 @@ namespace QuantumMaster
         public static bool Random_CheckProb_True(IRandomSource randomSource, int chance, int total)
         {
             var result = Calc_Random_CheckProb_True_By_Luck(randomSource, chance, total);
-            DebugLog.Info($"Random_CheckProb_True chance {chance} total {total} result {result}");
             return result;
         }
 
@@ -347,21 +305,37 @@ namespace QuantumMaster
 
             var luck = QuantumMaster.LuckyLevelFactor[ConfigManager.LuckyLevel];
             var randomValue = QuantumMaster.Random.Next(0, total);
-            DebugLog.Info($"randomValue = {randomValue}");
+            var originalPercent = (float)chance / total * 100;
+            var originalResult = randomValue >= chance;
 
             if (luck > 0)
             {
                 // 提高失败概率（降低成功概率）
                 var adjustedChance = Math.Max(0, chance - chance * luck);
-                return randomValue >= adjustedChance;
+                var result = randomValue >= adjustedChance;
+                var adjustedPercent = (float)adjustedChance / total * 100;
+                
+                if (originalResult != result)
+                {
+                    DebugLog.Info($"[LuckyRandom] *** 气运改写结果: 原始概率={originalPercent:F1}%({chance}/{total}), 判定值={randomValue}, 新概率={adjustedPercent:F1}%({adjustedChance:F2}/{total}), luck={luck:F2}, 原始判定={originalResult} -> 气运调整后={result} ***");
+                }
+                return result;
             }
             if (luck < 0)
             {
                 // 降低失败概率（提高成功概率）
                 var adjustedChance = Math.Min(total, chance + (total - chance) * (-luck));
-                return randomValue >= adjustedChance;
+                var result = randomValue >= adjustedChance;
+                var adjustedPercent = (float)adjustedChance / total * 100;
+                
+                if (originalResult != result)
+                {
+                    DebugLog.Info($"[LuckyRandom] *** 气运改写结果: 原始概率={originalPercent:F1}%({chance}/{total}), 判定值={randomValue}, 新概率={adjustedPercent:F1}%({adjustedChance:F2}/{total}), luck={luck:F2}, 原始判定={originalResult} -> 气运调整后={result} ***");
+                }
+                return result;
             }
-            return randomValue >= chance;
+            
+            return originalResult;
         }
 
         /// <summary>
@@ -370,7 +344,6 @@ namespace QuantumMaster
         public static bool Random_CheckProb_False(IRandomSource randomSource, int chance, int total)
         {
             var result = Calc_Random_CheckProb_False_By_Luck(randomSource, chance, total);
-            DebugLog.Info($"Random_CheckProb_False chance {chance} total {total} result {result}");
             return result;
         }
 
@@ -380,27 +353,21 @@ namespace QuantumMaster
         public static int Calc_Random_Next_2Args_Max_By_Luck_Static(int min, int max)
         {
             var luck = QuantumMaster.LuckyLevelFactor[ConfigManager.LuckyLevel];
-            // 先随机一个结果
             var randomValue = QuantumMaster.Random.Next(min, max);
-            
-            DebugLog.Info($"[LuckyRandom] Next_2Args_Max_Static: 原始范围=[{min},{max}), 气运因子={luck}, 随机值={randomValue}");
             
             if (luck > 0)
             {
-                // 获取的数量/概率 = Math.min(当前 + (最大-1-当前) * 因子, 最大-1)
                 var result = (int)Math.Min(max - 1, randomValue + (max - 1 - randomValue) * luck);
-                DebugLog.Info($"[LuckyRandom] Next_2Args_Max_Static: 正气运调整 {randomValue} -> {result} (向最大值{max-1}倾斜)");
+                DebugLog.Info($"[LuckyRandom] *** 气运调整结果: 范围=[{min},{max}), 原始值={randomValue}, 新值={result}, luck={luck:F2} ***");
                 return result;
             }
             if (luck < 0)
             {
-                // 获取的数量/概率 = 最小 + (当前-最小) * (1 + 因子)
                 var result = Math.Max(min, min + (int)((randomValue - min) * (1 + luck)));
-                DebugLog.Info($"[LuckyRandom] Next_2Args_Max_Static: 负气运调整 {randomValue} -> {result} (向最小值{min}倾斜)");
+                DebugLog.Info($"[LuckyRandom] *** 气运调整结果: 范围=[{min},{max}), 原始值={randomValue}, 新值={result}, luck={luck:F2} ***");
                 return result;
             }
             
-            DebugLog.Info($"[LuckyRandom] Next_2Args_Max_Static: 无气运影响，返回原始值={randomValue}");
             return randomValue;
         }
 
@@ -432,8 +399,6 @@ namespace QuantumMaster
                     result = Calc_Random_Next_2Args_Max_By_Luck_Static(1, 21);
                 }
             }
-            
-            DebugLog.Info($"Random_Calculate_5 result {result}");
             return result;
         }
     }
