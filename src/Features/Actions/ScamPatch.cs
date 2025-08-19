@@ -29,7 +29,7 @@ namespace QuantumMaster.Features.Actions
         /// <returns>补丁应用是否成功</returns>
         public static bool PatchGetScamActionPhase(Harmony harmony)
         {
-            if (!ConfigManager.scam && !QuantumMaster.openAll) return false;
+            if (!ConfigManager.IsFeatureEnabled("scam")) return false;
 
             DebugLog.Info("[ScamPatch] 开始应用静态上下文版唬骗补丁");
 
@@ -87,7 +87,7 @@ namespace QuantumMaster.Features.Actions
         {
             _currentCharacter = __instance;
             _targetCharacter = targetChar;
-            DebugLog.Info($"[ScamPatch] 设置角色上下文 - 当前角色: {(_currentCharacter != null ? _currentCharacter.GetId().ToString() : "NULL")}, 目标角色: {(_targetCharacter != null ? _targetCharacter.GetId().ToString() : "NULL")}");
+            DebugLog.Info($"[scam] 设置角色上下文 - 当前角色: {(_currentCharacter != null ? _currentCharacter.GetId().ToString() : "NULL")}, 目标角色: {(_targetCharacter != null ? _targetCharacter.GetId().ToString() : "NULL")}");
         }
 
         /// <summary>
@@ -97,7 +97,7 @@ namespace QuantumMaster.Features.Actions
         [HarmonyPostfix]
         public static void ClearCurrentCharacterPostfix()
         {
-            DebugLog.Info($"[ScamPatch] 清理角色上下文");
+            DebugLog.Info($"[scam] 清理角色上下文");
             _currentCharacter = null;
             _targetCharacter = null;
         }
@@ -128,7 +128,7 @@ namespace QuantumMaster.Features.Actions
                 if (currentCharId == taiwuId)
                 {
                     DebugLog.Info($"[ScamPatch] 太吾发起唬骗（目标：{targetCharId}）- 使用倾向成功的气运函数");
-                    var result = LuckyRandomHelper.Calc_Random_CheckPercentProb_True_By_Luck(random, probability);
+                    var result = LuckyCalculator.Calc_Random_CheckPercentProb_True_By_Luck(random, probability, "scam");
                     DebugLog.Info($"[ScamPatch] 太吾唬骗结果: {result}");
                     return result;
                 }

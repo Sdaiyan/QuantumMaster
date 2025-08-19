@@ -31,7 +31,7 @@ namespace QuantumMaster.Features.Reading
             // 如果原概率大于0，则使用气运系统进行判断
             if (__result > 0)
             {
-                bool success = LuckyRandomHelper.Calc_Random_CheckPercentProb_True_By_Luck(null, __result);
+                bool success = LuckyCalculator.Calc_Random_CheckPercentProb_True_By_Luck(null, __result);
                 short newResult = success ? (short)100 : (short)0;
                 DebugLog.Info($"【气运】灵光一闪: 原概率{__result}% -> 气运判定{(success ? "成功" : "失败")} -> {newResult}%");
                 __result = newResult;

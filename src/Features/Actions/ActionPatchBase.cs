@@ -5,6 +5,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 using HarmonyLib;
 using GameData.Domains.Character;
 using Redzen.Random;
@@ -26,21 +27,21 @@ namespace QuantumMaster.Features.Actions
         /// </summary>
         /// <param name="currentChar">当前角色</param>
         /// <param name="targetChar">目标角色</param>
-        /// <param name="actionName">行动名称，用于日志</param>
-        public static void SetCharacterContext(GameData.Domains.Character.Character currentChar, GameData.Domains.Character.Character targetChar, string actionName)
+        /// <param name="featureKey">功能键，用于日志</param>
+        public static void SetCharacterContext(GameData.Domains.Character.Character currentChar, GameData.Domains.Character.Character targetChar, string featureKey)
         {
             _currentCharacter = currentChar;
             _targetCharacter = targetChar;
-            DebugLog.Info($"[{actionName}] 设置角色上下文 - 当前角色: {(_currentCharacter != null ? _currentCharacter.GetId().ToString() : "NULL")}, 目标角色: {(_targetCharacter != null ? _targetCharacter.GetId().ToString() : "NULL")}");
+            DebugLog.Info($"[{featureKey}] 设置角色上下文 - 当前角色: {(_currentCharacter != null ? _currentCharacter.GetId().ToString() : "NULL")}, 目标角色: {(_targetCharacter != null ? _targetCharacter.GetId().ToString() : "NULL")}");
         }
 
         /// <summary>
         /// 清理角色上下文（通用方法）
         /// </summary>
-        /// <param name="actionName">行动名称，用于日志</param>
-        public static void ClearCharacterContext(string actionName)
+        /// <param name="featureKey">功能键，用于日志</param>
+        public static void ClearCharacterContext(string featureKey)
         {
-            DebugLog.Info($"[{actionName}] 清理角色上下文");
+            DebugLog.Info($"[{featureKey}] 清理角色上下文");
             _currentCharacter = null;
             _targetCharacter = null;
         }
@@ -50,12 +51,12 @@ namespace QuantumMaster.Features.Actions
         /// </summary>
         /// <param name="random">随机源</param>
         /// <param name="probability">原始概率</param>
-        /// <param name="actionName">行动名称，用于日志</param>
+        /// <param name="featureKey">功能键，用于获取该功能的专属气运等级和日志输出</param>
         /// <returns>是否成功</returns>
-        public static bool CheckPercentProbWithStaticContext(IRandomSource random, int probability, string actionName)
+        public static bool CheckPercentProbWithStaticContext(IRandomSource random, int probability, string featureKey)
         {
-            DebugLog.Info($"[{actionName}] === 静态上下文版方法被调用 ===");
-            DebugLog.Info($"[{actionName}] 原始概率: {probability}");
+            DebugLog.Info($"[{featureKey}] === 静态上下文版方法被调用 ===");
+            DebugLog.Info($"[{featureKey}] 原始概率: {probability}");
             
             var currentChar = _currentCharacter;
             var targetChar = _targetCharacter;
@@ -66,35 +67,35 @@ namespace QuantumMaster.Features.Actions
                 var targetCharId = targetChar.GetId();
                 var taiwuId = GameData.Domains.DomainManager.Taiwu.GetTaiwuCharId();
                 
-                DebugLog.Info($"[{actionName}] 当前角色ID: {currentCharId}, 目标角色ID: {targetCharId}, 太吾ID: {taiwuId}");
+                DebugLog.Info($"[{featureKey}] 当前角色ID: {currentCharId}, 目标角色ID: {targetCharId}, 太吾ID: {taiwuId}");
                 
                 // 如果是太吾发起行动，使用气运加成
                 if (currentCharId == taiwuId)
                 {
-                    DebugLog.Info($"[{actionName}] 太吾发起{actionName}（目标：{targetCharId}）- 使用倾向成功的气运函数");
-                    var result = LuckyRandomHelper.Calc_Random_CheckPercentProb_True_By_Luck(random, probability);
-                    DebugLog.Info($"[{actionName}] 太吾{actionName}结果: {result}");
+                    DebugLog.Info($"[{featureKey}] 太吾发起{featureKey}（目标：{targetCharId}）- 使用倾向成功的气运函数");
+                    var result = LuckyCalculator.Calc_Random_CheckPercentProb_True_By_Luck(random, probability, featureKey);
+                    DebugLog.Info($"[{featureKey}] 太吾{featureKey}结果: {result}");
                     return result;
                 }
                 // 如果目标是太吾，使用气运减成（对太吾不利）
                 else if (targetCharId == taiwuId)
                 {
-                    DebugLog.Info($"[{actionName}] 针对太吾的{actionName}（{currentCharId} -> 太吾）- 使用倾向失败的气运函数（对太吾不利）");
-                    var result = LuckyRandomHelper.Calc_Random_CheckPercentProb_False_By_Luck(random, probability);
-                    DebugLog.Info($"[{actionName}] 针对太吾{actionName}结果: {result}");
+                    DebugLog.Info($"[{featureKey}] 针对太吾的{featureKey}（{currentCharId} -> 太吾）- 使用倾向失败的气运函数（对太吾不利）");
+                    var result = LuckyCalculator.Calc_Random_CheckPercentProb_False_By_Luck(random, probability, featureKey);
+                    DebugLog.Info($"[{featureKey}] 针对太吾{featureKey}结果: {result}");
                     return result;
                 }
                 else
                 {
-                    DebugLog.Info($"[{actionName}] 非太吾相关{actionName}（{currentCharId} -> {targetCharId}）- 使用原始概率逻辑");
+                    DebugLog.Info($"[{featureKey}] 非太吾相关{featureKey}（{currentCharId} -> {targetCharId}）- 使用原始概率逻辑");
                     var result = RedzenHelper.CheckPercentProb(random, probability);
-                    DebugLog.Info($"[{actionName}] 非太吾相关{actionName}结果: {result}");
+                    DebugLog.Info($"[{featureKey}] 非太吾相关{featureKey}结果: {result}");
                     return result;
                 }
             }
             else
             {
-                DebugLog.Warning($"[{actionName}] 静态上下文中缺少角色信息 - 当前角色: {(currentChar != null ? "有效" : "NULL")}, 目标角色: {(targetChar != null ? "有效" : "NULL")}，使用原始概率");
+                DebugLog.Warning($"[{featureKey}] 静态上下文中缺少角色信息 - 当前角色: {(currentChar != null ? "有效" : "NULL")}, 目标角色: {(targetChar != null ? "有效" : "NULL")}，使用原始概率");
                 return RedzenHelper.CheckPercentProb(random, probability);
             }
         }

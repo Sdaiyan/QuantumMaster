@@ -28,8 +28,7 @@ namespace QuantumMaster.Features.Actions
         [HarmonyPrefix]
         public static void GetPlotHarmActionPhase_Prefix(GameData.Domains.Character.Character __instance, GameData.Domains.Character.Character targetChar)
         {
-            if (!ConfigManager.plotHarm && !QuantumMaster.openAll) return;
-            ActionPatchBase.SetCharacterContext(__instance, targetChar, "PlotHarmPatch");
+            ActionPatchBase.SetCharacterContext(__instance, targetChar, "plotHarm");
         }
 
         /// <summary>
@@ -39,8 +38,7 @@ namespace QuantumMaster.Features.Actions
         [HarmonyPostfix]
         public static void GetPlotHarmActionPhase_Postfix()
         {
-            if (!ConfigManager.plotHarm && !QuantumMaster.openAll) return;
-            ActionPatchBase.ClearCharacterContext("PlotHarmPatch");
+            ActionPatchBase.ClearCharacterContext("plotHarm");
         }
 
         /// <summary>
@@ -48,7 +46,7 @@ namespace QuantumMaster.Features.Actions
         /// </summary>
         public static bool CheckPercentProbWithStaticContext(Redzen.Random.IRandomSource random, int probability)
         {
-            return ActionPatchBase.CheckPercentProbWithStaticContext(random, probability, "PlotHarmPatch");
+            return ActionPatchBase.CheckPercentProbWithStaticContext(random, probability, "plotHarm");
         }
 
         /// <summary>
@@ -58,7 +56,7 @@ namespace QuantumMaster.Features.Actions
         /// <returns>补丁应用是否成功</returns>
         public static bool PatchGetPlotHarmActionPhase(Harmony harmony)
         {
-            if (!ConfigManager.plotHarm && !QuantumMaster.openAll) return false;
+            if (!ConfigManager.IsFeatureEnabled("plotHarm")) return false;
 
             var OriginalMethod = new OriginalMethodInfo
             {

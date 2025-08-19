@@ -21,7 +21,7 @@ namespace QuantumMaster
             public static readonly ExtensionMethodInfo CheckPercentProb = new ExtensionMethodInfo
             {
                 Type = typeof(RedzenHelper),
-                MethodName = "CheckPercentProb",
+                MethodName = nameof(RedzenHelper.CheckPercentProb),
                 Parameters = new Type[] { typeof(IRandomSource), typeof(int) }
             };
 
@@ -31,7 +31,7 @@ namespace QuantumMaster
             public static readonly ExtensionMethodInfo CheckProb = new ExtensionMethodInfo
             {
                 Type = typeof(RedzenHelper),
-                MethodName = "CheckProb",
+                MethodName = nameof(RedzenHelper.CheckProb),
                 Parameters = new Type[] { typeof(IRandomSource), typeof(int), typeof(int) }
             };
 
@@ -41,7 +41,7 @@ namespace QuantumMaster
             public static readonly ExtensionMethodInfo CalculateFormula0Arg = new ExtensionMethodInfo
             {
                 Type = typeof(Config.Common.ConfigFormulaExtensions),
-                MethodName = "Calculate",
+                MethodName = nameof(Config.Common.ConfigFormulaExtensions.Calculate),
                 Parameters = new Type[] { typeof(Config.Common.IConfigFormula) }
             };
         }
@@ -57,7 +57,7 @@ namespace QuantumMaster
             public static readonly InstanceMethodInfo Next2Args = new InstanceMethodInfo
             {
                 Type = typeof(IRandomSource),
-                MethodName = "Next",
+                MethodName = nameof(IRandomSource.Next),
                 Parameters = new Type[] { typeof(int), typeof(int) }
             };
 
@@ -67,7 +67,7 @@ namespace QuantumMaster
             public static readonly InstanceMethodInfo Next1Arg = new InstanceMethodInfo
             {
                 Type = typeof(IRandomSource),
-                MethodName = "Next",
+                MethodName = nameof(IRandomSource.Next),
                 Parameters = new Type[] { typeof(int) }
             };
         }
@@ -121,7 +121,7 @@ namespace QuantumMaster
             public static readonly ReplacementMethodInfo CheckPercentProbTrue = new ReplacementMethodInfo
             {
                 Type = typeof(LuckyRandomHelper),
-                MethodName = "Random_CheckPercentProb_True"
+                MethodName = nameof(LuckyRandomHelper.Random_CheckPercentProb_True)
             };
 
             /// <summary>
@@ -130,7 +130,7 @@ namespace QuantumMaster
             public static readonly ReplacementMethodInfo CheckPercentProbFalse = new ReplacementMethodInfo
             {
                 Type = typeof(LuckyRandomHelper),
-                MethodName = "Random_CheckPercentProb_False"
+                MethodName = nameof(LuckyRandomHelper.Random_CheckPercentProb_False)
             };
 
             /// <summary>
@@ -139,7 +139,7 @@ namespace QuantumMaster
             public static readonly ReplacementMethodInfo Next2ArgsMax = new ReplacementMethodInfo
             {
                 Type = typeof(LuckyRandomHelper),
-                MethodName = "Random_Next_2Args_Max"
+                MethodName = nameof(LuckyRandomHelper.Random_Next_2Args_Max)
             };
 
             /// <summary>
@@ -148,7 +148,7 @@ namespace QuantumMaster
             public static readonly ReplacementMethodInfo Next2ArgsMin = new ReplacementMethodInfo
             {
                 Type = typeof(LuckyRandomHelper),
-                MethodName = "Random_Next_2Args_Min"
+                MethodName = nameof(LuckyRandomHelper.Random_Next_2Args_Min)
             };
 
             /// <summary>
@@ -157,7 +157,7 @@ namespace QuantumMaster
             public static readonly ReplacementMethodInfo Next1ArgMax = new ReplacementMethodInfo
             {
                 Type = typeof(LuckyRandomHelper),
-                MethodName = "Random_Next_1Arg_Max"
+                MethodName = nameof(LuckyRandomHelper.Random_Next_1Arg_Max)
             };
 
             /// <summary>
@@ -166,7 +166,7 @@ namespace QuantumMaster
             public static readonly ReplacementMethodInfo Next1Arg0 = new ReplacementMethodInfo
             {
                 Type = typeof(LuckyRandomHelper),
-                MethodName = "Random_Next_1Arg_0"
+                MethodName = nameof(LuckyRandomHelper.Random_Next_1Arg_0)
             };
 
             /// <summary>
@@ -175,7 +175,7 @@ namespace QuantumMaster
             public static readonly ReplacementMethodInfo CheckProbTrue = new ReplacementMethodInfo
             {
                 Type = typeof(LuckyRandomHelper),
-                MethodName = "Random_CheckProb_True"
+                MethodName = nameof(LuckyRandomHelper.Random_CheckProb_True)
             };
 
             /// <summary>
@@ -184,26 +184,16 @@ namespace QuantumMaster
             public static readonly ReplacementMethodInfo CheckProbFalse = new ReplacementMethodInfo
             {
                 Type = typeof(LuckyRandomHelper),
-                MethodName = "Random_CheckProb_False"
+                MethodName = nameof(LuckyRandomHelper.Random_CheckProb_False)
             };
 
-            // public static readonly ReplacementMethodInfo GetRandomResourceLevel5 = new ReplacementMethodInfo
-            // {
-            //     Type = typeof(LuckyRandomHelper),
-            //     MethodName = "Custom_GetRandomResourceLevel"
-            // };
-            // public static readonly ReplacementMethodInfo GetRandomUselessResourceLevel20 = new ReplacementMethodInfo
-            // {
-            //     Type = typeof(LuckyRandomHelper),
-            //     MethodName = "Custom_GetRandomUselessResourceLevel"
-            // };
-
-            // public static int Config.Common.ConfigFormulaExtensions.Calculate(this Config.Common.IConfigFormula formula)
-            // Random_Calculate_Max
+            /// <summary>
+            /// 根据建筑配置公式计算最大值
+            /// </summary>
             public static readonly ReplacementMethodInfo RandomCalculateMax = new ReplacementMethodInfo
             {
                 Type = typeof(LuckyRandomHelper),
-                MethodName = "Random_Calculate_Max"
+                MethodName = nameof(LuckyRandomHelper.Random_Calculate_Max)
             };
 
         }

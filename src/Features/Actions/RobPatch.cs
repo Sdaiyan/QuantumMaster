@@ -25,7 +25,7 @@ namespace QuantumMaster.Features.Actions
         /// <returns>补丁应用是否成功</returns>
         public static bool PatchGetRobActionPhase(Harmony harmony)
         {
-            if (!ConfigManager.rob && !QuantumMaster.openAll) return false;
+            if (!ConfigManager.IsFeatureEnabled("rob")) return false;
 
             DebugLog.Info("[RobPatch] 开始应用静态上下文版抢劫补丁");
 
@@ -81,7 +81,7 @@ namespace QuantumMaster.Features.Actions
         [HarmonyPrefix]
         public static void SetCurrentCharacterPrefix(GameData.Domains.Character.Character __instance, GameData.Domains.Character.Character targetChar)
         {
-            ActionPatchBase.SetCharacterContext(__instance, targetChar, "RobPatch");
+            ActionPatchBase.SetCharacterContext(__instance, targetChar, "rob");
         }
 
         /// <summary>
@@ -91,7 +91,7 @@ namespace QuantumMaster.Features.Actions
         [HarmonyPostfix]
         public static void ClearCurrentCharacterPostfix()
         {
-            ActionPatchBase.ClearCharacterContext("RobPatch");
+            ActionPatchBase.ClearCharacterContext("rob");
         }
 
         /// <summary>
@@ -102,7 +102,7 @@ namespace QuantumMaster.Features.Actions
         /// <returns>是否成功</returns>
         public static bool CheckPercentProbWithStaticContext(IRandomSource random, int probability)
         {
-            return ActionPatchBase.CheckPercentProbWithStaticContext(random, probability, "RobPatch");
+            return ActionPatchBase.CheckPercentProbWithStaticContext(random, probability, "rob");
         }
     }
 }

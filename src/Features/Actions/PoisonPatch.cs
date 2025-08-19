@@ -28,8 +28,7 @@ namespace QuantumMaster.Features.Actions
         [HarmonyPrefix]
         public static void GetPoisonActionPhase_Prefix(GameData.Domains.Character.Character __instance, GameData.Domains.Character.Character targetChar)
         {
-            if (!ConfigManager.poison && !QuantumMaster.openAll) return;
-            ActionPatchBase.SetCharacterContext(__instance, targetChar, "PoisonPatch");
+            ActionPatchBase.SetCharacterContext(__instance, targetChar, "poison");
         }
 
         /// <summary>
@@ -39,8 +38,7 @@ namespace QuantumMaster.Features.Actions
         [HarmonyPostfix]
         public static void GetPoisonActionPhase_Postfix()
         {
-            if (!ConfigManager.poison && !QuantumMaster.openAll) return;
-            ActionPatchBase.ClearCharacterContext("PoisonPatch");
+            ActionPatchBase.ClearCharacterContext("poison");
         }
 
         /// <summary>
@@ -48,7 +46,7 @@ namespace QuantumMaster.Features.Actions
         /// </summary>
         public static bool CheckPercentProbWithStaticContext(Redzen.Random.IRandomSource random, int probability)
         {
-            return ActionPatchBase.CheckPercentProbWithStaticContext(random, probability, "PoisonPatch");
+            return ActionPatchBase.CheckPercentProbWithStaticContext(random, probability, "poison");
         }
 
         /// <summary>
@@ -58,7 +56,7 @@ namespace QuantumMaster.Features.Actions
         /// <returns>补丁应用是否成功</returns>
         public static bool PatchGetPoisonActionPhase(Harmony harmony)
         {
-            if (!ConfigManager.poison && !QuantumMaster.openAll) return false;
+            if (!ConfigManager.IsFeatureEnabled("poison")) return false;
 
             var OriginalMethod = new OriginalMethodInfo
             {

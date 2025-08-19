@@ -9,13 +9,13 @@ namespace QuantumMaster
     public static class ConfigManager
     {
         // 通过 class patch 的方法迁移过来的各种功能开关
-        public static bool steal; // 偷窃必定成功
-        public static bool scam; // 唬骗必定成功
-        public static bool rob; // 抢劫必定成功
-        public static bool stealLifeSkill; // 偷学生活技能必定成功
-        public static bool stealCombatSkill; // 偷学战斗技能必定成功
-        public static bool poison; // 下毒必定成功
-        public static bool plotHarm; // 暗害必定成功
+        public static int steal; // 偷窃气运等级：0=跟随全局，1-8=独立气运等级
+        public static int scam; // 唬骗气运等级：0=跟随全局，1-8=独立气运等级
+        public static int rob; // 抢劫气运等级：0=跟随全局，1-8=独立气运等级
+        public static int stealLifeSkill; // 偷学生活技能气运等级：0=跟随全局，1-8=独立气运等级
+        public static int stealCombatSkill; // 偷学战斗技能气运等级：0=跟随全局，1-8=独立气运等级
+        public static int poison; // 下毒气运等级：0=跟随全局，1-8=独立气运等级
+        public static int plotHarm; // 暗害气运等级：0=跟随全局，1-8=独立气运等级
         public static int genderControl; // 生成性别控制：0=关闭功能，1=修改为女，2=修改为男
         public static bool ropeOrSword; // 如果概率不为0，绳子绑架或者煎饼救人必定成功
         public static bool OfflineCalcGeneralAction_TeachSkill; // 如果概率不是0，则必定会指点别人
@@ -250,6 +250,64 @@ namespace QuantumMaster
             DebugLog.Info($"配置加载: UpdateShopBuildingTeach = {UpdateShopBuildingTeach}");
 
             DebugLog.Info("所有配置项加载完成");
+        }
+
+        /// <summary>
+        /// 获取指定功能的气运等级
+        /// </summary>
+        /// <param name="featureKey">功能键名</param>
+        /// <returns>气运等级（0-7），如果功能设置为跟随全局则返回全局气运等级</returns>
+        public static int GetFeatureLuckLevel(string featureKey)
+        {
+            try
+            {
+                // 使用反射获取对应的配置属性
+                var field = typeof(ConfigManager).GetField(featureKey, 
+                    System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static);
+                
+                if (field == null)
+                {
+                    DebugLog.Warning($"未找到功能配置键: {featureKey}，使用全局气运等级");
+                    return LuckyLevel;
+                }
+
+                // 如果是 int 类型，说明支持独立气运设置
+                if (field.FieldType == typeof(int))
+                {
+                    int value = (int)field.GetValue(null);
+                    return value == 0 ? LuckyLevel : value - 1; // 0=跟随全局，1-8映射到0-7
+                }
+                // 如果是 bool 类型，说明是传统的开关功能，使用全局气运
+                else if (field.FieldType == typeof(bool))
+                {
+                    return LuckyLevel;
+                }
+                else
+                {
+                    DebugLog.Warning($"功能配置键 {featureKey} 的类型不支持气运设置: {field.FieldType}，使用全局气运等级");
+                    return LuckyLevel;
+                }
+            }
+            catch (System.Exception ex)
+            {
+                DebugLog.Error($"获取功能气运等级时发生错误: {featureKey}, 异常: {ex.Message}，使用全局气运等级");
+                return LuckyLevel;
+            }
+        }
+
+        /// <summary>
+        /// 检查指定功能是否启用（不是顺风顺水状态）
+        /// 统一处理功能激活逻辑，包含全局开关和气运等级判断
+        /// </summary>
+        /// <param name="featureKey">功能键名</param>
+        /// <returns>true表示功能启用，false表示功能关闭（顺风顺水）</returns>
+        public static bool IsFeatureEnabled(string featureKey)
+        {
+            // 如果全局开启，则所有功能都启用
+            if (QuantumMaster.openAll) return true;
+            
+            int luckLevel = GetFeatureLuckLevel(featureKey);
+            return luckLevel != 2; // 2 = 顺风顺水（关闭功能）
         }
     }
 }

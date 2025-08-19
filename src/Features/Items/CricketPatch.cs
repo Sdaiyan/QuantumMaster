@@ -80,7 +80,7 @@ namespace QuantumMaster.Features.Items
             
             // 使用气运系统进行成功判断，基于原始唱级作为成功概率
             // 唱级范围通常是0-100，直接当作百分比概率使用
-            bool success = LuckyRandomHelper.Calc_Random_CheckPercentProb_True_By_Luck(null, originalSingLevel);
+            bool success = LuckyCalculator.Calc_Random_CheckPercentProb_True_By_Luck(null, originalSingLevel);
             short newSingLevel = success ? (short)100 : (short)0;
             
             DebugLog.Info($"【气运】抓蛐蛐基础成功率: 原始唱级{originalSingLevel}% -> 气运判定{(success ? "成功" : "失败")} -> {newSingLevel}");
@@ -118,7 +118,7 @@ namespace QuantumMaster.Features.Items
             
             // 原版默认概率 20%，使用气运影响
             int originalPercent = 20;
-            bool success = LuckyRandomHelper.Calc_Random_CheckPercentProb_True_By_Luck(random, originalPercent);
+            bool success = LuckyCalculator.Calc_Random_CheckPercentProb_True_By_Luck(random, originalPercent);
             
             DebugLog.Info($"【气运】蛐蛐升级检查: 满足升级条件，原始概率{originalPercent}%, 气运影响后结果={success}");
             __result = success;

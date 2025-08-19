@@ -85,3 +85,16 @@ GetPotentialRelatedCharactersInSet 这个函数会收集当前地块所以可以
 
 目标是 失败或者最小值时：
 获取的数量/概率 = 最小 + (当前-最小) * (1-因子)
+
+后续计划的：
+需要将支持【气运】的功能的设置都改成 dropdown 支持选择每个功能的气运。
+每个功能气运选项需要增加一个“跟随全局”的选项。（不需要增加关闭功能的选项，顺风顺水就是关闭，可以在顺风顺水后面括号描述）
+需要修改 config.lua、configManager、QuantumMaster。
+然后在 configManager 中新增一个方法，通过 feature key 获得对应的气运，feature key 就是 config.lua 中的 key。
+然后需要在 luckyRandomHelper 中的气运随机函数增加一个新的可选参数，feature key。从而获取正确的气运。
+
+class Patch 要做到这一点比较简单。直接传入就可以了。
+patchBuilder 要做到这一点的话需要每次 replace 声明一个对应的函数，这个函数应该管理在自己的cs文件中。相同功能的也可以合并。函数内部再去调用 luckyRandomHelper 中的函数。
+这样做有个好处就是每次随机都可以输出日志和分隔符，可以看到哪个功能正在生效，并且可以通过分隔符清楚的区分每个功能，这个也需要增加上
+
+我们现在就只将 steal 实装到支持单独选择气运，尝试一下。

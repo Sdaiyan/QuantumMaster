@@ -25,7 +25,7 @@ namespace QuantumMaster.Features.Actions
         /// <returns>补丁应用是否成功</returns>
         public static bool PatchGetStealLifeSkillActionPhase(Harmony harmony)
         {
-            if (!ConfigManager.stealLifeSkill && !QuantumMaster.openAll) return false;
+            if (!ConfigManager.IsFeatureEnabled("stealLifeSkill")) return false;
 
             DebugLog.Info("[StealLifeSkillPatch] 开始应用静态上下文版偷学生活技能补丁");
 
@@ -73,7 +73,7 @@ namespace QuantumMaster.Features.Actions
         [HarmonyPrefix]
         public static void SetCurrentCharacterPrefix(GameData.Domains.Character.Character __instance, GameData.Domains.Character.Character targetChar)
         {
-            ActionPatchBase.SetCharacterContext(__instance, targetChar, "StealLifeSkillPatch");
+            ActionPatchBase.SetCharacterContext(__instance, targetChar, "stealLifeSkill");
         }
 
         /// <summary>
@@ -83,7 +83,7 @@ namespace QuantumMaster.Features.Actions
         [HarmonyPostfix]
         public static void ClearCurrentCharacterPostfix()
         {
-            ActionPatchBase.ClearCharacterContext("StealLifeSkillPatch");
+            ActionPatchBase.ClearCharacterContext("stealLifeSkill");
         }
 
         /// <summary>
@@ -94,7 +94,7 @@ namespace QuantumMaster.Features.Actions
         /// <returns>是否成功</returns>
         public static bool CheckPercentProbWithStaticContext(IRandomSource random, int probability)
         {
-            return ActionPatchBase.CheckPercentProbWithStaticContext(random, probability, "StealLifeSkillPatch");
+            return ActionPatchBase.CheckPercentProbWithStaticContext(random, probability, "stealLifeSkill");
         }
     }
 }
