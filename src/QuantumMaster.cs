@@ -140,10 +140,10 @@ namespace QuantumMaster
 			{ "TryAddLoopingEvent", (Features.Core.LoopingEventPatch.PatchTryAddLoopingEvent, () => ConfigManager.TryAddLoopingEvent) },
 			
 			// Building 模块
-			{ "CreateBuildingArea", (Features.Building.BuildingPatch.PatchCreateBuildingArea, () => ConfigManager.CreateBuildingArea) },
-			{ "OfflineUpdateShopManagement", (Features.Building.BuildingPatch.PatchOfflineUpdateShopManagement, () => ConfigManager.OfflineUpdateShopManagement) },
-			{ "BuildingRandomCorrection", (Features.Building.BuildingPatch.PatchBuildingRandomCorrection, () => ConfigManager.BuildingRandomCorrection) },
-			{ "UpdateShopBuildingTeach", (Features.Building.BuildingPatch.PatchUpdateShopBuildingTeach, () => ConfigManager.UpdateShopBuildingTeach) },
+			{ "CreateBuildingArea", (Features.Building.CreateBuildingAreaPatch.Apply, () => ConfigManager.IsFeatureEnabled("CreateBuildingArea")) },
+			{ "OfflineUpdateShopManagement", (Features.Building.BuildingPatch.PatchOfflineUpdateShopManagement, () => ConfigManager.IsFeatureEnabled("OfflineUpdateShopManagement")) },
+			{ "BuildingRandomCorrection", (Features.Building.BuildingPatch.PatchBuildingRandomCorrection, () => ConfigManager.IsFeatureEnabled("BuildingRandomCorrection")) },
+			{ "UpdateShopBuildingTeach", (Features.Building.BuildingPatch.PatchUpdateShopBuildingTeach, () => ConfigManager.IsFeatureEnabled("UpdateShopBuildingTeach")) },
 			
 			// Skills 模块
 			{ "CalcNeigongLoopingEffect", (Features.Skills.SkillsPatch.PatchCalcNeigongLoopingEffect, () => ConfigManager.CalcNeigongLoopingEffect) },

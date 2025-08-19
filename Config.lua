@@ -192,11 +192,12 @@ return {
             DefaultValue = 0,
         },
         {
-            SettingType = "Toggle",
+            SettingType = "Dropdown",
             Key = "CreateBuildingArea",
             DisplayName = "【气运】世界初始建筑",
             Description = "【气运】生成世界时，产业中的建筑和资源点的初始等级，以及生成数量",
-            DefaultValue = true,
+            Options = luckLevelOptions,
+            DefaultValue = 0,
         },
         {
             SettingType = "Toggle",

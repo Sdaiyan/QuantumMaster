@@ -51,7 +51,7 @@ namespace QuantumMaster
 
         // 通过 PatchBuilder 应用的补丁配置
         public static int LuckyLevel;
-        public static bool CreateBuildingArea; // 生成世界时，产业中的建筑和资源点的初始等级，以及生成数量
+        public static int CreateBuildingArea; // 【气运】世界初始建筑：0=跟随全局，1-8=独立气运等级
         public static bool CalcNeigongLoopingEffect; // 周天运转时，获得的内力为浮动区间的最大值，内息恢复最大，内息紊乱最小
         public static bool collectResource; // 收获资源时必定获取引子，且是可能获取的最高级的引子
         public static bool GetCollectResourceAmount; // 采集数量必定为浮动区间的上限

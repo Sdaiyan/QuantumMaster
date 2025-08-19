@@ -6,6 +6,7 @@
 
 using System;
 using HarmonyLib;
+using Redzen.Random;
 
 namespace QuantumMaster.Features.Building
 {
@@ -16,123 +17,13 @@ namespace QuantumMaster.Features.Building
     public static class BuildingPatch
     {
         /// <summary>
-        /// 建筑区域创建补丁
-        /// 配置项: CreateBuildingArea
-        /// 功能: 修改建筑区域创建时的随机数生成，使建筑等级更高
-        /// </summary>
-        public static bool PatchCreateBuildingArea(Harmony harmony)
-        {
-            if (!ConfigManager.CreateBuildingArea && !QuantumMaster.openAll) return false;
-
-            var OriginalMethod = new OriginalMethodInfo
-            {
-                Type = typeof(GameData.Domains.Building.BuildingDomain),
-                MethodName = "CreateBuildingArea",
-                Parameters = new Type[] { typeof(GameData.Common.DataContext), typeof(short), typeof(short), typeof(short) }
-            };
-
-            var patchBuilder = GenericTranspiler.CreatePatchBuilder(
-                    "CreateBuildingArea",
-                    OriginalMethod);
-
-            // 2参数 NEXT 方法替换
-            // 1 sbyte level = (sbyte)Math.Max(random.Next(centerBuildingMaxLevel / 2, centerBuildingMaxLevel + 1), 1);
-            patchBuilder.AddInstanceMethodReplacement(
-                    PatchPresets.InstanceMethods.Next2Args,
-                    PatchPresets.Replacements.Next2ArgsMax,
-                    1);
-
-            // 2 AddElement_BuildingBlocks(buildingBlockKey, new BuildingBlockData(num3, buildingBlockItem.TemplateId, (sbyte)((buildingBlockItem.MaxLevel <= 1) ? 1 : random.Next(1, buildingBlockItem.MaxLevel)), -1), context);
-            patchBuilder.AddInstanceMethodReplacement(
-                    PatchPresets.InstanceMethods.Next2Args,
-                    PatchPresets.Replacements.Next2ArgsMax,
-                    2);
-
-            // 3 AddBuilding(context, mapAreaId, mapBlockId, num3, buildingBlockItem.TemplateId, (sbyte)((buildingBlockItem.MaxLevel <= 1) ? 1 : random.Next(1, buildingBlockItem.MaxLevel)), buildingAreaWidth);
-            patchBuilder.AddInstanceMethodReplacement(
-                    PatchPresets.InstanceMethods.Next2Args,
-                    PatchPresets.Replacements.Next2ArgsMax,
-                    3);
-
-            // 4 num5 = list2[random.Next(0, list2.Count)];
-
-            // 5 level = (sbyte)Math.Clamp(random.Next(centerBuildingMaxLevel / 2, centerBuildingMaxLevel + 1), 1, buildingBlockItem2.MaxLevel);
-            patchBuilder.AddInstanceMethodReplacement(
-                    PatchPresets.InstanceMethods.Next2Args,
-                    PatchPresets.Replacements.Next2ArgsMax,
-                    5);
-
-            // 6 level = (sbyte)Math.Max(random.Next(centerBuildingMaxLevel / 2, centerBuildingMaxLevel + 1), 1);
-            patchBuilder.AddInstanceMethodReplacement(
-                    PatchPresets.InstanceMethods.Next2Args,
-                    PatchPresets.Replacements.Next2ArgsMax,
-                    6);
-
-            // 7 int isBuild = random.Next(0, 2);
-            patchBuilder.AddInstanceMethodReplacement(
-                    PatchPresets.InstanceMethods.Next2Args,
-                    PatchPresets.Replacements.Next2ArgsMax,
-                    7);
-
-            // 8 blockIndex = canUseBlockList[random.Next(0, canUseBlockList.Count)];
-
-            // 9 level = (sbyte)Math.Max(random.Next(centerBuildingMaxLevel / 2, centerBuildingMaxLevel + 1), 1);
-            patchBuilder.AddInstanceMethodReplacement(
-                    PatchPresets.InstanceMethods.Next2Args,
-                    PatchPresets.Replacements.Next2ArgsMax,
-                    9);
-
-            // 10 short blockIndex4 = canUseBlockList[random.Next(0, canUseBlockList.Count)];
-
-            // 11 short blockIndex5 = canUseBlockList[random.Next(0, canUseBlockList.Count)];
-
-            // 12 short blockIndex6 = canUseBlockList[random.Next(0, canUseBlockList.Count)];
-
-            // 1 参数 NEXT 方法替换
-            // 1 short merchantBuildingId = (short)(274 + context.Random.Next(7));
-
-            // CheckPercentProb 方法替换
-            // 1 if (num7 >= 5 || random.CheckPercentProb(num7 * 20))
-            patchBuilder.AddExtensionMethodReplacement(
-                    PatchPresets.Extensions.CheckPercentProb,
-                    PatchPresets.Replacements.CheckPercentProbTrue,
-                    1);
-
-            // 2 if (num9 >= 5 || random.CheckPercentProb(num9 * 20))
-            patchBuilder.AddExtensionMethodReplacement(
-                    PatchPresets.Extensions.CheckPercentProb,
-                    PatchPresets.Replacements.CheckPercentProbTrue,
-                    2);
-
-            // 1 sbyte level2 = (sbyte)formula.Calculate();
-            patchBuilder.AddExtensionMethodReplacement(
-                    PatchPresets.Extensions.CalculateFormula0Arg,
-                    PatchPresets.Replacements.RandomCalculateMax,
-                    1);
-
-            patchBuilder.AddExtensionMethodReplacement(
-                    PatchPresets.Extensions.CalculateFormula0Arg,
-                    PatchPresets.Replacements.RandomCalculateMax,
-                    2);
-                    
-            patchBuilder.AddExtensionMethodReplacement(
-                    PatchPresets.Extensions.CalculateFormula0Arg,
-                    PatchPresets.Replacements.RandomCalculateMax,
-                    3);
-
-            patchBuilder.Apply(harmony);
-
-            return true;
-        }
-
-        /// <summary>
         /// 离线商店管理更新补丁
         /// 配置项: OfflineUpdateShopManagement
         /// 功能: 修改离线商店管理的随机概率，提高商品刷新和品质
         /// </summary>
         public static bool PatchOfflineUpdateShopManagement(Harmony harmony)
         {
-            if (!ConfigManager.OfflineUpdateShopManagement && !QuantumMaster.openAll) return false;
+            if (!ConfigManager.IsFeatureEnabled("OfflineUpdateShopManagement")) return false;
 
             // private void OfflineUpdateShopManagement(ParallelBuildingModification modification, short settlementId, BuildingBlockItem buildingBlockCfg, BuildingBlockKey blockKey, BuildingBlockData blockData, DataContext context)
             var OriginalMethod = new OriginalMethodInfo
@@ -188,7 +79,7 @@ namespace QuantumMaster.Features.Building
         /// </summary>
         public static bool PatchBuildingRandomCorrection(Harmony harmony)
         {
-            if (!ConfigManager.BuildingRandomCorrection && !QuantumMaster.openAll) return false;
+            if (!ConfigManager.IsFeatureEnabled("BuildingRandomCorrection")) return false;
 
             // 目标方法：internal int BuildingRandomCorrection(int value, IRandomSource randomSource)
             var OriginalMethod = new OriginalMethodInfo
@@ -222,7 +113,7 @@ namespace QuantumMaster.Features.Building
         /// </summary>
         public static bool PatchUpdateShopBuildingTeach(Harmony harmony)
         {
-            if (!ConfigManager.UpdateShopBuildingTeach && !QuantumMaster.openAll) return false;
+            if (!ConfigManager.IsFeatureEnabled("UpdateShopBuildingTeach")) return false;
 
             var OriginalMethod = new OriginalMethodInfo
             {
@@ -270,7 +161,7 @@ namespace QuantumMaster.Features.Building
         [HarmonyPostfix]
         public static void Postfix(ref int __result, GameData.Domains.Building.BuildingBlockKey blockKey, int charId)
         {
-            if (!ConfigManager.BuildingManageHarvestSpecialSuccessRate && !QuantumMaster.openAll)
+            if (!ConfigManager.IsFeatureEnabled("BuildingManageHarvestSpecialSuccessRate"))
             {
                 DebugLog.Info("【气运】赌坊与青楼基础暴击率: 使用原版逻辑");
                 return; // 使用原版逻辑
