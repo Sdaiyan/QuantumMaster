@@ -55,8 +55,6 @@ namespace QuantumMaster.Features.Actions
         /// <returns>是否成功</returns>
         public static bool CheckPercentProbWithStaticContext(IRandomSource random, int probability, string featureKey)
         {
-            DebugLog.Info($"[{featureKey}] === 静态上下文版方法被调用 ===");
-            DebugLog.Info($"[{featureKey}] 原始概率: {probability}");
             
             var currentChar = _currentCharacter;
             var targetChar = _targetCharacter;
@@ -66,8 +64,6 @@ namespace QuantumMaster.Features.Actions
                 var currentCharId = currentChar.GetId();
                 var targetCharId = targetChar.GetId();
                 var taiwuId = GameData.Domains.DomainManager.Taiwu.GetTaiwuCharId();
-                
-                DebugLog.Info($"[{featureKey}] 当前角色ID: {currentCharId}, 目标角色ID: {targetCharId}, 太吾ID: {taiwuId}");
                 
                 // 如果是太吾发起行动，使用气运加成
                 if (currentCharId == taiwuId)
@@ -87,9 +83,7 @@ namespace QuantumMaster.Features.Actions
                 }
                 else
                 {
-                    DebugLog.Info($"[{featureKey}] 非太吾相关{featureKey}（{currentCharId} -> {targetCharId}）- 使用原始概率逻辑");
                     var result = RedzenHelper.CheckPercentProb(random, probability);
-                    DebugLog.Info($"[{featureKey}] 非太吾相关{featureKey}结果: {result}");
                     return result;
                 }
             }
