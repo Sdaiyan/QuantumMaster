@@ -141,9 +141,9 @@ namespace QuantumMaster
 			
 			// Building 模块
 			{ "CreateBuildingArea", (Features.Building.CreateBuildingAreaPatch.Apply, () => ConfigManager.IsFeatureEnabled("CreateBuildingArea")) },
-			{ "OfflineUpdateShopManagement", (Features.Building.BuildingPatch.PatchOfflineUpdateShopManagement, () => ConfigManager.IsFeatureEnabled("OfflineUpdateShopManagement")) },
-			{ "BuildingRandomCorrection", (Features.Building.BuildingPatch.PatchBuildingRandomCorrection, () => ConfigManager.IsFeatureEnabled("BuildingRandomCorrection")) },
-			{ "UpdateShopBuildingTeach", (Features.Building.BuildingPatch.PatchUpdateShopBuildingTeach, () => ConfigManager.IsFeatureEnabled("UpdateShopBuildingTeach")) },
+			{ "OfflineUpdateShopManagement", (Features.Building.OfflineUpdateShopManagementPatch.Apply, () => ConfigManager.IsFeatureEnabled("OfflineUpdateShopManagement")) },
+			{ "BuildingRandomCorrection", (Features.Building.BuildingRandomCorrectionPatch.Apply, () => ConfigManager.IsFeatureEnabled("BuildingRandomCorrection")) },
+			{ "UpdateShopBuildingTeach", (Features.Building.UpdateShopBuildingTeachPatch.Apply, () => ConfigManager.IsFeatureEnabled("UpdateShopBuildingTeach")) },
 			
 			// Skills 模块
 			{ "CalcNeigongLoopingEffect", (Features.Skills.SkillsPatch.PatchCalcNeigongLoopingEffect, () => ConfigManager.CalcNeigongLoopingEffect) },

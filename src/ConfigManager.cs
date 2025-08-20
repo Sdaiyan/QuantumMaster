@@ -55,7 +55,7 @@ namespace QuantumMaster
         public static bool CalcNeigongLoopingEffect; // 周天运转时，获得的内力为浮动区间的最大值，内息恢复最大，内息紊乱最小
         public static bool collectResource; // 收获资源时必定获取引子，且是可能获取的最高级的引子
         public static bool GetCollectResourceAmount; // 采集数量必定为浮动区间的上限
-        public static bool OfflineUpdateShopManagement; // 如果概率不为0，产业建筑经营、招募必然成功、村民技艺必定提升
+        public static int OfflineUpdateShopManagement; // 【气运】太吾村经营成功率
         public static bool ApplyLifeSkillCombatResult; // 如果概率不为0，较艺读书&周天必定触发
         public static bool CalcReadInCombat; // 如果概率不为0，战斗读书必定触发
         public static bool CalcQiQrtInCombat; // 如果概率不为0，战斗周天运转必定触发
@@ -66,9 +66,9 @@ namespace QuantumMaster
         public static bool ChoosyGetMaterial; // 精挑细选，品质升级判定概率最大
         public static bool AddChoosyRemainUpgradeData; // 精挑细选过月累计最大
         public static bool ParallelUpdateOnMonthChange; // 地块每月资源恢复数量为浮动区间的上限
-        public static bool BuildingRandomCorrection; // 【气运】太吾村经营收益
+        public static int BuildingRandomCorrection; // 【气运】太吾村经营收益
         public static bool BuildingManageHarvestSpecialSuccessRate; // 【气运】赌坊与青楼基础暴击率
-        public static bool UpdateShopBuildingTeach; // 【气运】村民经营资质增加概率
+        public static int UpdateShopBuildingTeach; // 【气运】村民经营资质增加概率
 
         /// <summary>
         /// 从游戏配置中读取所有 MOD 设置

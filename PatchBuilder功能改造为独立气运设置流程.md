@@ -185,15 +185,36 @@ private readonly Dictionary<string, (System.Func<Harmony, bool> patchMethod, Sys
 
 ## 注意事项
 
-1. **气运函数查找**: 需要调用相关的气运函数时，请到 `LuckyCalculator.cs` 文件中查找支持 featureKey 参数的方法，如：
+1. **⚠️ 严格保持原始逻辑**: **绝对不可以篡改原本的逻辑、参数和方法调用**
+   - 创建独立补丁类时，必须完全按照原始 PatchBuilder 方法的逻辑进行转换
+   - 方法参数类型、数量、顺序必须与原始方法完全一致
+   - 替换方法的类型（如 `CheckProb` vs `CheckPercentProb`）必须与原始代码匹配
+   - 替换方法的调用次数和顺序不能改变
+   - **错误示例**: 将原本使用 `CheckPercentProb` 的方法错误地改为 `CheckProb` 或 `Next1Arg`
+   - **正确做法**: 先查看原始代码，确认使用的具体方法类型，然后严格按照原始逻辑创建对应的专用替换方法
+
+2. **气运函数查找**: 需要调用相关的气运函数时，请到 `LuckyCalculator.cs` 文件中查找支持 featureKey 参数的方法，如：
    - `Calc_Random_Next_2Args_Max_By_Luck(int min, int max, string featureKey)`
    - `Calc_Random_CheckPercentProb_True_By_Luck(IRandomSource randomSource, int percent, string featureKey)`
    - `Calc_Random_Next_2Args_Max_By_Luck_Static(int min, int max, string featureKey)`
    - 等其他已实现的方法
-2. **文件检查**: 改造前先检查原补丁文件中 `IsFeatureEnabled` 调用的数量和 featureKey，判断是否需要创建新文件
-3. **向后兼容**: 确保现有存档和配置能正常工作
-4. **默认值**: 新配置项的默认值应该是 0（跟随全局气运）
-5. **配置格式**: 使用 `luckLevelOptions` 预定义选项列表，保持与现有配置的一致性
-6. **错误处理**: 添加适当的错误处理和日志记录
-7. **性能考虑**: 避免在热路径中进行复杂计算
-8. **代码质量**: 保持代码风格一致性和良好的注释
+
+3. **文件检查**: 改造前先检查原补丁文件中 `IsFeatureEnabled` 调用的数量和 featureKey，判断是否需要创建新文件
+
+4. **原始代码验证**: 在开始改造前，务必查看原始的 PatchBuilder 方法实现，确认：
+   - 使用了哪些具体的替换方法类型（CheckProb/CheckPercentProb/Next1Arg/Next2Args等）
+   - 每种替换方法被调用了几次
+   - 原始方法的完整参数签名
+   - 可以通过 Git 历史查看原始代码：`git show <commit>:filepath`
+
+5. **向后兼容**: 确保现有存档和配置能正常工作
+
+6. **默认值**: 新配置项的默认值应该是 0（跟随全局气运）
+
+7. **配置格式**: 使用 `luckLevelOptions` 预定义选项列表，保持与现有配置的一致性
+
+8. **错误处理**: 添加适当的错误处理和日志记录
+
+9. **性能考虑**: 避免在热路径中进行复杂计算
+
+10. **代码质量**: 保持代码风格一致性和良好的注释
