@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Redzen.Random;
 using Config;
 
@@ -11,13 +12,56 @@ namespace QuantumMaster
     public class LuckyCalculator
     {
         /// <summary>
+        /// 功能键到显示名称的映射表（已去除气运前缀）
+        /// </summary>
+        private static readonly Dictionary<string, string> FeatureDisplayNames = new Dictionary<string, string>
+        {
+            { "steal", "偷窃" },
+            { "scam", "唬骗" },
+            { "rob", "抢劫" },
+            { "stealLifeSkill", "偷学生活技能" },
+            { "stealCombatSkill", "偷学战斗技能" },
+            { "poison", "下毒" },
+            { "plotHarm", "暗害" },
+            { "CreateBuildingArea", "世界初始建筑" },
+            { "ropeOrSword", "绳子/剑柄救人" },
+            { "collectResource", "采集资源引子" },
+            { "GetCollectResourceAmount", "采集资源数量" },
+            { "OfflineUpdateShopManagement", "太吾村经营成功率" },
+            { "BuildingRandomCorrection", "太吾村经营收益" },
+            { "UpdateShopBuildingTeach", "村民经营资质增加概率" },
+            { "BuildingManageHarvestSpecialSuccessRate", "赌坊与青楼基础暴击率" },
+            { "ApplyLifeSkillCombatResult", "教艺读书&周天" },
+            { "CalcReadInCombat", "战斗读书" },
+            { "CalcQiQrtInCombat", "战斗周天运转" },
+            { "CalcLootItem", "战利品掉落概率" },
+            { "InitPathContent", "奇遇收获" },
+            { "GetStrategyProgressAddValue", "读书进度策略" },
+            { "SetReadingStrategy", "读书效率策略" },
+            { "ParallelUpdateOnMonthChange", "过月地块资源恢复" },
+            { "OfflineCalcGeneralAction_TeachSkill", "太吾受到指点的成功率" },
+            { "CatchCricket", "抓蛐蛐基础成功率" },
+            { "CatchCricketDouble", "抓到双蛐蛐概率" },
+            { "CheckCricketIsSmart", "蛐蛐神采非凡概率" },
+            { "GetCurrReadingEventBonusRate", "灵光一闪" },
+            { "CalcNeigongLoopingEffect", "周天内力获取" },
+            { "GetQiArtStrategyDeltaNeiliBonus", "周天内力策略收益最大" },
+            { "TryAddLoopingEvent", "天人感应" },
+            { "ChoosyGetMaterial", "精挑细选品质升级" },
+            { "AddChoosyRemainUpgradeData", "精挑细选过月累计最大" }
+        };
+
+        /// <summary>
         /// 获取功能显示名称
         /// </summary>
         /// <param name="featureKey">功能键</param>
         /// <returns>功能显示名称</returns>
         private static string GetFeatureName(string featureKey)
         {
-            return featureKey ?? "未知";
+            if (string.IsNullOrEmpty(featureKey))
+                return "全局气运";
+            
+            return FeatureDisplayNames.TryGetValue(featureKey, out string displayName) ? displayName : featureKey;
         }
         /// <summary>
         /// 根据幸运等级计算双参数随机数（倾向最大值）
