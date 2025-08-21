@@ -95,18 +95,18 @@ namespace QuantumMaster
 			{ "SectApprovalPatch", (typeof(Features.Character.SectApprovalPatch), () => ConfigManager.SetSectMemberApproveTaiwu) },
 			{ "SexualOrientationControlPatch", (typeof(Features.Character.SexualOrientationControlPatch), () => ConfigManager.sexualOrientationControl > 0) },
 			// Core 模块
-			{ "GetQiArtStrategyDeltaNeiliBonusPatch", (typeof(Features.Core.GetQiArtStrategyDeltaNeiliBonusPatch), () => ConfigManager.GetQiArtStrategyDeltaNeiliBonus) },
-			{ "GetQiArtStrategyExtraNeiliAllocationBonusPatch", (typeof(Features.Core.GetQiArtStrategyExtraNeiliAllocationBonusPatch), () => ConfigManager.GetQiArtStrategyDeltaNeiliBonus) },
+			{ "GetQiArtStrategyDeltaNeiliBonusPatch", (typeof(Features.Core.GetQiArtStrategyDeltaNeiliBonusPatch), () => ConfigManager.IsFeatureEnabled("GetQiArtStrategyDeltaNeiliBonus")) },
+			{ "GetQiArtStrategyExtraNeiliAllocationBonusPatch", (typeof(Features.Core.GetQiArtStrategyExtraNeiliAllocationBonusPatch), () => ConfigManager.IsFeatureEnabled("GetQiArtStrategyDeltaNeiliBonus")) },
 			{ "QiArtStrategyControlPatch", (typeof(Features.Core.QiArtStrategyControlPatch), () => ConfigManager.QiArtStrategiesSelect1 > 0 || ConfigManager.QiArtStrategiesSelect2 > 0 || ConfigManager.QiArtStrategiesSelect3 > 0 || ConfigManager.QiArtStrategiesSelect4 > 0 || ConfigManager.QiArtStrategiesSelect5 > 0 || ConfigManager.QiArtStrategiesSelect6 > 0) },
 
 			// Items 模块 - 蛐蛐相关补丁
-			{ "CatchCricketSuccessRatePatch", (typeof(Features.Items.CatchCricketSuccessRatePatch), () => ConfigManager.CatchCricket) },
-			{ "CheckCricketIsSmartPatch", (typeof(Features.Items.CheckCricketIsSmartPatch), () => ConfigManager.CheckCricketIsSmart) },
+			{ "CatchCricketSuccessRatePatch", (typeof(Features.Items.CatchCricketSuccessRatePatch), () => ConfigManager.IsFeatureEnabled("CatchCricket")) },
+			{ "CheckCricketIsSmartPatch", (typeof(Features.Items.CheckCricketIsSmartPatch), () => ConfigManager.IsFeatureEnabled("CheckCricketIsSmart")) },
 			{ "CricketInitializePatch", (typeof(Features.Items.CricketInitializePatch), () => ConfigManager.CricketInitialize) },
 			{ "BookGenerationPatch", (typeof(Features.Items.BookGenerationPatch), () => ConfigManager.GeneratePageIncompleteState) },
 			
 			// Building 模块 - 建筑相关补丁
-			{ "BuildingManageHarvestSpecialSuccessRatePatch", (typeof(Features.Building.BuildingManageHarvestSpecialSuccessRatePatch), () => ConfigManager.BuildingManageHarvestSpecialSuccessRate) },
+			{ "BuildingManageHarvestSpecialSuccessRatePatch", (typeof(Features.Building.BuildingManageHarvestSpecialSuccessRatePatch), () => ConfigManager.IsFeatureEnabled("BuildingManageHarvestSpecialSuccessRate")) },
 			
 			// Reading 模块
 			{ "GetCurrReadingEventBonusRate", (typeof(Features.Reading.ReadingInspirationPatch), () => ConfigManager.IsFeatureEnabled("GetCurrReadingEventBonusRate")) },

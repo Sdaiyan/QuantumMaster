@@ -248,11 +248,12 @@ return {
             DefaultValue = 0,
         },
         {
-            SettingType = "Toggle",
+            SettingType = "Dropdown",
             Key = "BuildingManageHarvestSpecialSuccessRate",
             DisplayName = "【气运】赌坊与青楼基础暴击率",
             Description = "【气运】赌坊与青楼根据气运增加或减少",
-            DefaultValue = true,
+            Options = luckLevelOptions,
+            DefaultValue = 0,
         },
         {
             SettingType = "Dropdown",
@@ -334,11 +335,12 @@ return {
             DefaultValue = true,
         },
         {
-            SettingType = "Toggle",
+            SettingType = "Dropdown",
             Key = "CatchCricket",
             DisplayName = "【气运】抓蛐蛐基础成功率",
             Description = "【气运】抓蛐蛐时，基础成功率根据气运调整。",
-            DefaultValue = true,
+            Options = luckLevelOptions,
+            DefaultValue = 0,
         },
         {
             SettingType = "Dropdown",
@@ -349,11 +351,12 @@ return {
             DefaultValue = 0,
         },
         {
-            SettingType = "Toggle",
+            SettingType = "Dropdown",
             Key = "CheckCricketIsSmart",
             DisplayName = "【气运】蛐蛐神采非凡概率",
             Description = "【气运】蛐蛐进行神采非凡判定时，成功率根据气运增加。原版为20%的概率。但是需要注意，必须部位符合的蛐蛐才有可能神采非凡，这是原版的逻辑。",
-            DefaultValue = true,
+            Options = luckLevelOptions,
+            DefaultValue = 0,
         },
         {
             SettingType = "Dropdown",
@@ -393,11 +396,12 @@ return {
             DefaultValue = 0,
         },
         {
-            SettingType = "Toggle",
+            SettingType = "Dropdown",
             Key = "GetQiArtStrategyDeltaNeiliBonus",
             DisplayName = "【气运】周天内力策略收益最大",
             Description = "【气运】周天运转时，通过策略获得的内力为浮动区间的最大值",
-            DefaultValue = true,
+            Options = luckLevelOptions,
+            DefaultValue = 0,
         },
         {
             SettingType = "Dropdown",

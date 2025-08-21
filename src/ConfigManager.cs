@@ -19,10 +19,10 @@ namespace QuantumMaster
         public static int genderControl; // 生成性别控制：0=关闭功能，1=修改为女，2=修改为男
         public static int ropeOrSword = 0; // 绳子/剑柄救人的独立气运设置，0=跟随全局
         public static int OfflineCalcGeneralAction_TeachSkill = 0; // 太吾受到指点的独立气运设置，0=跟随全局
-        public static bool CatchCricket; // 抓蛐蛐必定成功
+        public static int CatchCricket; // 抓蛐蛐必定成功
         public static int CatchCricketDouble = 0; // 抓蛐蛐时获得双只蛐蛐
         public static bool InitResources; // 生成世界时，每个地块上的资源为浮动区间的最大值，受到难度的影响
-        public static bool CheckCricketIsSmart; // 蛐蛐是否可以升级，如果符合条件必定升级
+        public static int CheckCricketIsSmart; // 蛐蛐是否可以升级，如果符合条件必定升级
         public static int GetCurrReadingEventBonusRate = 0; // 灵光一闪概率不为0时，必定灵光一闪
         public static bool GeneratePageIncompleteState; // 生成书籍时，完整的书页为浮动区间的最大值，亡佚书页为浮动区间最小值，并且完整的书页会出现在书本的前篇位置
         public static bool FixedPagePos; // 位置固定在靠前
@@ -39,7 +39,7 @@ namespace QuantumMaster
         public static int BookStrategiesSelect8; // 第 8 个策略
         public static int BookStrategiesSelect9; // 第 9 个策略
         public static int sexualOrientationControl; // 性取向控制：0=关闭功能，1=全体双性恋，2=禁止双性恋
-        public static bool GetQiArtStrategyDeltaNeiliBonus; // 周天内力策略收益最大
+        public static int GetQiArtStrategyDeltaNeiliBonus; // 周天内力策略收益最大
         
         // 周天策略控制配置
         public static int QiArtStrategiesSelect1; // 第 1 个周天策略
@@ -67,7 +67,7 @@ namespace QuantumMaster
         public static int AddChoosyRemainUpgradeData = 0; // 精挑细选过月累计的独立气运设置，0=跟随全局
         public static int ParallelUpdateOnMonthChange = 0; // 过月地块资源恢复的独立气运设置，0=跟随全局
         public static int BuildingRandomCorrection; // 【气运】太吾村经营收益
-        public static bool BuildingManageHarvestSpecialSuccessRate; // 【气运】赌坊与青楼基础暴击率
+        public static int BuildingManageHarvestSpecialSuccessRate; // 【气运】赌坊与青楼基础暴击率
         public static int UpdateShopBuildingTeach; // 【气运】村民经营资质增加概率
 
         /// <summary>

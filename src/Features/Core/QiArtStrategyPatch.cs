@@ -34,7 +34,7 @@ namespace QuantumMaster.Features.Core
         [HarmonyPrefix]
         public static bool Prefix(IRandomSource random, ref int __result)
         {
-            if (!ConfigManager.GetQiArtStrategyDeltaNeiliBonus && !QuantumMaster.openAll)
+            if (!ConfigManager.IsFeatureEnabled("GetQiArtStrategyDeltaNeiliBonus"))
             {
                 return true; // 使用原版逻辑
             }
@@ -56,7 +56,11 @@ namespace QuantumMaster.Features.Core
                     if (id != -1)
                     {
                         QiArtStrategyItem config = QiArtStrategy.Instance[id];
-                        bonus += config.MaxExtraNeili;
+                        // 使用气运计算，在最小值到最大值之间随机
+                        int minValue = config.MinExtraNeili;
+                        int maxValue = config.MaxExtraNeili;
+                        int actualValue = LuckyCalculator.Calc_Random_Next_2Args_Max_By_Luck(minValue, maxValue, "GetQiArtStrategyDeltaNeiliBonus");
+                        bonus += actualValue;
                     }
                 }
                 
@@ -80,7 +84,7 @@ namespace QuantumMaster.Features.Core
         [HarmonyPrefix]
         public static bool Prefix(IRandomSource random, ref int __result)
         {
-            if (!ConfigManager.GetQiArtStrategyDeltaNeiliBonus && !QuantumMaster.openAll)
+            if (!ConfigManager.IsFeatureEnabled("GetQiArtStrategyDeltaNeiliBonus"))
             {
                 return true; // 使用原版逻辑
             }
@@ -102,7 +106,11 @@ namespace QuantumMaster.Features.Core
                     if (id != -1)
                     {
                         QiArtStrategyItem config = QiArtStrategy.Instance[id];
-                        bonus += config.MaxExtraNeiliAllocation;
+                        // 使用气运计算，在最小值到最大值之间随机
+                        int minValue = config.MinExtraNeiliAllocation;
+                        int maxValue = config.MaxExtraNeiliAllocation;
+                        int actualValue = LuckyCalculator.Calc_Random_Next_2Args_Max_By_Luck(minValue, maxValue, "GetQiArtStrategyDeltaNeiliBonus");
+                        bonus += actualValue;
                     }
                 }
                 
