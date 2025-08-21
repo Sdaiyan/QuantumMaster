@@ -52,7 +52,7 @@ namespace QuantumMaster
         // 通过 PatchBuilder 应用的补丁配置
         public static int LuckyLevel;
         public static int CreateBuildingArea; // 【气运】世界初始建筑：0=跟随全局，1-8=独立气运等级
-        public static bool CalcNeigongLoopingEffect; // 周天运转时，获得的内力为浮动区间的最大值，内息恢复最大，内息紊乱最小
+        public static int CalcNeigongLoopingEffect = 0; // 周天内力获取的独立气运设置，0=跟随全局
         public static int collectResource = 0; // 采集资源引子的独立气运设置，0=跟随全局
         public static int GetCollectResourceAmount = 0; // 采集资源数量的独立气运设置，0=跟随全局
         public static int OfflineUpdateShopManagement; // 【气运】太吾村经营成功率

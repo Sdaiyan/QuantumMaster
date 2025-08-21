@@ -375,11 +375,12 @@ return {
             DefaultValue = true,
         },
         {
-            SettingType = "Toggle",
+            SettingType = "Dropdown",
             Key = "CalcNeigongLoopingEffect",
             DisplayName = "【气运】周天内力获取",
             Description = "【气运】周天运转时，获得的内力为浮动区间的最大值",
-            DefaultValue = true,
+            Options = luckLevelOptions,
+            DefaultValue = 0,
         },
         {
             SettingType = "Toggle",
