@@ -157,12 +157,12 @@ namespace QuantumMaster
 			{ "AddChoosyRemainUpgradeData", (Features.Resources.AddChoosyRemainUpgradeDataPatch.Apply, () => ConfigManager.IsFeatureEnabled("AddChoosyRemainUpgradeData")) },
 			
 			// Combat 模块
-			{ "ApplyLifeSkillCombatResult", (Features.Combat.CombatPatch.PatchApplyLifeSkillCombatResult, () => ConfigManager.ApplyLifeSkillCombatResult) },
-			{ "CalcReadInCombat", (Features.Combat.CombatPatch.PatchCalcReadInCombat, () => ConfigManager.CalcReadInCombat) },
-			{ "CalcLootItem", (Features.Combat.CombatPatch.PatchCalcLootItem, () => ConfigManager.CalcLootItem) },
-			{ "CalcQiQrtInCombat", (Features.Combat.CombatPatch.PatchCalcQiQrtInCombat, () => ConfigManager.CalcQiQrtInCombat) },
-			{ "CheckRopeOrSwordHit", (Features.Combat.RopeAndSwordPatch.PatchCheckRopeOrSwordHit, () => ConfigManager.ropeOrSword) },
-			{ "CheckRopeOrSwordHitOutofCombat", (Features.Combat.RopeAndSwordPatch.PatchCheckRopeOrSwordHitOutofCombat, () => ConfigManager.ropeOrSword) },
+			{ "ApplyLifeSkillCombatResult", (Features.Combat.ApplyLifeSkillCombatResultPatch.Apply, () => ConfigManager.IsFeatureEnabled("ApplyLifeSkillCombatResult")) },
+			{ "CalcReadInCombat", (Features.Combat.CalcReadInCombatPatch.Apply, () => ConfigManager.IsFeatureEnabled("CalcReadInCombat")) },
+			{ "CalcLootItem", (Features.Combat.CalcLootItemPatch.Apply, () => ConfigManager.IsFeatureEnabled("CalcLootItem")) },
+			{ "CalcQiQrtInCombat", (Features.Combat.CalcQiQrtInCombatPatch.Apply, () => ConfigManager.IsFeatureEnabled("CalcQiQrtInCombat")) },
+			{ "CheckRopeOrSwordHit", (Features.Combat.RopeAndSwordPatch.PatchCheckRopeOrSwordHit, () => ConfigManager.IsFeatureEnabled("ropeOrSword")) },
+			{ "CheckRopeOrSwordHitOutofCombat", (Features.Combat.RopeAndSwordPatch.PatchCheckRopeOrSwordHitOutofCombat, () => ConfigManager.IsFeatureEnabled("ropeOrSword")) },
 			
 			// Adventure 模块
 			{ "InitPathContent", (Features.Adventure.AdventurePatch.PatchInitPathContent, () => ConfigManager.InitPathContent) },

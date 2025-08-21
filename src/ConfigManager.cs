@@ -17,7 +17,7 @@ namespace QuantumMaster
         public static int poison; // 下毒气运等级：0=跟随全局，1-8=独立气运等级
         public static int plotHarm; // 暗害气运等级：0=跟随全局，1-8=独立气运等级
         public static int genderControl; // 生成性别控制：0=关闭功能，1=修改为女，2=修改为男
-        public static bool ropeOrSword; // 如果概率不为0，绳子绑架或者煎饼救人必定成功
+        public static int ropeOrSword = 0; // 绳子/剑柄救人的独立气运设置，0=跟随全局
         public static int OfflineCalcGeneralAction_TeachSkill = 0; // 太吾受到指点的独立气运设置，0=跟随全局
         public static bool CatchCricket; // 抓蛐蛐必定成功
         public static bool CatchCricketDouble; // 抓蛐蛐时获得双只蛐蛐
@@ -56,10 +56,10 @@ namespace QuantumMaster
         public static int collectResource = 0; // 采集资源引子的独立气运设置，0=跟随全局
         public static int GetCollectResourceAmount = 0; // 采集资源数量的独立气运设置，0=跟随全局
         public static int OfflineUpdateShopManagement; // 【气运】太吾村经营成功率
-        public static bool ApplyLifeSkillCombatResult; // 如果概率不为0，较艺读书&周天必定触发
-        public static bool CalcReadInCombat; // 如果概率不为0，战斗读书必定触发
-        public static bool CalcQiQrtInCombat; // 如果概率不为0，战斗周天运转必定触发
-        public static bool CalcLootItem; // 如果概率不为0，战利品掉落判定必定通过（原本逻辑是对每个战利品进行判断是否掉落）
+        public static int ApplyLifeSkillCombatResult = 0; // 教艺读书&周天的独立气运设置，0=跟随全局
+        public static int CalcReadInCombat = 0; // 战斗读书的独立气运设置，0=跟随全局
+        public static int CalcQiQrtInCombat = 0; // 战斗周天运转的独立气运设置，0=跟随全局
+        public static int CalcLootItem = 0; // 战利品概率的独立气运设置，0=跟随全局
         public static bool InitPathContent; // 奇遇收获资源时，数量为浮动区间的上限
         public static bool GetStrategyProgressAddValue; // 读书进度策略
         public static bool SetReadingStrategy; // 读书效率策略
