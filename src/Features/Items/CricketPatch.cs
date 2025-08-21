@@ -17,46 +17,13 @@ namespace QuantumMaster.Features.Items
     /// <summary>
     /// 蛐蛐相关功能补丁集合
     /// 使用 PatchBuilder 和传统 Harmony 补丁
+    /// 
+    /// 注意：已迁移功能：
+    /// - CatchCricketDouble -> CatchCricketDoublePatch.cs
     /// </summary>
     public static class CricketPatch
     {
-        /// <summary>
-        /// 抓到双蛐蛐概率补丁
-        /// 配置项: CatchCricketDouble  
-        /// 功能: 【气运】根据气运影响抓到2只蛐蛐的概率，替换CheckPercentProb调用
-        /// </summary>
-        public static bool PatchCatchCricketDouble(Harmony harmony)
-        {
-            if (!ConfigManager.CatchCricketDouble && !QuantumMaster.openAll) return false;
-
-            var OriginalMethod = new OriginalMethodInfo
-            {
-                Type = typeof(GameData.Domains.Item.ItemDomain),
-                MethodName = "CatchCricket",
-                Parameters = new Type[] { 
-                    typeof(GameData.Common.DataContext), 
-                    typeof(short), 
-                    typeof(short), 
-                    typeof(short), 
-                    typeof(sbyte) 
-                }
-            };
-
-            var patchBuilder = GenericTranspiler.CreatePatchBuilder(
-                    "CatchCricketDouble",
-                    OriginalMethod);
-
-            // CheckPercentProb 方法替换 - 第3个调用是抓到2只蛐蛐的概率
-            // 3 第3个 CheckPercentProb 调用 - 抓到额外蛐蛐的概率
-            patchBuilder.AddExtensionMethodReplacement(
-                    PatchPresets.Extensions.CheckPercentProb,
-                    PatchPresets.Replacements.CheckPercentProbTrue,
-                    3);
-
-            patchBuilder.Apply(harmony);
-
-            return true;
-        }
+        // CatchCricketDouble 功能已迁移到 CatchCricketDoublePatch.cs
     }
 
     /// <summary>

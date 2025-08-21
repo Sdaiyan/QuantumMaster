@@ -20,10 +20,10 @@ namespace QuantumMaster
         public static int ropeOrSword = 0; // 绳子/剑柄救人的独立气运设置，0=跟随全局
         public static int OfflineCalcGeneralAction_TeachSkill = 0; // 太吾受到指点的独立气运设置，0=跟随全局
         public static bool CatchCricket; // 抓蛐蛐必定成功
-        public static bool CatchCricketDouble; // 抓蛐蛐时获得双只蛐蛐
+        public static int CatchCricketDouble = 0; // 抓蛐蛐时获得双只蛐蛐
         public static bool InitResources; // 生成世界时，每个地块上的资源为浮动区间的最大值，受到难度的影响
         public static bool CheckCricketIsSmart; // 蛐蛐是否可以升级，如果符合条件必定升级
-        public static bool GetCurrReadingEventBonusRate; // 灵光一闪概率不为0时，必定灵光一闪
+        public static int GetCurrReadingEventBonusRate = 0; // 灵光一闪概率不为0时，必定灵光一闪
         public static bool GeneratePageIncompleteState; // 生成书籍时，完整的书页为浮动区间的最大值，亡佚书页为浮动区间最小值，并且完整的书页会出现在书本的前篇位置
         public static bool FixedPagePos; // 位置固定在靠前
         public static bool CricketInitialize; // 生成蛐蛐时，必定生成耐久上限为理论上限值的，不受伤的蛐蛐
@@ -60,9 +60,9 @@ namespace QuantumMaster
         public static int CalcReadInCombat = 0; // 战斗读书的独立气运设置，0=跟随全局
         public static int CalcQiQrtInCombat = 0; // 战斗周天运转的独立气运设置，0=跟随全局
         public static int CalcLootItem = 0; // 战利品概率的独立气运设置，0=跟随全局
-        public static bool InitPathContent; // 奇遇收获资源时，数量为浮动区间的上限
-        public static bool GetStrategyProgressAddValue; // 读书进度策略
-        public static bool SetReadingStrategy; // 读书效率策略
+        public static int InitPathContent = 0; // 奇遇收获资源时，数量为浮动区间的上限
+        public static int GetStrategyProgressAddValue = 0; // 读书进度策略
+        public static int SetReadingStrategy = 0; // 读书效率策略
         public static int ChoosyGetMaterial = 0; // 精挑细选品质升级的独立气运设置，0=跟随全局
         public static int AddChoosyRemainUpgradeData = 0; // 精挑细选过月累计的独立气运设置，0=跟随全局
         public static int ParallelUpdateOnMonthChange = 0; // 过月地块资源恢复的独立气运设置，0=跟随全局

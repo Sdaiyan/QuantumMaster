@@ -13,6 +13,8 @@ namespace QuantumMaster.Features.Reading
     /// 灵光一闪功能补丁
     /// 配置项: GetCurrReadingEventBonusRate
     /// 功能: 【气运】控制灵光一闪的触发概率，根据气运影响成功率
+    /// 
+    /// 注意：地图捡书的灵光一闪功能已迁移到 UpdateReadingProgressOncePatch.cs
     /// </summary>
     [HarmonyPatch(typeof(TaiwuDomain), "GetCurrReadingEventBonusRate")]
     public class ReadingInspirationPatch
@@ -23,7 +25,7 @@ namespace QuantumMaster.Features.Reading
         [HarmonyPostfix]
         public static void Postfix(ref short __result)
         {
-            if (!ConfigManager.GetCurrReadingEventBonusRate)
+            if (!ConfigManager.IsFeatureEnabled("GetCurrReadingEventBonusRate"))
             {
                 return; // 使用原版逻辑
             }
@@ -31,45 +33,11 @@ namespace QuantumMaster.Features.Reading
             // 如果原概率大于0，则使用气运系统进行判断
             if (__result > 0)
             {
-                bool success = LuckyCalculator.Calc_Random_CheckPercentProb_True_By_Luck(null, __result);
+                bool success = LuckyCalculator.Calc_Random_CheckPercentProb_True_By_Luck(null, __result, "GetCurrReadingEventBonusRate");
                 short newResult = success ? (short)100 : (short)0;
                 DebugLog.Info($"【气运】灵光一闪: 原概率{__result}% -> 气运判定{(success ? "成功" : "失败")} -> {newResult}%");
                 __result = newResult;
             }
-        }
-
-
-        /// <summary>
-        /// 地图上捡起书籍的灵光一闪
-        /// </summary>
-        /// <param name="harmony">Harmony 实例</param>
-        /// <returns>补丁应用是否成功</returns>
-        public static bool PatchUpdateReadingProgressOnce(Harmony harmony)
-        {
-            if (!ConfigManager.GetCurrReadingEventBonusRate && !QuantumMaster.openAll) return false;
-
-            DebugLog.Info("[ReadingInspirationPatch] 开始应用地图上捡起书籍的灵光一闪补丁");
-
-            var OriginalMethod = new OriginalMethodInfo
-            {
-                Type = typeof(GameData.Domains.Taiwu.TaiwuDomain),
-                MethodName = "UpdateReadingProgressOnce",
-                Parameters = new Type[] { typeof(GameData.Common.DataContext), typeof(bool), typeof(bool) }
-            };
-
-            var patchBuilder = GenericTranspiler.CreatePatchBuilder(
-                "UpdateReadingProgressOnce",
-                OriginalMethod);
-                
-            
-            patchBuilder.AddExtensionMethodReplacement(
-                    PatchPresets.Extensions.CheckProb,
-                    PatchPresets.Replacements.CheckProbTrue,
-                    1);
-
-            patchBuilder.Apply(harmony);
-
-            return true;
         }
     }
 }

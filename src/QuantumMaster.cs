@@ -109,7 +109,7 @@ namespace QuantumMaster
 			{ "BuildingManageHarvestSpecialSuccessRatePatch", (typeof(Features.Building.BuildingManageHarvestSpecialSuccessRatePatch), () => ConfigManager.BuildingManageHarvestSpecialSuccessRate) },
 			
 			// Reading 模块
-			{ "ReadingInspirationPatch", (typeof(Features.Reading.ReadingInspirationPatch), () => ConfigManager.GetCurrReadingEventBonusRate) },
+			{ "GetCurrReadingEventBonusRate", (typeof(Features.Reading.ReadingInspirationPatch), () => ConfigManager.IsFeatureEnabled("GetCurrReadingEventBonusRate")) },
 			{ "ReadingStrategyPatch", (typeof(Features.Reading.ReadingStrategyPatch), () => 
 				ConfigManager.BookStrategiesSelect1 > 0 || ConfigManager.BookStrategiesSelect2 > 0 || 
 				ConfigManager.BookStrategiesSelect3 > 0 || ConfigManager.BookStrategiesSelect4 > 0 || 
@@ -165,18 +165,18 @@ namespace QuantumMaster
 			{ "CheckRopeOrSwordHitOutofCombat", (Features.Combat.RopeAndSwordPatch.PatchCheckRopeOrSwordHitOutofCombat, () => ConfigManager.IsFeatureEnabled("ropeOrSword")) },
 			
 			// Adventure 模块
-			{ "InitPathContent", (Features.Adventure.AdventurePatch.PatchInitPathContent, () => ConfigManager.InitPathContent) },
+			{ "InitPathContent", (Features.Adventure.InitPathContentPatch.Apply, () => ConfigManager.IsFeatureEnabled("InitPathContent")) },
 			
 			// Reading 模块
-			{ "ReadingInspirationPatch", (Features.Reading.ReadingInspirationPatch.PatchUpdateReadingProgressOnce, () => ConfigManager.GetCurrReadingEventBonusRate) },
+			{ "ReadingInspirationPatch", (Features.Reading.UpdateReadingProgressOncePatch.Apply, () => ConfigManager.IsFeatureEnabled("GetCurrReadingEventBonusRate")) },
 			
 			// 下面这两项都是书籍进度进度增加策略
-			{ "GetStrategyProgressAddValue", (Features.Reading.ReadingBuilderPatch.PatchGetStrategyProgressAddValue, () => ConfigManager.GetStrategyProgressAddValue) },
-			{ "ApplyImmediateReadingStrategyEffectForLifeSkill", (Features.Reading.ReadingBuilderPatch.PatchApplyImmediateReadingStrategyEffectForLifeSkill, () => ConfigManager.GetStrategyProgressAddValue) },
-			{ "SetReadingStrategy", (Features.Reading.ReadingBuilderPatch.PatchSetReadingStrategy, () => ConfigManager.SetReadingStrategy) },
+			{ "GetStrategyProgressAddValue", (Features.Reading.GetStrategyProgressAddValuePatch.Apply, () => ConfigManager.IsFeatureEnabled("GetStrategyProgressAddValue")) },
+			{ "ApplyImmediateReadingStrategyEffectForLifeSkill", (Features.Reading.ApplyImmediateReadingStrategyEffectForLifeSkillPatch.Apply, () => ConfigManager.IsFeatureEnabled("GetStrategyProgressAddValue")) },
+			{ "SetReadingStrategy", (Features.Reading.SetReadingStrategyPatch.Apply, () => ConfigManager.IsFeatureEnabled("SetReadingStrategy")) },
 			
 			// Items 模块
-			{ "CatchCricketDouble", (Features.Items.CricketPatch.PatchCatchCricketDouble, () => ConfigManager.CatchCricketDouble) }
+			{ "CatchCricketDouble", (Features.Items.CatchCricketDoublePatch.Apply, () => ConfigManager.IsFeatureEnabled("CatchCricketDouble")) }
 		};
 
 		// 新增方法，根据配置选择性应用 class 形式的补丁
