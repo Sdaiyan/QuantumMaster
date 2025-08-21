@@ -11,6 +11,15 @@ namespace QuantumMaster
     public class LuckyCalculator
     {
         /// <summary>
+        /// 获取功能显示名称
+        /// </summary>
+        /// <param name="featureKey">功能键</param>
+        /// <returns>功能显示名称</returns>
+        private static string GetFeatureName(string featureKey)
+        {
+            return featureKey ?? "未知";
+        }
+        /// <summary>
         /// 根据幸运等级计算双参数随机数（倾向最大值）
         /// </summary>
         /// <param name="min">最小值</param>
@@ -22,20 +31,21 @@ namespace QuantumMaster
             var luckyLevel = featureKey != null ? ConfigManager.GetFeatureLuckLevel(featureKey) : ConfigManager.LuckyLevel;
             var luck = QuantumMaster.LuckyLevelFactor[luckyLevel];
             var randomValue = QuantumMaster.Random.Next(min, max);
-            
-            if (luck > 0)
+            var featureName = GetFeatureName(featureKey);
+            if (luck != 0)
             {
-                var result = (int)Math.Min(max - 1, randomValue + (max - 1 - randomValue) * luck);
-                DebugLog.Info($"[LuckyRandom] *** 气运调整结果: 功能={featureKey ?? "全局"}, 范围=[{min},{max}), 原始值={randomValue}, 新值={result}, luck={luck:F2} ***");
+                int result;
+                if (luck > 0)
+                {
+                    result = (int)Math.Min(max - 1, randomValue + (max - 1 - randomValue) * luck);
+                }
+                else
+                {
+                    result = Math.Max(min, min + (int)((randomValue - min) * (1 + luck)));
+                }
+                DebugLog.Info($"[LR] {featureName}, {luckyLevel}, [{min},{max}), {randomValue} -> {result}");
                 return result;
             }
-            if (luck < 0)
-            {
-                var result = Math.Max(min, min + (int)((randomValue - min) * (1 + luck)));
-                DebugLog.Info($"[LuckyRandom] *** 气运调整结果: 功能={featureKey ?? "全局"}, 范围=[{min},{max}), 原始值={randomValue}, 新值={result}, luck={luck:F2} ***");
-                return result;
-            }
-            
             return randomValue;
         }
 
@@ -51,20 +61,21 @@ namespace QuantumMaster
             var luckyLevel = featureKey != null ? ConfigManager.GetFeatureLuckLevel(featureKey) : ConfigManager.LuckyLevel;
             var luck = QuantumMaster.LuckyLevelFactor[luckyLevel];
             var randomValue = QuantumMaster.Random.Next(min, max);
-            
-            if (luck > 0)
+            var featureName = GetFeatureName(featureKey);
+            if (luck != 0)
             {
-                var result = Math.Max(min, (int)(randomValue - (randomValue - min) * luck));
-                DebugLog.Info($"[LuckyRandom] *** 气运调整结果: 功能={featureKey ?? "全局"}, 范围=[{min},{max}), 原始值={randomValue}, 新值={result}, luck={luck:F2} ***");
+                int result;
+                if (luck > 0)
+                {
+                    result = Math.Max(min, (int)(randomValue - (randomValue - min) * luck));
+                }
+                else
+                {
+                    result = Math.Min(max - 1, min + (int)((randomValue - min) * (1 - luck)));
+                }
+                DebugLog.Info($"[LR] {featureName}, {luckyLevel}, [{min},{max}), {randomValue} -> {result}");
                 return result;
             }
-            if (luck < 0)
-            {
-                var result = Math.Min(max - 1, min + (int)((randomValue - min) * (1 - luck)));
-                DebugLog.Info($"[LuckyRandom] *** 气运调整结果: 功能={featureKey ?? "全局"}, 范围=[{min},{max}), 原始值={randomValue}, 新值={result}, luck={luck:F2} ***");
-                return result;
-            }
-            
             return randomValue;
         }
 
@@ -79,20 +90,21 @@ namespace QuantumMaster
             var luckyLevel = featureKey != null ? ConfigManager.GetFeatureLuckLevel(featureKey) : ConfigManager.LuckyLevel;
             var luck = QuantumMaster.LuckyLevelFactor[luckyLevel];
             var randomValue = QuantumMaster.Random.Next(0, max);
-            
-            if (luck > 0)
+            var featureName = GetFeatureName(featureKey);
+            if (luck != 0)
             {
-                var result = Math.Min(max - 1, randomValue + (int)((max - 1 - randomValue) * luck));
-                DebugLog.Info($"[LuckyRandom] *** 气运调整结果: 功能={featureKey ?? "全局"}, 范围=[0,{max}), 原始值={randomValue}, 新值={result}, luck={luck:F2} ***");
+                int result;
+                if (luck > 0)
+                {
+                    result = Math.Min(max - 1, randomValue + (int)((max - 1 - randomValue) * luck));
+                }
+                else
+                {
+                    result = Math.Max(0, (int)(randomValue * (1 + luck)));
+                }
+                DebugLog.Info($"[LR] {featureName}, {luckyLevel}, [0,{max}), {randomValue} -> {result}");
                 return result;
             }
-            if (luck < 0)
-            {
-                var result = Math.Max(0, (int)(randomValue * (1 + luck)));
-                DebugLog.Info($"[LuckyRandom] *** 气运调整结果: 功能={featureKey ?? "全局"}, 范围=[0,{max}), 原始值={randomValue}, 新值={result}, luck={luck:F2} ***");
-                return result;
-            }
-            
             return randomValue;
         }
 
@@ -107,20 +119,21 @@ namespace QuantumMaster
             var luckyLevel = featureKey != null ? ConfigManager.GetFeatureLuckLevel(featureKey) : ConfigManager.LuckyLevel;
             var luck = QuantumMaster.LuckyLevelFactor[luckyLevel];
             var randomValue = QuantumMaster.Random.Next(0, max);
-            
-            if (luck > 0)
+            var featureName = GetFeatureName(featureKey);
+            if (luck != 0)
             {
-                var result = Math.Max(0, randomValue - (int)(randomValue * luck));
-                DebugLog.Info($"[LuckyRandom] *** 气运调整结果: 功能={featureKey ?? "全局"}, 范围=[0,{max}), 原始值={randomValue}, 新值={result}, luck={luck:F2} ***");
+                int result;
+                if (luck > 0)
+                {
+                    result = Math.Max(0, randomValue - (int)(randomValue * luck));
+                }
+                else
+                {
+                    result = Math.Min(max - 1, (int)(randomValue * (1 - luck)));
+                }
+                DebugLog.Info($"[LR] {featureName}, {luckyLevel}, [0,{max}), {randomValue} -> {result}");
                 return result;
             }
-            if (luck < 0)
-            {
-                var result = Math.Min(max - 1, (int)(randomValue * (1 - luck)));
-                DebugLog.Info($"[LuckyRandom] *** 气运调整结果: 功能={featureKey ?? "全局"}, 范围=[0,{max}), 原始值={randomValue}, 新值={result}, luck={luck:F2} ***");
-                return result;
-            }
-            
             return randomValue;
         }
 
@@ -139,33 +152,26 @@ namespace QuantumMaster
             var luckyLevel = featureKey != null ? ConfigManager.GetFeatureLuckLevel(featureKey) : ConfigManager.LuckyLevel;
             var luck = QuantumMaster.LuckyLevelFactor[luckyLevel];
             var randomValue = QuantumMaster.Random.Next(0, 100);
-            var originalResult = randomValue < percent;
-
-            if (luck > 0)
+            var originalResult = randomValue <= percent;
+            var featureName = GetFeatureName(featureKey);
+            if (luck != 0)
             {
-                // 提高成功概率
-                var adjustedPercent = Math.Min(100, percent + (100 - percent) * luck);
-                var result = randomValue < adjustedPercent;
-                
-                if (originalResult != result)
+                double adjustedPercent;
+                bool result;
+                if (luck > 0)
                 {
-                    DebugLog.Info($"[LuckyRandom] *** 气运改写结果: 功能={featureKey ?? "全局"}, 原始概率={percent}%, 判定值={randomValue}, 新概率={adjustedPercent:F2}%, luck={luck:F2}, 原始判定={originalResult} -> 气运调整后={result} ***");
+                    adjustedPercent = Math.Min(100, percent + (100 - percent) * luck);
+                    result = randomValue <= adjustedPercent;
                 }
+                else
+                {
+                    adjustedPercent = Math.Max(0, percent * (1 + luck));
+                    result = randomValue <= adjustedPercent;
+                }
+                string arrow = result ? "<=" : ">";
+                DebugLog.Info($"[LR] {featureName}, {luckyLevel}, {randomValue} {arrow} {adjustedPercent:F2}%, 原始={originalResult} -> 气运后={result}");
                 return result;
             }
-            if (luck < 0)
-            {
-                // 降低成功概率
-                var adjustedPercent = Math.Max(0, percent * (1 + luck));
-                var result = randomValue < adjustedPercent;
-                
-                if (originalResult != result)
-                {
-                    DebugLog.Info($"[LuckyRandom] *** 气运改写结果: 功能={featureKey ?? "全局"}, 原始概率={percent}%, 判定值={randomValue}, 新概率={adjustedPercent:F2}%, luck={luck:F2}, 原始判定={originalResult} -> 气运调整后={result} ***");
-                }
-                return result;
-            }
-            
             return originalResult;
         }
 
@@ -178,39 +184,32 @@ namespace QuantumMaster
         /// <returns>是否失败</returns>
         public static bool Calc_Random_CheckPercentProb_False_By_Luck(IRandomSource randomSource, int percent, string featureKey = null)
         {
-            if (percent <= 0) return true;
-            if (percent >= 100) return false;
+            if (percent <= 0) return false;
+            if (percent >= 100) return true;
 
             var luckyLevel = featureKey != null ? ConfigManager.GetFeatureLuckLevel(featureKey) : ConfigManager.LuckyLevel;
             var luck = QuantumMaster.LuckyLevelFactor[luckyLevel];
             var randomValue = QuantumMaster.Random.Next(0, 100);
-            var originalResult = randomValue >= percent;
-
-            if (luck > 0)
+            var originalResult = randomValue <= percent;
+            var featureName = GetFeatureName(featureKey);
+            if (luck != 0)
             {
-                // 提高失败概率（降低成功概率）
-                var adjustedPercent = Math.Max(0, percent - percent * luck);
-                var result = randomValue >= adjustedPercent;
-                
-                if (originalResult != result)
+                double adjustedPercent;
+                bool result;
+                if (luck > 0)
                 {
-                    DebugLog.Info($"[LuckyRandom] *** 气运改写结果: 功能={featureKey ?? "全局"}, 原始概率={percent}%, 判定值={randomValue}, 新概率={adjustedPercent:F2}%, luck={luck:F2}, 原始判定={originalResult} -> 气运调整后={result} ***");
+                    adjustedPercent = Math.Max(0, percent - percent * luck);
+                    result = randomValue > adjustedPercent;
                 }
+                else
+                {
+                    adjustedPercent = Math.Min(100, percent + (100 - percent) * (-luck));
+                    result = randomValue > adjustedPercent;
+                }
+                string arrow = result ? "<=" : ">";
+                DebugLog.Info($"[LR] {featureName}, {luckyLevel}, {randomValue} {arrow} {adjustedPercent:F2}%, 原始={originalResult} -> 气运后={result}");
                 return result;
             }
-            if (luck < 0)
-            {
-                // 降低失败概率（提高成功概率）
-                var adjustedPercent = Math.Min(100, percent + (100 - percent) * (-luck));
-                var result = randomValue >= adjustedPercent;
-                
-                if (originalResult != result)
-                {
-                    DebugLog.Info($"[LuckyRandom] *** 气运改写结果: 功能={featureKey ?? "全局"}, 原始概率={percent}%, 判定值={randomValue}, 新概率={adjustedPercent:F2}%, luck={luck:F2}, 原始判定={originalResult} -> 气运调整后={result} ***");
-                }
-                return result;
-            }
-            
             return originalResult;
         }
 
@@ -231,35 +230,25 @@ namespace QuantumMaster
             var luck = QuantumMaster.LuckyLevelFactor[luckyLevel];
             var randomValue = QuantumMaster.Random.Next(0, total);
             var originalPercent = (float)chance / total * 100;
-            var originalResult = randomValue < chance;
-
-            if (luck > 0)
+            var originalResult = randomValue <= chance;
+            var featureName = GetFeatureName(featureKey);
+            if (luck != 0)
             {
-                // 提高成功概率
-                var adjustedChance = Math.Min(total, chance + (total - chance) * luck);
-                var result = randomValue < adjustedChance;
-                var adjustedPercent = (float)adjustedChance / total * 100;
-                
-                if (originalResult != result)
+                double adjustedChance;
+                bool result;
+                if (luck > 0)
                 {
-                    DebugLog.Info($"[LuckyRandom] *** 气运改写结果: 功能={featureKey ?? "全局"}, 原始概率={originalPercent:F1}%({chance}/{total}), 判定值={randomValue}, 新概率={adjustedPercent:F1}%({adjustedChance:F2}/{total}), luck={luck:F2}, 原始判定={originalResult} -> 气运调整后={result} ***");
+                    adjustedChance = Math.Min(total, chance + (total - chance) * luck);
                 }
+                else
+                {
+                    adjustedChance = Math.Max(0, chance * (1 + luck));
+                }
+                result = randomValue <= adjustedChance;
+                string arrow = result ? "<=" : ">";
+                DebugLog.Info($"[LR] {featureName}, {luckyLevel}, {randomValue} {arrow} {adjustedChance:F2}, 原始={originalResult} -> 气运后={result}");
                 return result;
             }
-            if (luck < 0)
-            {
-                // 降低成功概率
-                var adjustedChance = Math.Max(0, chance * (1 + luck));
-                var result = randomValue < adjustedChance;
-                var adjustedPercent = (float)adjustedChance / total * 100;
-                
-                if (originalResult != result)
-                {
-                    DebugLog.Info($"[LuckyRandom] *** 气运改写结果: 功能={featureKey ?? "全局"}, 原始概率={originalPercent:F1}%({chance}/{total}), 判定值={randomValue}, 新概率={adjustedPercent:F1}%({adjustedChance:F2}/{total}), luck={luck:F2}, 原始判定={originalResult} -> 气运调整后={result} ***");
-                }
-                return result;
-            }
-            
             return originalResult;
         }
 
@@ -273,42 +262,32 @@ namespace QuantumMaster
         /// <returns>是否失败</returns>
         public static bool Calc_Random_CheckProb_False_By_Luck(IRandomSource randomSource, int chance, int total, string featureKey = null)
         {
-            if (chance <= 0) return true;
-            if (chance >= total) return false;
+            if (chance <= 0) return false;
+            if (chance >= total) return true;
 
             var luckyLevel = featureKey != null ? ConfigManager.GetFeatureLuckLevel(featureKey) : ConfigManager.LuckyLevel;
             var luck = QuantumMaster.LuckyLevelFactor[luckyLevel];
             var randomValue = QuantumMaster.Random.Next(0, total);
             var originalPercent = (float)chance / total * 100;
-            var originalResult = randomValue >= chance;
-
-            if (luck > 0)
+            var originalResult = randomValue <= chance;
+            var featureName = GetFeatureName(featureKey);
+            if (luck != 0)
             {
-                // 提高失败概率（降低成功概率）
-                var adjustedChance = Math.Max(0, chance - chance * luck);
-                var result = randomValue >= adjustedChance;
-                var adjustedPercent = (float)adjustedChance / total * 100;
-                
-                if (originalResult != result)
+                double adjustedChance;
+                bool result;
+                if (luck > 0)
                 {
-                    DebugLog.Info($"[LuckyRandom] *** 气运改写结果: 功能={featureKey ?? "全局"}, 原始概率={originalPercent:F1}%({chance}/{total}), 判定值={randomValue}, 新概率={adjustedPercent:F1}%({adjustedChance:F2}/{total}), luck={luck:F2}, 原始判定={originalResult} -> 气运调整后={result} ***");
+                    adjustedChance = Math.Max(0, chance - chance * luck);
                 }
+                else
+                {
+                    adjustedChance = Math.Min(total, chance + (total - chance) * (-luck));
+                }
+                result = randomValue <= adjustedChance;
+                string arrow = result ? "<=" : ">";
+                DebugLog.Info($"[LR] {featureName}, {luckyLevel}, {randomValue} {arrow} {adjustedChance:F2}, 原始={originalResult} -> 气运后={result}");
                 return result;
             }
-            if (luck < 0)
-            {
-                // 降低失败概率（提高成功概率）
-                var adjustedChance = Math.Min(total, chance + (total - chance) * (-luck));
-                var result = randomValue >= adjustedChance;
-                var adjustedPercent = (float)adjustedChance / total * 100;
-                
-                if (originalResult != result)
-                {
-                    DebugLog.Info($"[LuckyRandom] *** 气运改写结果: 功能={featureKey ?? "全局"}, 原始概率={originalPercent:F1}%({chance}/{total}), 判定值={randomValue}, 新概率={adjustedPercent:F1}%({adjustedChance:F2}/{total}), luck={luck:F2}, 原始判定={originalResult} -> 气运调整后={result} ***");
-                }
-                return result;
-            }
-            
             return originalResult;
         }
 
@@ -324,20 +303,21 @@ namespace QuantumMaster
             var luckyLevel = featureKey != null ? ConfigManager.GetFeatureLuckLevel(featureKey) : ConfigManager.LuckyLevel;
             var luck = QuantumMaster.LuckyLevelFactor[luckyLevel];
             var randomValue = QuantumMaster.Random.Next(min, max);
-            
-            if (luck > 0)
+            var featureName = GetFeatureName(featureKey);
+            if (luck != 0)
             {
-                var result = (int)Math.Min(max - 1, randomValue + (max - 1 - randomValue) * luck);
-                DebugLog.Info($"[LuckyRandom] *** 气运调整结果: 功能={featureKey ?? "全局"}, 范围=[{min},{max}), 原始值={randomValue}, 新值={result}, luck={luck:F2} ***");
+                int result;
+                if (luck > 0)
+                {
+                    result = (int)Math.Min(max - 1, randomValue + (max - 1 - randomValue) * luck);
+                }
+                else
+                {
+                    result = Math.Max(min, min + (int)((randomValue - min) * (1 + luck)));
+                }
+                DebugLog.Info($"[LR] {featureName}, {luckyLevel}, [{min},{max}), {randomValue} -> {result}");
                 return result;
             }
-            if (luck < 0)
-            {
-                var result = Math.Max(min, min + (int)((randomValue - min) * (1 + luck)));
-                DebugLog.Info($"[LuckyRandom] *** 气运调整结果: 功能={featureKey ?? "全局"}, 范围=[{min},{max}), 原始值={randomValue}, 新值={result}, luck={luck:F2} ***");
-                return result;
-            }
-            
             return randomValue;
         }
     }
