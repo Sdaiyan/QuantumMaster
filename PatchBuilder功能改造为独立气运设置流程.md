@@ -120,7 +120,25 @@ namespace QuantumMaster.Features.Building
 }
 ```
 
-### 第四步：更新 QuantumMaster.cs 配置映射
+### 第四步：统一方法名为 Apply
+为了与其他模块保持一致，将补丁方法名统一改为 `Apply`：
+
+**修改补丁类中的方法名**：
+```csharp
+// 原来的方法名（示例）
+public static bool PatchCreateBuildingArea(Harmony harmony)
+
+// 改为统一的方法名
+public static bool Apply(Harmony harmony)
+```
+
+**同时更新主配置映射中的调用**：
+```csharp
+// 在 QuantumMaster.cs 的 patchBuilderMappings 中
+{ "CreateBuildingArea", (Features.Building.CreateBuildingAreaPatch.Apply, () => ConfigManager.IsFeatureEnabled("CreateBuildingArea")) },
+```
+
+### 第五步：更新 QuantumMaster.cs 配置映射
 修改主文件中的补丁映射，指向新的独立补丁类：
 
 ```csharp
@@ -135,7 +153,7 @@ private readonly Dictionary<string, (System.Func<Harmony, bool> patchMethod, Sys
 };
 ```
 
-### 第四步：清理原有代码
+### 第六步：清理原有代码
 从原来的 `BuildingPatch.cs` 中删除 `CreateBuildingArea` 相关的代码：
 - 删除 `CreateBuildingAreaReplacements` 嵌套类
 - 删除相关的替换方法实现
@@ -167,19 +185,20 @@ private readonly Dictionary<string, (System.Func<Harmony, bool> patchMethod, Sys
 2. **配置管理**: ConfigManager.cs 中的属性类型匹配
 3. **气运计算**: LuckyCalculator 支持 featureKey 参数
 4. **独立补丁类**: 新建的补丁类功能完整
-5. **主配置映射**: QuantumMaster.cs 中的映射指向正确
-6. **代码清理**: 原有冗余代码已移除
-7. **编译测试**: 项目能够成功编译
-8. **功能测试**: 游戏中功能按预期工作
-
+5. **方法名统一**: 补丁类使用统一的 `Apply` 方法名
+6. **主配置映射**: QuantumMaster.cs 中的映射指向正确
+7. **代码清理**: 原有冗余代码已移除
+8. **编译测试**: 项目能够成功编译
+9. **功能测试**: 游戏中功能按预期工作
 ## 扩展应用
 
 此操作流程可以应用于任何需要独立气运设置的 PatchBuilder 功能：
 
 1. 按照上述步骤修改配置
 2. 创建功能专用的补丁类
-3. 更新主配置映射
-4. 清理原有代码
+3. 统一方法名为 Apply
+4. 更新主配置映射
+5. 清理原有代码
 
 这样就能实现每个功能都有独立的气运控制，提供更精细的用户体验。
 

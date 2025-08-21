@@ -385,11 +385,12 @@ return {
             DefaultValue = true,
         },
         {
-            SettingType = "Toggle",
+            SettingType = "Dropdown",
             Key = "TryAddLoopingEvent",
             DisplayName = "【气运】天人感应",
             Description = "【气运】尝试触发天人感应时，成功率根据设置的气运增加或者减少",
-            DefaultValue = true,
+            Options = luckLevelOptions,
+            DefaultValue = 0,
         },
         {
             SettingType = "Toggle",

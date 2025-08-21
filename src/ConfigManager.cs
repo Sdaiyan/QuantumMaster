@@ -27,7 +27,7 @@ namespace QuantumMaster
         public static bool GeneratePageIncompleteState; // 生成书籍时，完整的书页为浮动区间的最大值，亡佚书页为浮动区间最小值，并且完整的书页会出现在书本的前篇位置
         public static bool FixedPagePos; // 位置固定在靠前
         public static bool CricketInitialize; // 生成蛐蛐时，必定生成耐久上限为理论上限值的，不受伤的蛐蛐
-        public static bool TryAddLoopingEvent; // 如果概率不为0，尝试触发天人感应时必定成功
+        public static int TryAddLoopingEvent; // 天人感应的独立气运设置，0=跟随全局
         public static bool SetSectMemberApproveTaiwu; // 送上拜帖时，必定是尽可能高阶的门派成员会认可太吾
         public static int BookStrategiesSelect1; // 第 1 个策略
         public static int BookStrategiesSelect2; // 第 2 个策略

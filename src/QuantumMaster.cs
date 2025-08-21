@@ -82,13 +82,13 @@ namespace QuantumMaster
 		private readonly Dictionary<string, (System.Type patchType, System.Func<bool> condition)> patchConfigMappings = new Dictionary<string, (System.Type, System.Func<bool>)>
 		{
 			// Actions 模块 - 静态上下文支持的Prefix/Postfix补丁
-			{ "StealPatch", (typeof(Features.Actions.StealPatch), () => ConfigManager.IsFeatureEnabled("steal")) },
-			{ "RobPatch", (typeof(Features.Actions.RobPatch), () => ConfigManager.IsFeatureEnabled("rob")) },
-			{ "ScamPatch", (typeof(Features.Actions.ScamPatch), () => ConfigManager.IsFeatureEnabled("scam")) },
-			{ "PoisonPatch", (typeof(Features.Actions.PoisonPatch), () => ConfigManager.IsFeatureEnabled("poison")) },
-			{ "PlotHarmPatch", (typeof(Features.Actions.PlotHarmPatch), () => ConfigManager.IsFeatureEnabled("plotHarm")) },
-			{ "StealLifeSkillPatch", (typeof(Features.Actions.StealLifeSkillPatch), () => ConfigManager.IsFeatureEnabled("stealLifeSkill")) },
-			{ "StealCombatSkillPatch", (typeof(Features.Actions.StealCombatSkillPatch), () => ConfigManager.IsFeatureEnabled("stealCombatSkill")) },
+			{ "steal", (typeof(Features.Actions.StealPatch), () => ConfigManager.IsFeatureEnabled("steal")) },
+			{ "rob", (typeof(Features.Actions.RobPatch), () => ConfigManager.IsFeatureEnabled("rob")) },
+			{ "scam", (typeof(Features.Actions.ScamPatch), () => ConfigManager.IsFeatureEnabled("scam")) },
+			{ "poison", (typeof(Features.Actions.PoisonPatch), () => ConfigManager.IsFeatureEnabled("poison")) },
+			{ "plotHarm", (typeof(Features.Actions.PlotHarmPatch), () => ConfigManager.IsFeatureEnabled("plotHarm")) },
+			{ "stealLifeSkill", (typeof(Features.Actions.StealLifeSkillPatch), () => ConfigManager.IsFeatureEnabled("stealLifeSkill")) },
+			{ "stealCombatSkill", (typeof(Features.Actions.StealCombatSkillPatch), () => ConfigManager.IsFeatureEnabled("stealCombatSkill")) },
 			
 			// Character 模块
 			{ "GenderControlPatch", (typeof(Features.Character.GenderControlPatch), () => ConfigManager.genderControl != 50) },
@@ -125,19 +125,19 @@ namespace QuantumMaster
 		private readonly Dictionary<string, (System.Func<Harmony, bool> patchMethod, System.Func<bool> condition)> patchBuilderMappings = new Dictionary<string, (System.Func<Harmony, bool>, System.Func<bool>)>
 		{
 			// Actions 模块 - 使用静态上下文版本测试所有5次替换和双角色判断
-			{ "GetStealActionPhase", (Features.Actions.StealPatch.PatchGetStealActionPhase, () => ConfigManager.IsFeatureEnabled("steal")) },
-			{ "GetScamActionPhase", (Features.Actions.ScamPatch.PatchGetScamActionPhase, () => ConfigManager.IsFeatureEnabled("scam")) },
-			{ "GetRobActionPhase", (Features.Actions.RobPatch.PatchGetRobActionPhase, () => ConfigManager.IsFeatureEnabled("rob")) },
-			{ "GetStealLifeSkillActionPhase", (Features.Actions.StealLifeSkillPatch.PatchGetStealLifeSkillActionPhase, () => ConfigManager.IsFeatureEnabled("stealLifeSkill")) },
-			{ "GetStealCombatSkillActionPhase", (Features.Actions.StealCombatSkillPatch.PatchGetStealCombatSkillActionPhase, () => ConfigManager.IsFeatureEnabled("stealCombatSkill")) },
-			{ "GetPoisonActionPhase", (Features.Actions.PoisonPatch.PatchGetPoisonActionPhase, () => ConfigManager.IsFeatureEnabled("poison")) },
-			{ "GetPlotHarmActionPhase", (Features.Actions.PlotHarmPatch.PatchGetPlotHarmActionPhase, () => ConfigManager.IsFeatureEnabled("plotHarm")) },
+			{ "steal", (Features.Actions.StealPatch.PatchGetStealActionPhase, () => ConfigManager.IsFeatureEnabled("steal")) },
+			{ "rob", (Features.Actions.ScamPatch.PatchGetScamActionPhase, () => ConfigManager.IsFeatureEnabled("scam")) },
+			{ "scam", (Features.Actions.RobPatch.PatchGetRobActionPhase, () => ConfigManager.IsFeatureEnabled("rob")) },
+			{ "poison", (Features.Actions.StealLifeSkillPatch.PatchGetStealLifeSkillActionPhase, () => ConfigManager.IsFeatureEnabled("stealLifeSkill")) },
+			{ "plotHarm", (Features.Actions.StealCombatSkillPatch.PatchGetStealCombatSkillActionPhase, () => ConfigManager.IsFeatureEnabled("stealCombatSkill")) },
+			{ "stealLifeSkill", (Features.Actions.PoisonPatch.PatchGetPoisonActionPhase, () => ConfigManager.IsFeatureEnabled("poison")) },
+			{ "stealCombatSkill", (Features.Actions.PlotHarmPatch.PatchGetPlotHarmActionPhase, () => ConfigManager.IsFeatureEnabled("plotHarm")) },
 			
 			// Character 模块
 			{ "OfflineCalcGeneralActionTeachSkill", (Features.Character.OfflineCalcGeneralActionTeachSkillPatch.PatchOfflineCalcGeneralActionTeachSkill, () => ConfigManager.OfflineCalcGeneralAction_TeachSkill) },
 			
 			// Core 模块
-			{ "TryAddLoopingEvent", (Features.Core.LoopingEventPatch.PatchTryAddLoopingEvent, () => ConfigManager.TryAddLoopingEvent) },
+			{ "TryAddLoopingEvent", (Features.Core.LoopingEventPatch.Apply, () => ConfigManager.IsFeatureEnabled("TryAddLoopingEvent")) },
 			
 			// Building 模块
 			{ "CreateBuildingArea", (Features.Building.CreateBuildingAreaPatch.Apply, () => ConfigManager.IsFeatureEnabled("CreateBuildingArea")) },
