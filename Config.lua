@@ -308,11 +308,12 @@ return {
             DefaultValue = true,
         },
         {
-            SettingType = "Toggle",
+            SettingType = "Dropdown",
             Key = "OfflineCalcGeneralAction_TeachSkill",
             DisplayName = "【气运】太吾受到指点的成功率",
             Description = "【气运】如果太吾受到NPC指点，指点的成功率根据气运增加",
-            DefaultValue = true,
+            Options = luckLevelOptions,
+            DefaultValue = 0,
         },
         {
             SettingType = "Toggle",

@@ -134,7 +134,7 @@ namespace QuantumMaster
 			{ "stealCombatSkill", (Features.Actions.PlotHarmPatch.PatchGetPlotHarmActionPhase, () => ConfigManager.IsFeatureEnabled("plotHarm")) },
 			
 			// Character 模块
-			{ "OfflineCalcGeneralActionTeachSkill", (Features.Character.OfflineCalcGeneralActionTeachSkillPatch.PatchOfflineCalcGeneralActionTeachSkill, () => ConfigManager.OfflineCalcGeneralAction_TeachSkill) },
+			{ "OfflineCalcGeneralActionTeachSkill", (Features.Character.OfflineCalcGeneralActionTeachSkillPatch.Apply, () => ConfigManager.IsFeatureEnabled("OfflineCalcGeneralAction_TeachSkill")) },
 			
 			// Core 模块
 			{ "TryAddLoopingEvent", (Features.Core.LoopingEventPatch.Apply, () => ConfigManager.IsFeatureEnabled("TryAddLoopingEvent")) },

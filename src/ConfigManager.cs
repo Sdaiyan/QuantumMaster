@@ -18,7 +18,7 @@ namespace QuantumMaster
         public static int plotHarm; // 暗害气运等级：0=跟随全局，1-8=独立气运等级
         public static int genderControl; // 生成性别控制：0=关闭功能，1=修改为女，2=修改为男
         public static bool ropeOrSword; // 如果概率不为0，绳子绑架或者煎饼救人必定成功
-        public static bool OfflineCalcGeneralAction_TeachSkill; // 如果概率不是0，则必定会指点别人
+        public static int OfflineCalcGeneralAction_TeachSkill = 0; // 太吾受到指点的独立气运设置，0=跟随全局
         public static bool CatchCricket; // 抓蛐蛐必定成功
         public static bool CatchCricketDouble; // 抓蛐蛐时获得双只蛐蛐
         public static bool InitResources; // 生成世界时，每个地块上的资源为浮动区间的最大值，受到难度的影响
