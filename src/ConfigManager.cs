@@ -53,8 +53,8 @@ namespace QuantumMaster
         public static int LuckyLevel;
         public static int CreateBuildingArea; // 【气运】世界初始建筑：0=跟随全局，1-8=独立气运等级
         public static bool CalcNeigongLoopingEffect; // 周天运转时，获得的内力为浮动区间的最大值，内息恢复最大，内息紊乱最小
-        public static bool collectResource; // 收获资源时必定获取引子，且是可能获取的最高级的引子
-        public static bool GetCollectResourceAmount; // 采集数量必定为浮动区间的上限
+        public static int collectResource = 0; // 采集资源引子的独立气运设置，0=跟随全局
+        public static int GetCollectResourceAmount = 0; // 采集资源数量的独立气运设置，0=跟随全局
         public static int OfflineUpdateShopManagement; // 【气运】太吾村经营成功率
         public static bool ApplyLifeSkillCombatResult; // 如果概率不为0，较艺读书&周天必定触发
         public static bool CalcReadInCombat; // 如果概率不为0，战斗读书必定触发
@@ -63,9 +63,9 @@ namespace QuantumMaster
         public static bool InitPathContent; // 奇遇收获资源时，数量为浮动区间的上限
         public static bool GetStrategyProgressAddValue; // 读书进度策略
         public static bool SetReadingStrategy; // 读书效率策略
-        public static bool ChoosyGetMaterial; // 精挑细选，品质升级判定概率最大
-        public static bool AddChoosyRemainUpgradeData; // 精挑细选过月累计最大
-        public static bool ParallelUpdateOnMonthChange; // 地块每月资源恢复数量为浮动区间的上限
+        public static int ChoosyGetMaterial = 0; // 精挑细选品质升级的独立气运设置，0=跟随全局
+        public static int AddChoosyRemainUpgradeData = 0; // 精挑细选过月累计的独立气运设置，0=跟随全局
+        public static int ParallelUpdateOnMonthChange = 0; // 过月地块资源恢复的独立气运设置，0=跟随全局
         public static int BuildingRandomCorrection; // 【气运】太吾村经营收益
         public static bool BuildingManageHarvestSpecialSuccessRate; // 【气运】赌坊与青楼基础暴击率
         public static int UpdateShopBuildingTeach; // 【气运】村民经营资质增加概率

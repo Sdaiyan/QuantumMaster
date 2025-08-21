@@ -149,12 +149,12 @@ namespace QuantumMaster
 			{ "CalcNeigongLoopingEffect", (Features.Skills.SkillsPatch.PatchCalcNeigongLoopingEffect, () => ConfigManager.CalcNeigongLoopingEffect) },
 			
 			// Resources 模块
-			{ "CollectResource", (Features.Resources.ResourcesPatch.PatchCollectResource, () => ConfigManager.collectResource) },
-			{ "UpgradeCollectMaterial", (Features.Resources.ResourcesPatch.PatchUpgradeCollectMaterial, () => ConfigManager.collectResource) },
-			{ "GetCollectResourceAmount", (Features.Resources.ResourcesPatch.PatchGetCollectResourceAmount, () => ConfigManager.GetCollectResourceAmount) },
-			{ "ParallelUpdateOnMonthChange", (Features.Resources.ResourcesPatch.PatchParallelUpdateOnMonthChange, () => ConfigManager.ParallelUpdateOnMonthChange) },
-			{ "ChoosyGetMaterial", (Features.Resources.ResourcesPatch.PatchChoosyGetMaterial, () => ConfigManager.ChoosyGetMaterial) },
-			{ "AddChoosyRemainUpgradeData", (Features.Resources.ResourcesPatch.PatchAddChoosyRemainUpgradeData, () => ConfigManager.AddChoosyRemainUpgradeData) },
+			{ "CollectResource", (Features.Resources.CollectResourcePatch.Apply, () => ConfigManager.IsFeatureEnabled("collectResource")) },
+			{ "UpgradeCollectMaterial", (Features.Resources.UpgradeCollectMaterialPatch.Apply, () => ConfigManager.IsFeatureEnabled("collectResource")) },
+			{ "GetCollectResourceAmount", (Features.Resources.GetCollectResourceAmountPatch.Apply, () => ConfigManager.IsFeatureEnabled("GetCollectResourceAmount")) },
+			{ "ParallelUpdateOnMonthChange", (Features.Resources.ParallelUpdateOnMonthChangePatch.Apply, () => ConfigManager.IsFeatureEnabled("ParallelUpdateOnMonthChange")) },
+			{ "ChoosyGetMaterial", (Features.Resources.ChoosyGetMaterialPatch.Apply, () => ConfigManager.IsFeatureEnabled("ChoosyGetMaterial")) },
+			{ "AddChoosyRemainUpgradeData", (Features.Resources.AddChoosyRemainUpgradeDataPatch.Apply, () => ConfigManager.IsFeatureEnabled("AddChoosyRemainUpgradeData")) },
 			
 			// Combat 模块
 			{ "ApplyLifeSkillCombatResult", (Features.Combat.CombatPatch.PatchApplyLifeSkillCombatResult, () => ConfigManager.ApplyLifeSkillCombatResult) },
