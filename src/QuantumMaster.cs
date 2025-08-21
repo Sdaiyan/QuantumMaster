@@ -161,6 +161,8 @@ namespace QuantumMaster
 			{ "CalcReadInCombat", (Features.Combat.CalcReadInCombatPatch.Apply, () => ConfigManager.IsFeatureEnabled("CalcReadInCombat")) },
 			{ "CalcLootItem", (Features.Combat.CalcLootItemPatch.Apply, () => ConfigManager.IsFeatureEnabled("CalcLootItem")) },
 			{ "CalcQiQrtInCombat", (Features.Combat.CalcQiQrtInCombatPatch.Apply, () => ConfigManager.IsFeatureEnabled("CalcQiQrtInCombat")) },
+			{ "CheckReduceWeaponDurability", (Features.Combat.CheckReduceWeaponDurabilityPatch.Apply, () => ConfigManager.IsFeatureEnabled("CheckReduceWeaponDurability")) },
+			{ "CheckReduceArmorDurability", (Features.Combat.CheckReduceArmorDurabilityPatch.Apply, () => ConfigManager.IsFeatureEnabled("CheckReduceArmorDurability")) },
 			{ "CheckRopeOrSwordHit", (Features.Combat.RopeAndSwordPatch.PatchCheckRopeOrSwordHit, () => ConfigManager.IsFeatureEnabled("ropeOrSword")) },
 			{ "CheckRopeOrSwordHitOutofCombat", (Features.Combat.RopeAndSwordPatch.PatchCheckRopeOrSwordHitOutofCombat, () => ConfigManager.IsFeatureEnabled("ropeOrSword")) },
 			

@@ -60,6 +60,8 @@ namespace QuantumMaster
         public static int CalcReadInCombat = 0; // 战斗读书的独立气运设置，0=跟随全局
         public static int CalcQiQrtInCombat = 0; // 战斗周天运转的独立气运设置，0=跟随全局
         public static int CalcLootItem = 0; // 战利品概率的独立气运设置，0=跟随全局
+        public static int CheckReduceWeaponDurability = 0; // 减少武器耐久消耗概率的独立气运设置，0=跟随全局
+        public static int CheckReduceArmorDurability = 0; // 减少护甲耐久消耗概率的独立气运设置，0=跟随全局
         public static int InitPathContent = 0; // 奇遇收获资源时，数量为浮动区间的上限
         public static int GetStrategyProgressAddValue = 0; // 读书进度策略
         public static int SetReadingStrategy = 0; // 读书效率策略
@@ -221,6 +223,12 @@ namespace QuantumMaster
 
             DomainManager.Mod.GetSetting(modIdStr, "CalcLootItem", ref CalcLootItem);
             DebugLog.Info($"配置加载: CalcLootItem = {CalcLootItem}");
+
+            DomainManager.Mod.GetSetting(modIdStr, "CheckReduceWeaponDurability", ref CheckReduceWeaponDurability);
+            DebugLog.Info($"配置加载: CheckReduceWeaponDurability = {CheckReduceWeaponDurability}");
+
+            DomainManager.Mod.GetSetting(modIdStr, "CheckReduceArmorDurability", ref CheckReduceArmorDurability);
+            DebugLog.Info($"配置加载: CheckReduceArmorDurability = {CheckReduceArmorDurability}");
 
             DomainManager.Mod.GetSetting(modIdStr, "InitPathContent", ref InitPathContent);
             DebugLog.Info($"配置加载: InitPathContent = {InitPathContent}");

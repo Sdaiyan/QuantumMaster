@@ -35,6 +35,8 @@ namespace QuantumMaster
             { "CalcReadInCombat", "战斗读书" },
             { "CalcQiQrtInCombat", "战斗周天运转" },
             { "CalcLootItem", "战利品掉落概率" },
+            { "CheckReduceWeaponDurability", "减少武器耐久消耗概率" },
+            { "CheckReduceArmorDurability", "减少护甲耐久消耗概率" },
             { "InitPathContent", "奇遇收获" },
             { "GetStrategyProgressAddValue", "读书进度策略" },
             { "SetReadingStrategy", "读书效率策略" },

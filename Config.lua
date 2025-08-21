@@ -289,6 +289,22 @@ return {
         },
         {
             SettingType = "Dropdown",
+            Key = "CheckReduceWeaponDurability",
+            DisplayName = "【气运】减少武器耐久消耗概率",
+            Description = "武器耐久消耗判定时，根据气运减少消耗的概率",
+            Options = luckLevelOptions,
+            DefaultValue = 0,
+        },
+        {
+            SettingType = "Dropdown",
+            Key = "CheckReduceArmorDurability",
+            DisplayName = "【气运】减少护甲耐久消耗概率",
+            Description = "护甲耐久消耗判定时，根据气运减少消耗的概率",
+            Options = luckLevelOptions,
+            DefaultValue = 0,
+        },
+        {
+            SettingType = "Dropdown",
             Key = "InitPathContent",
             DisplayName = "【气运】奇遇收获",
             Description = "奇遇收获资源时，数量根据气运增加",

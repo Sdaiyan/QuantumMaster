@@ -167,7 +167,15 @@ private readonly Dictionary<string, (System.Func<Harmony, bool> patchMethod, Sys
 };
 ```
 
-## 第六步：编译和测试
+## 第六步：更新功能描述文件 (desc.txt)
+
+在 `desc.txt` 文件中添加新功能的描述，让用户了解功能的作用。找到合适的分类位置添加：
+
+```plaintext
+【气运】采集蛐蛐成功率: 采集蛐蛐时，基础成功率根据气运增加
+```
+
+## 第七步：编译和测试
 
 1. 编译项目确保没有语法错误：
 ```powershell
