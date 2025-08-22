@@ -35,13 +35,13 @@ namespace QuantumMaster
             { "CalcReadInCombat", "战斗读书" },
             { "CalcQiQrtInCombat", "战斗周天运转" },
             { "CalcLootItem", "战利品掉落概率" },
-            { "CheckReduceWeaponDurability", "减少武器耐久消耗概率" },
-            { "CheckReduceArmorDurability", "减少护甲耐久消耗概率" },
+            { "CheckReduceWeaponDurability", "减少武器耐久消耗概率（强制扣除时无效）" },
+            { "CheckReduceArmorDurability", "减少护甲耐久消耗概率（强制扣除时无效）" },
             { "InitPathContent", "奇遇收获" },
             { "GetStrategyProgressAddValue", "读书进度策略" },
             { "SetReadingStrategy", "读书效率策略" },
             { "ParallelUpdateOnMonthChange", "过月地块资源恢复" },
-            { "OfflineCalcGeneralAction_TeachSkill", "太吾受到指点的成功率" },
+            { "OfflineCalcGeneralAction_TeachSkill", "NPC（包括太吾）受到指点的成功率" },
             { "CatchCricket", "抓蛐蛐基础成功率" },
             { "CatchCricketDouble", "抓到双蛐蛐概率" },
             { "CheckCricketIsSmart", "蛐蛐神采非凡概率" },
@@ -245,13 +245,12 @@ namespace QuantumMaster
                 if (luck > 0)
                 {
                     adjustedPercent = Math.Max(0, percent - percent * luck);
-                    result = randomValue > adjustedPercent;
                 }
                 else
                 {
                     adjustedPercent = Math.Min(100, percent + (100 - percent) * (-luck));
-                    result = randomValue > adjustedPercent;
                 }
+                result = randomValue <= adjustedPercent;
                 string arrow = result ? "<=" : ">";
                 DebugLog.Info($"[LR] {featureName}, {luckyLevel}, {randomValue} {arrow} {adjustedPercent:F2}%, 原始={originalResult} -> 气运后={result}");
                 return result;

@@ -11,7 +11,7 @@ using Redzen.Random;
 namespace QuantumMaster.Features.Combat
 {
     /// <summary>
-    /// 减少武器耐久消耗概率补丁
+    /// 减少武器耐久消耗概率（强制扣除时无效）补丁
     /// 配置项: CheckReduceWeaponDurability
     /// 功能: 武器耐久消耗判定时，根据气运减少消耗的概率
     /// </summary>
@@ -42,7 +42,7 @@ namespace QuantumMaster.Features.Combat
         }
 
         /// <summary>
-        /// 应用减少武器耐久消耗概率补丁
+        /// 应用减少武器耐久消耗概率（强制扣除时无效）补丁
         /// </summary>
         /// <param name="harmony">Harmony 实例</param>
         /// <returns>补丁应用是否成功</returns>
