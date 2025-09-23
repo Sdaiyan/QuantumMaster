@@ -40,66 +40,63 @@ namespace QuantumMaster.Features.Reading
 
             DebugLog.Info("读书策略自定义功能已启用，正在应用指定策略");
 
-            SByteList customIds = SByteList.Create();
-            
-            // 只添加非"使用原版"的策略（值 > 0），并且需要减 1 因为第一个选项是"使用原版"
-            if (ConfigManager.BookStrategiesSelect1 > 0)
+            // 直接按位置替换对应的策略（值 > 0），并且需要减 1 因为第一个选项是"使用原版"
+            if (ConfigManager.BookStrategiesSelect1 > 0 && 0 < strategyIds.Items.Count)
             {
                 sbyte strategyId = (sbyte)(ConfigManager.BookStrategiesSelect1 - 1);
-                customIds.Items.Add(strategyId);
-                DebugLog.Info($"添加策略1: {GetStrategyName(strategyId)}");
+                strategyIds.Items[0] = strategyId;
+                DebugLog.Info($"替换策略位置0: {GetStrategyName(strategyId)}");
             }
-            if (ConfigManager.BookStrategiesSelect2 > 0)
+            if (ConfigManager.BookStrategiesSelect2 > 0 && 1 < strategyIds.Items.Count)
             {
                 sbyte strategyId = (sbyte)(ConfigManager.BookStrategiesSelect2 - 1);
-                customIds.Items.Add(strategyId);
-                DebugLog.Info($"添加策略2: {GetStrategyName(strategyId)}");
+                strategyIds.Items[1] = strategyId;
+                DebugLog.Info($"替换策略位置1: {GetStrategyName(strategyId)}");
             }
-            if (ConfigManager.BookStrategiesSelect3 > 0)
+            if (ConfigManager.BookStrategiesSelect3 > 0 && 2 < strategyIds.Items.Count)
             {
                 sbyte strategyId = (sbyte)(ConfigManager.BookStrategiesSelect3 - 1);
-                customIds.Items.Add(strategyId);
-                DebugLog.Info($"添加策略3: {GetStrategyName(strategyId)}");
+                strategyIds.Items[2] = strategyId;
+                DebugLog.Info($"替换策略位置2: {GetStrategyName(strategyId)}");
             }
-            if (ConfigManager.BookStrategiesSelect4 > 0)
+            if (ConfigManager.BookStrategiesSelect4 > 0 && 3 < strategyIds.Items.Count)
             {
                 sbyte strategyId = (sbyte)(ConfigManager.BookStrategiesSelect4 - 1);
-                customIds.Items.Add(strategyId);
-                DebugLog.Info($"添加策略4: {GetStrategyName(strategyId)}");
+                strategyIds.Items[3] = strategyId;
+                DebugLog.Info($"替换策略位置3: {GetStrategyName(strategyId)}");
             }
-            if (ConfigManager.BookStrategiesSelect5 > 0)
+            if (ConfigManager.BookStrategiesSelect5 > 0 && 4 < strategyIds.Items.Count)
             {
                 sbyte strategyId = (sbyte)(ConfigManager.BookStrategiesSelect5 - 1);
-                customIds.Items.Add(strategyId);
-                DebugLog.Info($"添加策略5: {GetStrategyName(strategyId)}");
+                strategyIds.Items[4] = strategyId;
+                DebugLog.Info($"替换策略位置4: {GetStrategyName(strategyId)}");
             }
-            if (ConfigManager.BookStrategiesSelect6 > 0)
+            if (ConfigManager.BookStrategiesSelect6 > 0 && 5 < strategyIds.Items.Count)
             {
                 sbyte strategyId = (sbyte)(ConfigManager.BookStrategiesSelect6 - 1);
-                customIds.Items.Add(strategyId);
-                DebugLog.Info($"添加策略6: {GetStrategyName(strategyId)}");
+                strategyIds.Items[5] = strategyId;
+                DebugLog.Info($"替换策略位置5: {GetStrategyName(strategyId)}");
             }
-            if (ConfigManager.BookStrategiesSelect7 > 0)
+            if (ConfigManager.BookStrategiesSelect7 > 0 && 6 < strategyIds.Items.Count)
             {
                 sbyte strategyId = (sbyte)(ConfigManager.BookStrategiesSelect7 - 1);
-                customIds.Items.Add(strategyId);
-                DebugLog.Info($"添加策略7: {GetStrategyName(strategyId)}");
+                strategyIds.Items[6] = strategyId;
+                DebugLog.Info($"替换策略位置6: {GetStrategyName(strategyId)}");
             }
-            if (ConfigManager.BookStrategiesSelect8 > 0)
+            if (ConfigManager.BookStrategiesSelect8 > 0 && 7 < strategyIds.Items.Count)
             {
                 sbyte strategyId = (sbyte)(ConfigManager.BookStrategiesSelect8 - 1);
-                customIds.Items.Add(strategyId);
-                DebugLog.Info($"添加策略8: {GetStrategyName(strategyId)}");
+                strategyIds.Items[7] = strategyId;
+                DebugLog.Info($"替换策略位置7: {GetStrategyName(strategyId)}");
             }
-            if (ConfigManager.BookStrategiesSelect9 > 0)
+            if (ConfigManager.BookStrategiesSelect9 > 0 && 8 < strategyIds.Items.Count)
             {
                 sbyte strategyId = (sbyte)(ConfigManager.BookStrategiesSelect9 - 1);
-                customIds.Items.Add(strategyId);
-                DebugLog.Info($"添加策略9: {GetStrategyName(strategyId)}");
+                strategyIds.Items[8] = strategyId;
+                DebugLog.Info($"替换策略位置8: {GetStrategyName(strategyId)}");
             }
             
-            strategyIds = customIds;
-            DebugLog.Info($"读书策略设置完成，共应用{customIds.Items.Count}个自定义策略");
+            DebugLog.Info("读书策略设置完成");
         }
 
         /// <summary>

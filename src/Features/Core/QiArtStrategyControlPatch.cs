@@ -37,48 +37,45 @@ namespace QuantumMaster.Features.Core
 
             DebugLog.Info("周天策略自定义功能已启用，正在应用指定策略");
 
-            SByteList customIds = SByteList.Create();
-            
-            // 只添加非"使用原版"的策略（值 > 0），并且需要减 1 因为第一个选项是"使用原版"
-            if (ConfigManager.QiArtStrategiesSelect1 > 0)
+            // 直接按位置替换对应的策略（值 > 0），并且需要减 1 因为第一个选项是"使用原版"
+            if (ConfigManager.QiArtStrategiesSelect1 > 0 && 0 < strategyIds.Items.Count)
             {
                 sbyte strategyId = (sbyte)(ConfigManager.QiArtStrategiesSelect1 - 1);
-                customIds.Items.Add(strategyId);
-                DebugLog.Info($"添加周天策略1: {GetQiArtStrategyName(strategyId)}");
+                strategyIds.Items[0] = strategyId;
+                DebugLog.Info($"替换周天策略位置0: {GetQiArtStrategyName(strategyId)}");
             }
-            if (ConfigManager.QiArtStrategiesSelect2 > 0)
+            if (ConfigManager.QiArtStrategiesSelect2 > 0 && 1 < strategyIds.Items.Count)
             {
                 sbyte strategyId = (sbyte)(ConfigManager.QiArtStrategiesSelect2 - 1);
-                customIds.Items.Add(strategyId);
-                DebugLog.Info($"添加周天策略2: {GetQiArtStrategyName(strategyId)}");
+                strategyIds.Items[1] = strategyId;
+                DebugLog.Info($"替换周天策略位置1: {GetQiArtStrategyName(strategyId)}");
             }
-            if (ConfigManager.QiArtStrategiesSelect3 > 0)
+            if (ConfigManager.QiArtStrategiesSelect3 > 0 && 2 < strategyIds.Items.Count)
             {
                 sbyte strategyId = (sbyte)(ConfigManager.QiArtStrategiesSelect3 - 1);
-                customIds.Items.Add(strategyId);
-                DebugLog.Info($"添加周天策略3: {GetQiArtStrategyName(strategyId)}");
+                strategyIds.Items[2] = strategyId;
+                DebugLog.Info($"替换周天策略位置2: {GetQiArtStrategyName(strategyId)}");
             }
-            if (ConfigManager.QiArtStrategiesSelect4 > 0)
+            if (ConfigManager.QiArtStrategiesSelect4 > 0 && 3 < strategyIds.Items.Count)
             {
                 sbyte strategyId = (sbyte)(ConfigManager.QiArtStrategiesSelect4 - 1);
-                customIds.Items.Add(strategyId);
-                DebugLog.Info($"添加周天策略4: {GetQiArtStrategyName(strategyId)}");
+                strategyIds.Items[3] = strategyId;
+                DebugLog.Info($"替换周天策略位置3: {GetQiArtStrategyName(strategyId)}");
             }
-            if (ConfigManager.QiArtStrategiesSelect5 > 0)
+            if (ConfigManager.QiArtStrategiesSelect5 > 0 && 4 < strategyIds.Items.Count)
             {
                 sbyte strategyId = (sbyte)(ConfigManager.QiArtStrategiesSelect5 - 1);
-                customIds.Items.Add(strategyId);
-                DebugLog.Info($"添加周天策略5: {GetQiArtStrategyName(strategyId)}");
+                strategyIds.Items[4] = strategyId;
+                DebugLog.Info($"替换周天策略位置4: {GetQiArtStrategyName(strategyId)}");
             }
-            if (ConfigManager.QiArtStrategiesSelect6 > 0)
+            if (ConfigManager.QiArtStrategiesSelect6 > 0 && 5 < strategyIds.Items.Count)
             {
                 sbyte strategyId = (sbyte)(ConfigManager.QiArtStrategiesSelect6 - 1);
-                customIds.Items.Add(strategyId);
-                DebugLog.Info($"添加周天策略6: {GetQiArtStrategyName(strategyId)}");
+                strategyIds.Items[5] = strategyId;
+                DebugLog.Info($"替换周天策略位置5: {GetQiArtStrategyName(strategyId)}");
             }
             
-            strategyIds = customIds;
-            DebugLog.Info($"周天策略设置完成，共应用{customIds.Items.Count}个自定义策略");
+            DebugLog.Info("周天策略设置完成");
         }
 
         /// <summary>
