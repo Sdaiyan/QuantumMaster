@@ -42,14 +42,14 @@ namespace QuantumMaster.Features.Combat
         /// 配置项: ropeOrSword
         /// 功能: 【气运】根据气运影响绳子绑架和剑柄救人的成功率
         /// </summary>
-        public static bool PatchCheckRopeOrSwordHit(Harmony harmony)
+        public static bool PatchCheckRopeHit(Harmony harmony)
         {
             if (!ConfigManager.IsFeatureEnabled("ropeOrSword")) return false;
 
             var OriginalMethod = new OriginalMethodInfo
             {
                 Type = typeof(GameData.Domains.Combat.CombatDomain),
-                MethodName = "CheckRopeOrSwordHit",
+                MethodName = "CheckRopeHit",
                 Parameters = new Type[] { 
                     typeof(Redzen.Random.IRandomSource), 
                     typeof(int) 
@@ -57,7 +57,7 @@ namespace QuantumMaster.Features.Combat
             };
 
             var patchBuilder = GenericTranspiler.CreatePatchBuilder(
-                    "CheckRopeOrSwordHit",
+                    "CheckRopeHit",
                     OriginalMethod);
 
             // CheckPercentProb 方法替换 - 期望成功，使用气运提高成功率
@@ -77,14 +77,14 @@ namespace QuantumMaster.Features.Combat
         /// 配置项: ropeOrSword
         /// 功能: 【气运】根据气运影响战斗外绳子和剑柄的成功率
         /// </summary>
-        public static bool PatchCheckRopeOrSwordHitOutofCombat(Harmony harmony)
+        public static bool PatchCheckRopeHitOutOfCombat(Harmony harmony)
         {
             if (!ConfigManager.IsFeatureEnabled("ropeOrSword")) return false;
 
             var OriginalMethod = new OriginalMethodInfo
             {
                 Type = typeof(GameData.Domains.Combat.CombatDomain),
-                MethodName = "CheckRopeOrSwordHitOutofCombat",
+                MethodName = "CheckRopeHitOutOfCombat",
                 Parameters = new Type[] { 
                     typeof(Redzen.Random.IRandomSource), 
                     typeof(GameData.Domains.Character.Character),
@@ -96,7 +96,7 @@ namespace QuantumMaster.Features.Combat
             };
 
             var patchBuilder = GenericTranspiler.CreatePatchBuilder(
-                    "CheckRopeOrSwordHitOutofCombat",
+                    "CheckRopeHitOutOfCombat",
                     OriginalMethod);
 
             // CheckPercentProb 方法替换 - 期望成功，使用气运提高成功率

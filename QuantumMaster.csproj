@@ -4,7 +4,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>annotations</Nullable>
-    <TaiwuPath>C:\Program Files (x86)\Steam\steamapps\common\The Scroll Of Taiwu</TaiwuPath>
+    <TaiwuPath>E:\SteamLibrary\steamapps\common\The Scroll Of Taiwu</TaiwuPath>
     <OutputPath>$(TaiwuPath)\Mod\[测试]天机秘术(Reborn)\Plugins</OutputPath>
     <ProduceReferenceAssembly>False</ProduceReferenceAssembly>
     <PackageOutputPath>$(TaiwuPath)\Mod\[测试]天机秘术(Reborn)\Plugins</PackageOutputPath>
@@ -25,8 +25,32 @@
     <Reference Include="GameData">
       <HintPath>$(TaiwuPath)\Backend\GameData.dll</HintPath>
     </Reference>
+    <Reference Include="GameData.Adventure">
+      <HintPath>E:\SteamLibrary\steamapps\common\The Scroll Of Taiwu\Backend\GameData.Adventure.dll</HintPath>
+    </Reference>
+    <Reference Include="GameData.Combat.Math">
+      <HintPath>E:\SteamLibrary\steamapps\common\The Scroll Of Taiwu\Backend\GameData.Combat.Math.dll</HintPath>
+    </Reference>
+    <Reference Include="GameData.Common">
+      <HintPath>E:\SteamLibrary\steamapps\common\The Scroll Of Taiwu\Backend\GameData.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="GameData.Common.Algorithm">
+      <HintPath>E:\SteamLibrary\steamapps\common\The Scroll Of Taiwu\Backend\GameData.Common.Algorithm.dll</HintPath>
+    </Reference>
+    <Reference Include="GameData.GameDataBridge">
+      <HintPath>E:\SteamLibrary\steamapps\common\The Scroll Of Taiwu\Backend\GameData.GameDataBridge.dll</HintPath>
+    </Reference>
+    <Reference Include="GameData.Serializer">
+      <HintPath>E:\SteamLibrary\steamapps\common\The Scroll Of Taiwu\Backend\GameData.Serializer.dll</HintPath>
+    </Reference>
+    <Reference Include="GameData.Shared">
+      <HintPath>E:\SteamLibrary\steamapps\common\The Scroll Of Taiwu\Backend\GameData.Shared.dll</HintPath>
+    </Reference>
     <Reference Include="GameData.Utilities">
       <HintPath>$(TaiwuPath)\Backend\GameData.Utilities.dll</HintPath>
+    </Reference>
+    <Reference Include="GameData.Utilities.Structure">
+      <HintPath>E:\SteamLibrary\steamapps\common\The Scroll Of Taiwu\Backend\GameData.Utilities.Structure.dll</HintPath>
     </Reference>
     <Reference Include="Redzen">
       <HintPath>$(TaiwuPath)\Backend\Redzen.dll</HintPath>
