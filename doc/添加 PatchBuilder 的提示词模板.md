@@ -15,3 +15,5 @@ config.lua 定义如下
 `DisplayName = 【气运】村庄资源点获得心材概率`
 
 `Description = 过月时，采集到资源点心材的概率（有内置冷却时间，低品3个月，高品6个月）`
+
+不要忘记按照 流程示例中的要求维护 README.md 和 README_en.md
