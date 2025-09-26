@@ -165,6 +165,7 @@ namespace QuantumMaster
 			{ "CheckReduceArmorDurability", (Features.Combat.CheckReduceArmorDurabilityPatch.Apply, () => ConfigManager.IsFeatureEnabled("CheckReduceArmorDurability")) },
 			{ "CheckRopeHit", (Features.Combat.RopeAndSwordPatch.PatchCheckRopeHit, () => ConfigManager.IsFeatureEnabled("ropeOrSword")) },
 			{ "CheckRopeHitOutOfCombat", (Features.Combat.RopeAndSwordPatch.PatchCheckRopeHitOutOfCombat, () => ConfigManager.IsFeatureEnabled("ropeOrSword")) },
+			{ "JieQingKuaiJian", (Features.Combat.JieQingKuaiJianPatch.Apply, () => ConfigManager.IsFeatureEnabled("JieQingKuaiJian")) },
 			
 			// Adventure 模块
 			{ "InitPathContent", (Features.Adventure.InitPathContentPatch.Apply, () => ConfigManager.IsFeatureEnabled("InitPathContent")) },
