@@ -59,6 +59,7 @@ Please leave a comment if you encounter any issues.
 *   **[Fortune] Loot Drop Rate 【气运】战利品掉落概率:** Increases the probability of loot drops (if base probability > 0). (Vanilla logic checks each loot item individually).
 *   **[Fortune] Reduce Weapon Durability Loss Chance 【气运】减少武器耐久消耗概率:** Increases the chance to reduce weapon durability consumption (ineffective on forced durability loss).
 *   **[Fortune] Reduce Armor Durability Loss Chance 【气运】减少护甲耐久消耗概率:** Increases the chance to reduce armor durability consumption (ineffective on forced durability loss).
+*   **[Fortune] JieQing Fast Sword Repeat Trigger Rate 【气运】界青快剑重复触发概率增加:** Increases the repeat trigger probability for JieQing Fast Sword skill based on Fortune.
 *   **[Fortune] Adventure Harvest 【气运】奇遇收获:** Increases the quantity of resources gained from adventures within their floating range based on Fortune.
 *   **[Fortune] NPC Guidance Success Rate 【气运】NPC受到指点的成功率:** Increases the success rate of the Taiwu receiving guidance from NPCs.
 *   **[Fortune] Celestial Revelation 【气运】天人感应:** Increases the success rate of triggering Celestial Revelation.
