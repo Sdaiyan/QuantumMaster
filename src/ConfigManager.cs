@@ -76,6 +76,11 @@ namespace QuantumMaster
         /// 村庄资源点获得心材概率气运设置
         /// </summary>
         public static int UpdateResourceBlockBuildingCoreProducing = 0;
+        
+        /// <summary>
+        /// 界青快剑重复触发概率增加的独立气运设置
+        /// </summary>
+        public static int JieQingKuaiJian = 0;
 
         /// <summary>
         /// 从游戏配置中读取所有 MOD 设置
@@ -264,6 +269,9 @@ namespace QuantumMaster
 
             DomainManager.Mod.GetSetting(modIdStr, "UpdateResourceBlockBuildingCoreProducing", ref UpdateResourceBlockBuildingCoreProducing);
             DebugLog.Info($"配置加载: UpdateResourceBlockBuildingCoreProducing = {UpdateResourceBlockBuildingCoreProducing}");
+
+            DomainManager.Mod.GetSetting(modIdStr, "JieQingKuaiJian", ref JieQingKuaiJian);
+            DebugLog.Info($"配置加载: JieQingKuaiJian = {JieQingKuaiJian}");
 
             DebugLog.Info("所有配置项加载完成");
         }

@@ -51,7 +51,8 @@ namespace QuantumMaster
             { "TryAddLoopingEvent", "天人感应" },
             { "UpdateResourceBlockBuildingCoreProducing", "村庄资源点获得心材概率" },
             { "ChoosyGetMaterial", "精挑细选品质升级" },
-            { "AddChoosyRemainUpgradeData", "精挑细选过月累计最大" }
+            { "AddChoosyRemainUpgradeData", "精挑细选过月累计最大" },
+            { "JieQingKuaiJian", "界青快剑重复触发概率增加" }
         };
 
         /// <summary>
