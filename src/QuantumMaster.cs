@@ -178,7 +178,10 @@ namespace QuantumMaster
 			{ "SetReadingStrategy", (Features.Reading.SetReadingStrategyPatch.Apply, () => ConfigManager.IsFeatureEnabled("SetReadingStrategy")) },
 			
 			// Items 模块
-			{ "CatchCricketDouble", (Features.Items.CatchCricketDoublePatch.Apply, () => ConfigManager.IsFeatureEnabled("CatchCricketDouble")) }
+			{ "CatchCricketDouble", (Features.Items.CatchCricketDoublePatch.Apply, () => ConfigManager.IsFeatureEnabled("CatchCricketDouble")) },
+			
+			// Extra 模块
+			{ "UpdateResourceBlockBuildingCoreProducing", (Features.Extra.UpdateResourceBlockBuildingCoreProducingPatch.Apply, () => ConfigManager.IsFeatureEnabled("UpdateResourceBlockBuildingCoreProducing")) }
 		};
 
 		// 新增方法，根据配置选择性应用 class 形式的补丁

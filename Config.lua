@@ -1285,6 +1285,24 @@ return {
             DisplayName = "门派初始支持度",
             Description = "太吾第一次向门派发出拜帖的时候，会默认获取部分人的支持度，具体的人员是随机的，开启后会获取尽可能高品人员的支持度。理论上这获取的支持度会更高",
             DefaultValue = true,
+        },
+        {
+            SettingType = "Dropdown",
+            Key = "UpdateResourceBlockBuildingCoreProducing",
+            DisplayName = "【气运】村庄资源点获得心材概率",
+            Description = "过月时，太吾村内资源采集建筑采集到资源点心材的概率（有内置冷却时间，低品3个月，高品6个月）",
+            Options = {
+                "跟随全局",
+                "命途多舛",
+                "时运不济",
+                "顺风顺水(关闭功能)",
+                "左右逢源",
+                "心想事成",
+                "福星高照",
+                "洪福齐天",
+                "气运之子"
+            },
+            DefaultValue = 0,
         }
     },
 }

@@ -167,9 +167,11 @@ private readonly Dictionary<string, (System.Func<Harmony, bool> patchMethod, Sys
 };
 ```
 
-## 第六步：更新功能描述文件 (desc.txt)
+## 第六步：更新功能描述文件 (readme.md)
 
-在 `desc.txt` 文件中添加新功能的描述，让用户了解功能的作用。找到合适的分类位置添加：
+在 `README.md` 文件中添加新功能的描述，让用户了解功能的作用。找到合适的分类位置添加：
+
+同时在 `README_en.md` 添加英文的描述，添加时需要特别注意格式
 
 ```plaintext
 【气运】采集蛐蛐成功率: 采集蛐蛐时，基础成功率根据气运增加

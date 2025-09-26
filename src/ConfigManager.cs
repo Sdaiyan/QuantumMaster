@@ -71,6 +71,11 @@ namespace QuantumMaster
         public static int BuildingRandomCorrection; // 【气运】太吾村经营收益
         public static int BuildingManageHarvestSpecialSuccessRate; // 【气运】赌坊与青楼基础暴击率
         public static int UpdateShopBuildingTeach; // 【气运】村民经营资质增加概率
+        
+        /// <summary>
+        /// 村庄资源点获得心材概率气运设置
+        /// </summary>
+        public static int UpdateResourceBlockBuildingCoreProducing = 0;
 
         /// <summary>
         /// 从游戏配置中读取所有 MOD 设置
@@ -256,6 +261,9 @@ namespace QuantumMaster
 
             DomainManager.Mod.GetSetting(modIdStr, "UpdateShopBuildingTeach", ref UpdateShopBuildingTeach);
             DebugLog.Info($"配置加载: UpdateShopBuildingTeach = {UpdateShopBuildingTeach}");
+
+            DomainManager.Mod.GetSetting(modIdStr, "UpdateResourceBlockBuildingCoreProducing", ref UpdateResourceBlockBuildingCoreProducing);
+            DebugLog.Info($"配置加载: UpdateResourceBlockBuildingCoreProducing = {UpdateResourceBlockBuildingCoreProducing}");
 
             DebugLog.Info("所有配置项加载完成");
         }

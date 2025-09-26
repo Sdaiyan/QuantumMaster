@@ -66,6 +66,7 @@ Please leave a comment if you encounter any issues.
 **【Resource Acquisition 【资源获取类】】**
 *   **[Fortune] Catalyst Gathering 【气运】采集资源引子:** Increases the probability and quality of obtaining Catalysts while gathering resources.
 *   **[Fortune] Gathering Quantity 【气运】采集资源数量:** Increases the quantity of resources gathered within their floating range based on Fortune.
+*   **[Fortune] Village Resource Point Core Material Probability 【气运】村庄资源点获得心材概率:** Increases the probability of resource collection buildings in Taiwu Village obtaining core materials from resource points during monthly updates (has built-in cooldown: 3 months for low-grade, 6 months for high-grade).
 *   **[Fortune] Monthly Tile Resource Regeneration 【气运】过月地块资源恢复:** Increases the amount of resources regenerated monthly on tiles within their floating range based on Fortune.
 *   **[Fortune] Careful Selection Quality Upgrade 【气运】精挑细选品质升级:** Increases the probability of quality upgrade during 'Careful Selection' (does not guarantee highest grade material every time).
 *   **[Fortune] Max Careful Selection Monthly Accumulation 【气运】精挑细选过月累计最大:** Increases the monthly accumulated upgrade probability and quantity during 'Careful Selection' within their floating range based on Fortune.

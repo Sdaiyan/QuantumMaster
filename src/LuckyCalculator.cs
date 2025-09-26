@@ -49,6 +49,7 @@ namespace QuantumMaster
             { "CalcNeigongLoopingEffect", "周天内力获取" },
             { "GetQiArtStrategyDeltaNeiliBonus", "周天内力策略收益最大" },
             { "TryAddLoopingEvent", "天人感应" },
+            { "UpdateResourceBlockBuildingCoreProducing", "村庄资源点获得心材概率" },
             { "ChoosyGetMaterial", "精挑细选品质升级" },
             { "AddChoosyRemainUpgradeData", "精挑细选过月累计最大" }
         };
