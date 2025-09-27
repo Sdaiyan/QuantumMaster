@@ -4,9 +4,9 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>annotations</Nullable>
-	  <OutputPath>C:\Program Files (x86)\Steam\steamapps\common\The Scroll Of Taiwu\Mod\QMBreak\Plugins</OutputPath>
+	  <OutputPath>E:\SteamLibrary\steamapps\common\The Scroll Of Taiwu\Mod\QMBreak\Plugins</OutputPath>
     <ProduceReferenceAssembly>False</ProduceReferenceAssembly>
-    <PackageOutputPath>C:\Program Files (x86)\Steam\steamapps\common\The Scroll Of Taiwu\Mod\QMBreak\Plugins</PackageOutputPath>
+    <PackageOutputPath>E:\SteamLibrary\steamapps\common\The Scroll Of Taiwu\Mod\QMBreak\Plugins</PackageOutputPath>
     <BaseIntermediateOutputPath></BaseIntermediateOutputPath>
     <AnalysisLevel>none</AnalysisLevel>
     <EnableNETAnalyzers>False</EnableNETAnalyzers>
@@ -19,16 +19,19 @@
 
   <ItemGroup>
     <Reference Include="0Harmony">
-      <HintPath>C:\Program Files (x86)\Steam\steamapps\common\The Scroll Of Taiwu\The Scroll of Taiwu_Data\Managed\0Harmony.dll</HintPath>
+      <HintPath>E:\SteamLibrary\steamapps\common\The Scroll Of Taiwu\The Scroll of Taiwu_Data\Managed\0Harmony.dll</HintPath>
     </Reference>
     <Reference Include="GameData">
-      <HintPath>C:\Program Files (x86)\Steam\steamapps\common\The Scroll Of Taiwu\Backend\GameData.dll</HintPath>
+      <HintPath>E:\SteamLibrary\steamapps\common\The Scroll Of Taiwu\Backend\GameData.dll</HintPath>
+    </Reference>
+    <Reference Include="GameData">
+      <HintPath>E:\SteamLibrary\steamapps\common\The Scroll Of Taiwu\Backend\GameData.Shared.dll</HintPath>
     </Reference>
     <Reference Include="Redzen">
-      <HintPath>C:\Program Files (x86)\Steam\steamapps\common\The Scroll Of Taiwu\Backend\Redzen.dll</HintPath>
+      <HintPath>E:\SteamLibrary\steamapps\common\The Scroll Of Taiwu\Backend\Redzen.dll</HintPath>
     </Reference>
     <Reference Include="TaiwuModdingLib">
-      <HintPath>C:\Program Files (x86)\Steam\steamapps\common\The Scroll Of Taiwu\The Scroll of Taiwu_Data\Managed\TaiwuModdingLib.dll</HintPath>
+      <HintPath>E:\SteamLibrary\steamapps\common\The Scroll Of Taiwu\The Scroll of Taiwu_Data\Managed\TaiwuModdingLib.dll</HintPath>
     </Reference>
   </ItemGroup>
 
