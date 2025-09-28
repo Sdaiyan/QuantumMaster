@@ -2,6 +2,30 @@
 
 本文档展示如何完整地添加一个新的 PatchBuilder 功能，以"【气运】采集蛐蛐成功率"为例。
 
+**重要提醒**: 本项目已重构为双项目结构，请根据功能性质选择正确的项目：
+- **QuantumMaster**: 核心游戏功能修改（资源、建筑、角色等）
+- **CombatMaster**: 战斗相关功能修改
+
+本示例以添加到 **QuantumMaster** 项目为例，如需添加到 CombatMaster 项目，请将对应路径中的 `QuantumMaster` 替换为 `CombatMaster`。
+
+## 项目选择指南
+
+### QuantumMaster 项目适用于：
+- 资源采集相关功能（采集蛐蛐、资源点等）
+- 建筑管理功能（太吾村经营、建筑效果等）
+- 角色生成功能（性别控制、性取向等）
+- 读书学习功能（读书策略、灵光一闪等）
+- 世界生成功能（地图资源初始化等）
+- 技能学习功能（偷学、指点等）
+- 奇遇相关功能
+
+### CombatMaster 项目适用于：
+- 功法的修改
+
+### 配置管理器对应关系：
+- **QuantumMaster 项目** → `ConfigManager` → `Config.lua`
+- **CombatMaster 项目** → `CombatConfigManager` → `Config.combat.lua`
+
 ## 功能信息
 
 - **featureKey**: `catchGrasshopper`
@@ -11,9 +35,11 @@
 - **需要替换的函数**: `IRandomSource.CheckPercentProb(int percent)`
 - **替换次数**: 1次（假设原方法中只有一个概率判断）
 
-## 第一步：修改配置文件 (Config.lua)
+## 第一步：修改配置文件
 
-在 `Config.lua` 的 `DefaultSettings` 数组中添加新配置项：
+**对于 QuantumMaster 项目**，在 `Config.lua` 的 `DefaultSettings` 数组中添加新配置项：
+
+**对于 CombatMaster 项目**，在 `Config.combat.lua` 的 `DefaultSettings` 数组中添加新配置项：
 
 ```lua
 {
@@ -26,9 +52,11 @@
 },
 ```
 
-## 第二步：更新配置管理器 (ConfigManager.cs)
+## 第二步：更新配置管理器
 
-在 `ConfigManager.cs` 中添加新的配置属性：
+**对于 QuantumMaster 项目**，在 `src/QuantumMaster/ConfigManager.cs` 中添加新的配置属性：
+
+**对于 CombatMaster 项目**，在 `src/CombatMaster/CombatConfigManager.cs` 中添加新的配置属性：
 
 ```csharp
 /// <summary>
@@ -37,9 +65,16 @@
 public static int catchGrasshopper = 0;
 ```
 
-## 第三步：更新功能显示名称映射 (LuckyCalculator.cs)
+然后在 `LoadAllConfigs` 方法中添加配置加载代码：
 
-在 `LuckyCalculator.cs` 的 `FeatureDisplayNames` 字典中添加新映射：
+```csharp
+DomainManager.Mod.GetSetting(modIdStr, "catchGrasshopper", ref catchGrasshopper);
+DebugLog.Info($"配置加载: catchGrasshopper = {catchGrasshopper}");
+```
+
+## 第三步：更新功能显示名称映射
+
+在 `src/Shared/LuckyCalculator.cs` 的 `FeatureDisplayNames` 字典中添加新映射：
 
 ```csharp
 private static readonly Dictionary<string, string> FeatureDisplayNames = new Dictionary<string, string>
@@ -50,9 +85,26 @@ private static readonly Dictionary<string, string> FeatureDisplayNames = new Dic
 };
 ```
 
+**注意**: LuckyCalculator 现在位于 Shared 项目中，两个项目共享此配置。
+
+## 关于 Shared 文件夹
+
+`src/Shared/` 文件夹包含两个项目共享的代码：
+- `LuckyCalculator.cs` - 气运计算逻辑
+- `LuckyRandomHelper.cs` - 随机数辅助方法
+- `PatchBuilder.cs` - 补丁构建器
+- `PatchPresets.cs` - 预设的方法信息
+- `DebugLog.cs` - 日志输出
+- `IConfigProvider.cs` - 配置提供者接口
+- `TranspilerHelper.cs` - Transpiler 辅助工具
+
+这些文件会被两个项目同时编译，无需重复维护。
+
 ## 第四步：创建功能专用补丁类
 
-创建新文件 `src/Features/Resources/CatchGrasshopperPatch.cs`：
+**对于 QuantumMaster 项目**，创建新文件 `src/QuantumMaster/Features/Resources/CatchGrasshopperPatch.cs`：
+
+**对于 CombatMaster 项目**，创建新文件 `src/CombatMaster/Features/Combat/SomeFeaturePatch.cs`：
 
 ```csharp
 /*
@@ -64,6 +116,7 @@ private static readonly Dictionary<string, string> FeatureDisplayNames = new Dic
 using System;
 using HarmonyLib;
 using Redzen.Random;
+using QuantumMaster.Shared;
 
 namespace QuantumMaster.Features.Resources
 {
@@ -148,24 +201,39 @@ namespace QuantumMaster.Features.Resources
 }
 ```
 
-## 第五步：更新 QuantumMaster.cs 配置映射
+**注意事项**：
+- 确保添加了 `using QuantumMaster.Shared;` 引用
+- 如果是 CombatMaster 项目，应使用 `CombatConfigManager.IsFeatureEnabled` 而不是 `ConfigManager.IsFeatureEnabled`
+- 根据功能性质选择合适的命名空间（如 `Features.Combat` 用于战斗功能）
+```
 
-在 `QuantumMaster.cs` 的 `patchBuilderMappings` 字典中添加新映射：
+## 第五步：更新主类配置映射
+
+**对于 QuantumMaster 项目**，在 `src/QuantumMaster/QuantumMaster.cs` 的 `patchBuilderMappings` 字典中添加新映射：
+
+**对于 CombatMaster 项目**，在 `src/CombatMaster/CombatMaster.cs` 的 `patchBuilderMappings` 字典中添加新映射：
 
 ```csharp
 private readonly Dictionary<string, (System.Func<Harmony, bool> patchMethod, System.Func<bool> condition)> patchBuilderMappings = new Dictionary<string, (System.Func<Harmony, bool>, System.Func<bool>)>
 {
     // ... 现有映射
     
-    // Resources 模块
+    // Resources 模块 (QuantumMaster)
     { "CollectResource", (Features.Resources.CollectResourcePatch.Apply, () => ConfigManager.IsFeatureEnabled("collectResource")) },
     { "UpgradeCollectMaterial", (Features.Resources.UpgradeCollectMaterialPatch.Apply, () => ConfigManager.IsFeatureEnabled("collectResource")) },
     { "GetCollectResourceAmount", (Features.Resources.GetCollectResourceAmountPatch.Apply, () => ConfigManager.IsFeatureEnabled("GetCollectResourceAmount")) },
     { "catchGrasshopper", (Features.Resources.CatchGrasshopperPatch.Apply, () => ConfigManager.IsFeatureEnabled("catchGrasshopper")) },
     
+    // 或者 Combat 模块 (CombatMaster)
+    // { "combatFeature", (Features.Combat.SomeFeaturePatch.Apply, () => CombatConfigManager.IsFeatureEnabled("combatFeature")) },
+    
     // ... 其他映射
 };
 ```
+
+**注意**：
+- QuantumMaster 项目使用 `ConfigManager.IsFeatureEnabled`
+- CombatMaster 项目使用 `CombatConfigManager.IsFeatureEnabled`
 
 ## 第六步：【重要】更新功能描述文件 (README.md)
 
@@ -182,9 +250,21 @@ private readonly Dictionary<string, (System.Func<Harmony, bool> patchMethod, Sys
 
 ## 第七步：编译和测试
 
-1. 编译项目确保没有语法错误：
+1. 编译对应的项目确保没有语法错误：
+
+**编译 QuantumMaster 项目**：
 ```powershell
-dotnet build
+dotnet build QuantumMaster.csproj
+```
+
+**编译 CombatMaster 项目**：
+```powershell
+dotnet build CombatMaster.csproj
+```
+
+**编译两个项目**：
+```powershell
+dotnet build QuantumMaster.sln
 ```
 
 2. 在游戏中测试功能是否正常工作
@@ -284,5 +364,43 @@ public void SomeMethod()
 3. **替换次数准确**: 仔细计算目标方法中的调用次数
 4. **功能独立性**: 每个功能应该有独立的补丁类
 5. **向后兼容**: 确保新功能不会破坏现有功能
+6. **项目选择**: 根据功能性质选择正确的项目（QuantumMaster vs CombatMaster）
+7. **配置管理器**: 使用对应项目的配置管理器（ConfigManager vs CombatConfigManager）
+8. **Shared 引用**: 补丁类中需要添加 `using QuantumMaster.Shared;` 引用
+9. **配置文件**: 确保在正确的配置文件中添加设置项（Config.lua vs Config.combat.lua）
+
+## 架构说明
+
+重构后的项目采用以下架构：
+
+```
+QuantumMaster/
+├── QuantumMaster.csproj           # 主项目文件
+├── CombatMaster.csproj            # 战斗项目文件
+├── Config.lua                     # QuantumMaster 配置
+├── Config.combat.lua              # CombatMaster 配置
+└── src/
+    ├── QuantumMaster/             # 主项目代码
+    │   ├── QuantumMaster.cs
+    │   ├── ConfigManager.cs
+    │   ├── ConfigManagerAdapter.cs
+    │   └── Features/
+    ├── CombatMaster/              # 战斗项目代码
+    │   ├── CombatMaster.cs
+    │   ├── CombatConfigManager.cs
+    │   ├── CombatConfigManagerAdapter.cs
+    │   └── Features/
+    └── Shared/                    # 共享代码
+        ├── LuckyCalculator.cs
+        ├── PatchBuilder.cs
+        ├── IConfigProvider.cs
+        └── ...
+```
+
+这种架构的优势：
+- **代码复用**: 共享的逻辑（如气运计算）不需要重复实现
+- **功能分离**: 主功能和战斗功能分开管理，降低复杂度
+- **独立配置**: 每个项目有独立的配置文件和配置管理器
+- **灵活部署**: 用户可以选择只安装需要的功能模块
 
 通过遵循这个流程，可以快速且正确地添加新的 PatchBuilder 功能。

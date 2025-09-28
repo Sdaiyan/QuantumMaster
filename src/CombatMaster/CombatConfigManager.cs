@@ -13,25 +13,9 @@ namespace CombatMaster
         // 气运等级
         public static int LuckyLevel = 7;
 
-        // 战斗相关功能开关 - 示例配置项，可根据需要添加更多
-        public static int CombatLucky = 0;          // 战斗幸运加成
-        public static int WeaponDurability = 3;    // 武器耐久控制
-        public static int ArmorDurability = 3;     // 护甲耐久控制
-        public static int CombatRead = 0;          // 战斗中读书
-        public static int CombatQiQrt = 0;         // 战斗中周天运转
-        public static int LootDrop = 0;            // 战利品掉落
-        public static int LifeSkillCombat = 0;     // 生活技能战斗应用
-
         // 功能开关映射表 - 将功能名映射到对应的配置字段
         private static readonly Dictionary<string, string> FeatureMap = new Dictionary<string, string>
         {
-            { "combatLucky", "CombatLucky" },
-            { "weaponDurability", "WeaponDurability" },
-            { "armorDurability", "ArmorDurability" },
-            { "combatRead", "CombatRead" },
-            { "combatQiQrt", "CombatQiQrt" },
-            { "lootDrop", "LootDrop" },
-            { "lifeSkillCombat", "LifeSkillCombat" }
         };
 
         /// <summary>
@@ -45,28 +29,6 @@ namespace CombatMaster
             // 加载气运等级
             DomainManager.Mod.GetSetting(modIdStr, "CombatLuckyLevel", ref LuckyLevel);
             DebugLog.Info($"[CombatMaster] 气运等级: {LuckyLevel}");
-
-            // 加载战斗相关配置
-            DomainManager.Mod.GetSetting(modIdStr, "combatLucky", ref CombatLucky);
-            DebugLog.Info($"[CombatMaster] 战斗幸运加成: {CombatLucky}");
-
-            DomainManager.Mod.GetSetting(modIdStr, "weaponDurability", ref WeaponDurability);
-            DebugLog.Info($"[CombatMaster] 武器耐久控制: {WeaponDurability}");
-
-            DomainManager.Mod.GetSetting(modIdStr, "armorDurability", ref ArmorDurability);
-            DebugLog.Info($"[CombatMaster] 护甲耐久控制: {ArmorDurability}");
-
-            DomainManager.Mod.GetSetting(modIdStr, "combatRead", ref CombatRead);
-            DebugLog.Info($"[CombatMaster] 战斗中读书: {CombatRead}");
-
-            DomainManager.Mod.GetSetting(modIdStr, "combatQiQrt", ref CombatQiQrt);
-            DebugLog.Info($"[CombatMaster] 战斗中周天运转: {CombatQiQrt}");
-
-            DomainManager.Mod.GetSetting(modIdStr, "lootDrop", ref LootDrop);
-            DebugLog.Info($"[CombatMaster] 战利品掉落: {LootDrop}");
-
-            DomainManager.Mod.GetSetting(modIdStr, "lifeSkillCombat", ref LifeSkillCombat);
-            DebugLog.Info($"[CombatMaster] 生活技能战斗应用: {LifeSkillCombat}");
 
             DebugLog.Info("[CombatMaster] 所有配置项加载完成");
         }
@@ -117,13 +79,6 @@ namespace CombatMaster
         {
             switch (configKey)
             {
-                case "CombatLucky": return CombatLucky;
-                case "WeaponDurability": return WeaponDurability;
-                case "ArmorDurability": return ArmorDurability;
-                case "CombatRead": return CombatRead;
-                case "CombatQiQrt": return CombatQiQrt;
-                case "LootDrop": return LootDrop;
-                case "LifeSkillCombat": return LifeSkillCombat;
                 default: 
                     DebugLog.Warning($"[CombatMaster] 未知的配置键: {configKey}");
                     return 0;
