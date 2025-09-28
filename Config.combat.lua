@@ -35,7 +35,7 @@ return {
             SettingType = "Dropdown",
             Key = "JieQingKuaiJian",
             DisplayName = "【气运】界青快剑重复触发概率增加",
-            Description = "界青快剑重复触发概率增加",
+            Description = "界青快剑重复触发概率增加（理论上最多连发3次，加上主动释放的话一共4次）",
             Options = {
                 "跟随全局",
                 "命途多舛",

@@ -5,6 +5,9 @@ CombatMaster is a specialized version of the QuantumMaster project, focusing exc
 
 ## Features
 
+### Combat Skill Enhancement
+【Luck】Jieqing Swift Sword Repeat Trigger Probability Increase: Increases the probability of Jieqing Swift Sword's repeat trigger effect (theoretically up to 3 consecutive triggers, counting the initial active use as 4 times total)
+
 ## Installation
 1. Ensure game version compatibility
 2. Place MOD files in the game's MOD directory
