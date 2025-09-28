@@ -4,13 +4,6 @@
 CombatMaster is a specialized version of the QuantumMaster project, focusing exclusively on combat-related enhancements for The Scroll of Taiwu.
 
 ## Features
-- **Combat Luck System**: Independent combat luck level control
-- **Weapon Durability Optimization**: Reduce weapon durability consumption based on luck
-- **Armor Durability Optimization**: Reduce armor durability consumption based on luck
-- **Combat Reading**: Enhanced probability of reading during combat
-- **Combat Qi Circulation**: Improved success rate of Qi circulation in combat
-- **Loot Drop Enhancement**: Optimized loot drop probabilities
-- **Life Skill Combat Application**: Enhanced effects of life skills like teaching and reading in combat
 
 ## Installation
 1. Ensure game version compatibility

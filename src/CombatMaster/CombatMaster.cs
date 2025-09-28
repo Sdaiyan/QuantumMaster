@@ -69,18 +69,16 @@ namespace CombatMaster
         private readonly Dictionary<string, (System.Type patchType, System.Func<bool> condition)> patchConfigMappings = 
             new Dictionary<string, (System.Type, System.Func<bool>)>
         {
-            // TODO: 在这里添加战斗相关的Class补丁
-            // 示例：
-            // { "combatFeature1", (typeof(Features.Combat.SomeFeaturePatch), () => CombatConfigManager.IsFeatureEnabled("combatFeature1")) },
+            // 战斗相关的Class补丁
+            { "JieQingKuaiJian", (typeof(Features.Combat.JieQingKuaiJianPatch), () => CombatConfigManager.IsFeatureEnabled("JieQingKuaiJian")) },
         };
 
         // PatchBuilder 补丁配置映射表 - 目前为空，后续添加战斗相关补丁
         private readonly Dictionary<string, (System.Func<Harmony, bool> patchMethod, System.Func<bool> condition)> patchBuilderMappings = 
             new Dictionary<string, (System.Func<Harmony, bool>, System.Func<bool>)>
         {
-            // TODO: 在这里添加战斗相关的PatchBuilder补丁
-            // 示例：
-            // { "combatFeature2", (Features.Combat.SomeFeaturePatch.Apply, () => CombatConfigManager.IsFeatureEnabled("combatFeature2")) },
+            // 战斗相关的PatchBuilder补丁
+            { "JieQingKuaiJianBuilder", (Features.Combat.JieQingKuaiJianPatch.Apply, () => CombatConfigManager.IsFeatureEnabled("JieQingKuaiJian")) },
         };
 
         // 应用 class 形式的补丁

@@ -30,6 +30,24 @@ return {
                 "气运之子"
             },
             DefaultValue = 7,
+        },
+        {
+            SettingType = "Dropdown",
+            Key = "JieQingKuaiJian",
+            DisplayName = "【气运】界青快剑重复触发概率增加",
+            Description = "界青快剑重复触发概率增加",
+            Options = {
+                "跟随全局",
+                "命途多舛",
+                "时运不济",
+                "顺风顺水",
+                "左右逢源",
+                "心想事成",
+                "福星高照",
+                "洪福齐天",
+                "气运之子"
+            },
+            DefaultValue = 0,
         }
     },
 }

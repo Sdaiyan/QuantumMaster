@@ -13,9 +13,13 @@ namespace CombatMaster
         // 气运等级
         public static int LuckyLevel = 7;
 
+        // 界青快剑重复触发概率气运设置
+        public static int JieQingKuaiJian = 0;
+
         // 功能开关映射表 - 将功能名映射到对应的配置字段
         private static readonly Dictionary<string, string> FeatureMap = new Dictionary<string, string>
         {
+            { "JieQingKuaiJian", "JieQingKuaiJian" }
         };
 
         /// <summary>
@@ -29,6 +33,10 @@ namespace CombatMaster
             // 加载气运等级
             DomainManager.Mod.GetSetting(modIdStr, "CombatLuckyLevel", ref LuckyLevel);
             DebugLog.Info($"[CombatMaster] 气运等级: {LuckyLevel}");
+
+            // 加载界青快剑配置
+            DomainManager.Mod.GetSetting(modIdStr, "JieQingKuaiJian", ref JieQingKuaiJian);
+            DebugLog.Info($"[CombatMaster] 界青快剑重复触发概率: {JieQingKuaiJian}");
 
             DebugLog.Info("[CombatMaster] 所有配置项加载完成");
         }
@@ -79,6 +87,7 @@ namespace CombatMaster
         {
             switch (configKey)
             {
+                case "JieQingKuaiJian": return JieQingKuaiJian;
                 default: 
                     DebugLog.Warning($"[CombatMaster] 未知的配置键: {configKey}");
                     return 0;
