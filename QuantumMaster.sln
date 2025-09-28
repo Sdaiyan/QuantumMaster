@@ -5,6 +5,8 @@ VisualStudioVersion = 17.6.33801.468
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuantumMaster", "QuantumMaster.csproj", "{0FC069EE-6948-4383-AFBA-8F2B4663F73A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CombatMaster", "CombatMaster.csproj", "{1234ABCD-5678-90EF-GHIJ-KLMNOPQRSTUV}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{0FC069EE-6948-4383-AFBA-8F2B4663F73A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0FC069EE-6948-4383-AFBA-8F2B4663F73A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0FC069EE-6948-4383-AFBA-8F2B4663F73A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1234ABCD-5678-90EF-GHIJ-KLMNOPQRSTUV}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1234ABCD-5678-90EF-GHIJ-KLMNOPQRSTUV}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1234ABCD-5678-90EF-GHIJ-KLMNOPQRSTUV}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1234ABCD-5678-90EF-GHIJ-KLMNOPQRSTUV}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -6,9 +6,9 @@
     <Nullable>annotations</Nullable>
     <PlatformTarget>x64</PlatformTarget>
     <TaiwuPath>D:\tw</TaiwuPath>
-    <OutputPath>$(TaiwuPath)\Mod\[测试]天机秘术(Reborn)\Plugins</OutputPath>
+    <OutputPath>$(TaiwuPath)\Mod\[测试]战斗大师(Reborn)\Plugins</OutputPath>
     <ProduceReferenceAssembly>False</ProduceReferenceAssembly>
-    <PackageOutputPath>$(TaiwuPath)\Mod\[测试]天机秘术(Reborn)\Plugins</PackageOutputPath>
+    <PackageOutputPath>$(TaiwuPath)\Mod\[测试]战斗大师(Reborn)\Plugins</PackageOutputPath>
     <BaseIntermediateOutputPath></BaseIntermediateOutputPath>
     <AnalysisLevel>none</AnalysisLevel>
     <EnableNETAnalyzers>False</EnableNETAnalyzers>
@@ -17,13 +17,13 @@
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <AssemblyName>QuantumMaster</AssemblyName>
+    <AssemblyName>CombatMaster</AssemblyName>
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
   </PropertyGroup>
 
   <ItemGroup>
-    <!-- 包含QuantumMaster专属代码 -->
-    <Compile Include="src\QuantumMaster\**\*.cs" />
+    <!-- 包含CombatMaster专属代码 -->
+    <Compile Include="src\CombatMaster\**\*.cs" />
     <!-- 包含共享代码 -->
     <Compile Include="src\Shared\**\*.cs" />
   </ItemGroup>

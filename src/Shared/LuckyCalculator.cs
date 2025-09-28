@@ -75,9 +75,10 @@ namespace QuantumMaster.Shared
         /// <returns>调整后的随机数</returns>
         public static int Calc_Random_Next_2Args_Max_By_Luck(int min, int max, string featureKey = null)
         {
-            var luckyLevel = featureKey != null ? ConfigManager.GetFeatureLuckLevel(featureKey) : ConfigManager.LuckyLevel;
-            var luck = QuantumMaster.LuckyLevelFactor[luckyLevel];
-            var randomValue = QuantumMaster.Random.Next(min, max);
+            var config = ConfigProvider.Instance;
+            var luckyLevel = featureKey != null ? config.GetFeatureLuckLevel(featureKey) : config.GlobalLuckyLevel;
+            var luck = config.LuckyLevelFactor[luckyLevel];
+            var randomValue = config.Random.Next(min, max);
             var featureName = GetFeatureName(featureKey);
             if (luck != 0)
             {
@@ -105,9 +106,10 @@ namespace QuantumMaster.Shared
         /// <returns>调整后的随机数</returns>
         public static int Calc_Random_Next_2Args_Min_By_Luck(int min, int max, string featureKey = null)
         {
-            var luckyLevel = featureKey != null ? ConfigManager.GetFeatureLuckLevel(featureKey) : ConfigManager.LuckyLevel;
-            var luck = QuantumMaster.LuckyLevelFactor[luckyLevel];
-            var randomValue = QuantumMaster.Random.Next(min, max);
+            var config = ConfigProvider.Instance;
+            var luckyLevel = featureKey != null ? config.GetFeatureLuckLevel(featureKey) : config.GlobalLuckyLevel;
+            var luck = config.LuckyLevelFactor[luckyLevel];
+            var randomValue = config.Random.Next(min, max);
             var featureName = GetFeatureName(featureKey);
             if (luck != 0)
             {
@@ -134,9 +136,10 @@ namespace QuantumMaster.Shared
         /// <returns>调整后的随机数</returns>
         public static int Calc_Random_Next_1Arg_Max_By_Luck(int max, string featureKey = null)
         {
-            var luckyLevel = featureKey != null ? ConfigManager.GetFeatureLuckLevel(featureKey) : ConfigManager.LuckyLevel;
-            var luck = QuantumMaster.LuckyLevelFactor[luckyLevel];
-            var randomValue = QuantumMaster.Random.Next(0, max);
+            var config = ConfigProvider.Instance;
+            var luckyLevel = featureKey != null ? config.GetFeatureLuckLevel(featureKey) : config.GlobalLuckyLevel;
+            var luck = config.LuckyLevelFactor[luckyLevel];
+            var randomValue = config.Random.Next(0, max);
             var featureName = GetFeatureName(featureKey);
             if (luck != 0)
             {
@@ -163,9 +166,10 @@ namespace QuantumMaster.Shared
         /// <returns>调整后的随机数</returns>
         public static int Calc_Random_Next_1Arg_0_By_Luck(int max, string featureKey = null)
         {
-            var luckyLevel = featureKey != null ? ConfigManager.GetFeatureLuckLevel(featureKey) : ConfigManager.LuckyLevel;
-            var luck = QuantumMaster.LuckyLevelFactor[luckyLevel];
-            var randomValue = QuantumMaster.Random.Next(0, max);
+            var config = ConfigProvider.Instance;
+            var luckyLevel = featureKey != null ? config.GetFeatureLuckLevel(featureKey) : config.GlobalLuckyLevel;
+            var luck = config.LuckyLevelFactor[luckyLevel];
+            var randomValue = config.Random.Next(0, max);
             var featureName = GetFeatureName(featureKey);
             if (luck != 0)
             {
@@ -196,9 +200,10 @@ namespace QuantumMaster.Shared
             if (percent <= 0) return false;
             if (percent >= 100) return true;
 
-            var luckyLevel = featureKey != null ? ConfigManager.GetFeatureLuckLevel(featureKey) : ConfigManager.LuckyLevel;
-            var luck = QuantumMaster.LuckyLevelFactor[luckyLevel];
-            var randomValue = QuantumMaster.Random.Next(0, 100);
+            var config = ConfigProvider.Instance;
+            var luckyLevel = featureKey != null ? config.GetFeatureLuckLevel(featureKey) : config.GlobalLuckyLevel;
+            var luck = config.LuckyLevelFactor[luckyLevel];
+            var randomValue = config.Random.Next(0, 100);
             var originalResult = randomValue <= percent;
             var featureName = GetFeatureName(featureKey);
             if (luck != 0)
@@ -234,9 +239,10 @@ namespace QuantumMaster.Shared
             if (percent <= 0) return false;
             if (percent >= 100) return true;
 
-            var luckyLevel = featureKey != null ? ConfigManager.GetFeatureLuckLevel(featureKey) : ConfigManager.LuckyLevel;
-            var luck = QuantumMaster.LuckyLevelFactor[luckyLevel];
-            var randomValue = QuantumMaster.Random.Next(0, 100);
+            var config = ConfigProvider.Instance;
+            var luckyLevel = featureKey != null ? config.GetFeatureLuckLevel(featureKey) : config.GlobalLuckyLevel;
+            var luck = config.LuckyLevelFactor[luckyLevel];
+            var randomValue = config.Random.Next(0, 100);
             var originalResult = randomValue <= percent;
             var featureName = GetFeatureName(featureKey);
             if (luck != 0)
@@ -272,9 +278,10 @@ namespace QuantumMaster.Shared
             if (chance <= 0) return false;
             if (chance >= total) return true;
 
-            var luckyLevel = featureKey != null ? ConfigManager.GetFeatureLuckLevel(featureKey) : ConfigManager.LuckyLevel;
-            var luck = QuantumMaster.LuckyLevelFactor[luckyLevel];
-            var randomValue = QuantumMaster.Random.Next(0, total);
+            var config = ConfigProvider.Instance;
+            var luckyLevel = featureKey != null ? config.GetFeatureLuckLevel(featureKey) : config.GlobalLuckyLevel;
+            var luck = config.LuckyLevelFactor[luckyLevel];
+            var randomValue = config.Random.Next(0, total);
             var originalPercent = (float)chance / total * 100;
             var originalResult = randomValue <= chance;
             var featureName = GetFeatureName(featureKey);
@@ -311,9 +318,10 @@ namespace QuantumMaster.Shared
             if (chance <= 0) return false;
             if (chance >= total) return true;
 
-            var luckyLevel = featureKey != null ? ConfigManager.GetFeatureLuckLevel(featureKey) : ConfigManager.LuckyLevel;
-            var luck = QuantumMaster.LuckyLevelFactor[luckyLevel];
-            var randomValue = QuantumMaster.Random.Next(0, total);
+            var config = ConfigProvider.Instance;
+            var luckyLevel = featureKey != null ? config.GetFeatureLuckLevel(featureKey) : config.GlobalLuckyLevel;
+            var luck = config.LuckyLevelFactor[luckyLevel];
+            var randomValue = config.Random.Next(0, total);
             var originalPercent = (float)chance / total * 100;
             var originalResult = randomValue <= chance;
             var featureName = GetFeatureName(featureKey);
@@ -346,9 +354,10 @@ namespace QuantumMaster.Shared
         /// <returns>调整后的随机数</returns>
         public static int Calc_Random_Next_2Args_Max_By_Luck_Static(int min, int max, string featureKey = null)
         {
-            var luckyLevel = featureKey != null ? ConfigManager.GetFeatureLuckLevel(featureKey) : ConfigManager.LuckyLevel;
-            var luck = QuantumMaster.LuckyLevelFactor[luckyLevel];
-            var randomValue = QuantumMaster.Random.Next(min, max);
+            var config = ConfigProvider.Instance;
+            var luckyLevel = featureKey != null ? config.GetFeatureLuckLevel(featureKey) : config.GlobalLuckyLevel;
+            var luck = config.LuckyLevelFactor[luckyLevel];
+            var randomValue = config.Random.Next(min, max);
             var featureName = GetFeatureName(featureKey);
             if (luck != 0)
             {

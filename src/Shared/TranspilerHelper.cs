@@ -7,7 +7,7 @@ using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
 using TaiwuModdingLib.Core.Plugin;
-using QuantumMaster;  // 引用新的命名空间
+
 
 namespace QuantumMaster.Shared
 {

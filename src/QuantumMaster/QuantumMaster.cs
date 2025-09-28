@@ -61,6 +61,10 @@ namespace QuantumMaster
 		public override void Initialize()
 		{
 			UpdateConfig();
+			
+			// 设置配置提供者，供 Shared 代码使用
+			ConfigProvider.SetProvider(new ConfigManagerAdapter());
+			
 			harmony = new Harmony("QuantumMaster");
 
 			if (ConfigManager.LuckyLevel == 2)

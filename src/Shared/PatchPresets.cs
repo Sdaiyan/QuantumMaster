@@ -1,7 +1,6 @@
 using GameData.Utilities;
 using Redzen.Random;
 using System;
-using QuantumMaster;
 
 namespace QuantumMaster.Shared
 {

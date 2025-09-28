@@ -9,7 +9,7 @@ namespace QuantumMaster.Shared
     {
         public static void Info(string message)
         {
-            if (QuantumMaster.debug)
+            if (ConfigProvider.Instance.Debug)
             {
                 AdaptableLog.Info(message);
             }
@@ -17,7 +17,7 @@ namespace QuantumMaster.Shared
 
         public static void Warning(string message)
         {
-            if (QuantumMaster.debug)
+            if (ConfigProvider.Instance.Debug)
             {
                 AdaptableLog.Warning(message);
             }
