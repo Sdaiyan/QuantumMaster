@@ -48,6 +48,24 @@ return {
                 "气运之子"
             },
             DefaultValue = 0,
+        },
+        {
+            SettingType = "Dropdown",
+            Key = "XinWuDingYi",
+            DisplayName = "【气运】心无定意获得式或者减少式消耗的效果生效概率增加",
+            Description = "心无定意获得式或者减少式消耗的效果生效概率增加",
+            Options = {
+                "跟随全局",
+                "命途多舛",
+                "时运不济",
+                "顺风顺水",
+                "左右逢源",
+                "心想事成",
+                "福星高照",
+                "洪福齐天",
+                "气运之子"
+            },
+            DefaultValue = 0,
         }
     },
 }

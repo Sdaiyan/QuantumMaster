@@ -7,6 +7,7 @@ CombatMaster is a specialized version of the QuantumMaster project, focusing exc
 
 ### Combat Skill Enhancement
 【Luck】Jieqing Swift Sword Repeat Trigger Probability Increase: Increases the probability of Jieqing Swift Sword's repeat trigger effect (theoretically up to 3 consecutive triggers, counting the initial active use as 4 times total)
+【Luck】Xinwudingyi Style Acquisition or Consumption Reduction Effect Probability Increase: Increases the probability of Xinwudingyi's style acquisition or consumption reduction effects taking place
 
 ## Installation
 1. Ensure game version compatibility

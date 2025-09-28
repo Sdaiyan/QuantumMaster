@@ -52,7 +52,8 @@ namespace QuantumMaster.Shared
             { "UpdateResourceBlockBuildingCoreProducing", "村庄资源点获得心材概率" },
             { "ChoosyGetMaterial", "精挑细选品质升级" },
             { "AddChoosyRemainUpgradeData", "精挑细选过月累计最大" },
-            { "JieQingKuaiJian", "界青快剑重复触发概率" }
+            { "JieQingKuaiJian", "界青快剑重复触发概率" },
+            { "XinWuDingYi", "心无定意获得式或减少式消耗效果生效概率" }
         };
 
         /// <summary>

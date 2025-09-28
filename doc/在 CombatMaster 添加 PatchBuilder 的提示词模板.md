@@ -17,3 +17,7 @@
 `Description = 界青快剑重复触发概率增加`
 
 添加的逻辑需要参考 src\CombatMaster\Features\Combat\JieQingKuaiJianPatch.cs
+
+注意需要在 patch 的 prefix 获取 CharacterId 上下文，然后在 postfix 清空。
+
+CharacterId 的获取方式是直接通过 harmony 提供的 __instance.CharacterId 可以拿到

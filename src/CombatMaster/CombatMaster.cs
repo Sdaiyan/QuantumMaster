@@ -71,6 +71,7 @@ namespace CombatMaster
         {
             // 战斗相关的Class补丁
             { "JieQingKuaiJian", (typeof(Features.Combat.JieQingKuaiJianPatch), () => CombatConfigManager.IsFeatureEnabled("JieQingKuaiJian")) },
+            { "XinWuDingYi", (typeof(Features.Combat.XinWuDingYiPatch), () => CombatConfigManager.IsFeatureEnabled("XinWuDingYi")) },
         };
 
         // PatchBuilder 补丁配置映射表 - 目前为空，后续添加战斗相关补丁
@@ -79,6 +80,7 @@ namespace CombatMaster
         {
             // 战斗相关的PatchBuilder补丁
             { "JieQingKuaiJianBuilder", (Features.Combat.JieQingKuaiJianPatch.Apply, () => CombatConfigManager.IsFeatureEnabled("JieQingKuaiJian")) },
+            { "XinWuDingYiBuilder", (Features.Combat.XinWuDingYiPatch.Apply, () => CombatConfigManager.IsFeatureEnabled("XinWuDingYi")) },
         };
 
         // 应用 class 形式的补丁
