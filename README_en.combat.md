@@ -11,6 +11,9 @@ CombatMaster is a specialized version of the QuantumMaster project, focusing exc
 【Luck】Nine Deaths Soul Separation Hand Secret Trigger Probability Increase: Increases the probability of Nine Deaths Soul Separation Hand triggering secret events
 【Luck】Leizu Cocoon Peeling Style Equipment Removal Probability Increase: Increases the probability of Leizu Cocoon Peeling Style removing equipment from enemies
 
+### Combat Strategy Enhancement
+Leizu Cocoon Peeling Style Equipment Removal Priority - Prioritize Appearance Clothing: When Leizu Cocoon Peeling Style removes equipment, prioritize removing appearance clothing items
+
 ## Installation
 1. Ensure game version compatibility
 2. Place MOD files in the game's MOD directory

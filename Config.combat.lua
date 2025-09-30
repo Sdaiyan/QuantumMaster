@@ -102,6 +102,13 @@ return {
                 "气运之子"
             },
             DefaultValue = 0,
+        },
+        {
+            SettingType = "Toggle",
+            Key = "LeiZuBoJianShiCloth",
+            DisplayName = "嫘祖剥茧式脱装备时，是否优先脱外观的衣服",
+            Description = "嫘祖剥茧式脱装备时，是否优先脱外观的衣服",
+            DefaultValue = true,
         }
     },
 }
