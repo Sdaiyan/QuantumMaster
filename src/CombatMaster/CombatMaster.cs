@@ -86,6 +86,7 @@ namespace CombatMaster
             { "XinWuDingYiBuilder", (Features.Combat.XinWuDingYiPatch.Apply, () => CombatConfigManager.IsFeatureEnabled("XinWuDingYi")) },
             { "JiuSiLiHunShouBuilder", (Features.Combat.JiuSiLiHunShouPatch.Apply, () => CombatConfigManager.IsFeatureEnabled("JiuSiLiHunShou")) },
             { "LeiZuBoJianShiBuilder", (Features.Combat.LeiZuBoJianShiPatch.Apply, () => CombatConfigManager.IsFeatureEnabled("LeiZuBoJianShi")) },
+            { "YaoJiYunYuShiBuilder", (Features.Combat.YaoJiYunYuShiPatch.Apply, () => CombatConfigManager.IsFeatureEnabled("YaoJiYunYuShi")) },
         };
 
         // 应用 class 形式的补丁

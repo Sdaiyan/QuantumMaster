@@ -55,7 +55,8 @@ namespace QuantumMaster.Shared
             { "JieQingKuaiJian", "界青快剑重复触发概率" },
             { "XinWuDingYi", "心无定意获得式或减少式消耗效果生效概率" },
             { "JiuSiLiHunShou", "九死离魂手触发秘闻概率" },
-            { "LeiZuBoJianShi", "嫘祖剥茧式脱装备概率" }
+            { "LeiZuBoJianShi", "嫘祖剥茧式脱装备概率" },
+            { "YaoJiYunYuShi", "瑶姬云雨式爱慕概率" }
         };
 
         /// <summary>

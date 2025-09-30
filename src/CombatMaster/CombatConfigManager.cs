@@ -28,13 +28,17 @@ namespace CombatMaster
         // 嫘祖剝茧式优先脱外观衣服设置
         public static bool LeiZuBoJianShiCloth = true;
 
+        // 瑶姬云雨式爱慕概率气运设置
+        public static int YaoJiYunYuShi = 0;
+
         // 功能开关映射表 - 将功能名映射到对应的配置字段
         private static readonly Dictionary<string, string> FeatureMap = new Dictionary<string, string>
         {
             { "JieQingKuaiJian", "JieQingKuaiJian" },
             { "XinWuDingYi", "XinWuDingYi" },
             { "JiuSiLiHunShou", "JiuSiLiHunShou" },
-            { "LeiZuBoJianShi", "LeiZuBoJianShi" }
+            { "LeiZuBoJianShi", "LeiZuBoJianShi" },
+            { "YaoJiYunYuShi", "YaoJiYunYuShi" }
         };
 
         /// <summary>
@@ -68,6 +72,10 @@ namespace CombatMaster
             // 加载嫘祖剝茧式优先脱衣服配置
             DomainManager.Mod.GetSetting(modIdStr, "LeiZuBoJianShiCloth", ref LeiZuBoJianShiCloth);
             DebugLog.Info($"[CombatMaster] 嫘祖剝茧式优先脱外观衣服: {LeiZuBoJianShiCloth}");
+
+            // 加载瑶姬云雨式配置
+            DomainManager.Mod.GetSetting(modIdStr, "YaoJiYunYuShi", ref YaoJiYunYuShi);
+            DebugLog.Info($"[CombatMaster] 瑶姬云雨式爱慕概率: {YaoJiYunYuShi}");
 
             DebugLog.Info("[CombatMaster] 所有配置项加载完成");
         }
@@ -122,6 +130,7 @@ namespace CombatMaster
                 case "XinWuDingYi": return XinWuDingYi;
                 case "JiuSiLiHunShou": return JiuSiLiHunShou;
                 case "LeiZuBoJianShi": return LeiZuBoJianShi;
+                case "YaoJiYunYuShi": return YaoJiYunYuShi;
                 default: 
                     DebugLog.Warning($"[CombatMaster] 未知的配置键: {configKey}");
                     return 0;
