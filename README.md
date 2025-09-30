@@ -99,6 +99,9 @@
 
 ---
 
+【开发者说明】
+如果您想要从源码编译此MOD，请参考 `SETUP.md` 文件了解如何配置开发环境。
+
 【MOD已开源】
 https://github.com/Sdaiyan/QuantumMaster/tree/reborn
 请遵守 GPL-3.0 license

@@ -2,3 +2,6 @@
 Debug
 Debug/*
 obj/*
+
+# 本地配置文件 - 包含个人的太吾绘卷路径
+Directory.Build.props

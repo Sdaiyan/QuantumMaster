@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project>
+  <!-- 
+    本地配置文件 - 请根据您的太吾绘卷安装路径修改 TaiwuPath
+    此文件不会被提交到版本控制系统
+    请复制此文件，并且重命名为 Directory.Build.props
+    配置的 TaiwuPath 就会生效
+  -->
+  <PropertyGroup>
+    <!-- 请修改为您的太吾绘卷安装路径 -->
+    <TaiwuPath>D:\tw</TaiwuPath>
+  </PropertyGroup>
+</Project>
