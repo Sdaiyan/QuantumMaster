@@ -6,9 +6,9 @@
     <Nullable>annotations</Nullable>
     <PlatformTarget>x64</PlatformTarget>
     <TaiwuPath>D:\tw</TaiwuPath>
-    <OutputPath>$(TaiwuPath)\Mod\[测试]战斗大师(Reborn)\Plugins</OutputPath>
+    <OutputPath>$(TaiwuPath)\Mod\[测试]十强武者(Reborn)\Plugins</OutputPath>
     <ProduceReferenceAssembly>False</ProduceReferenceAssembly>
-    <PackageOutputPath>$(TaiwuPath)\Mod\[测试]战斗大师(Reborn)\Plugins</PackageOutputPath>
+    <PackageOutputPath>$(TaiwuPath)\Mod\[测试]十强武者(Reborn)\Plugins</PackageOutputPath>
     <BaseIntermediateOutputPath></BaseIntermediateOutputPath>
     <AnalysisLevel>none</AnalysisLevel>
     <EnableNETAnalyzers>False</EnableNETAnalyzers>

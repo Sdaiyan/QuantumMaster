@@ -1,5 +1,5 @@
 return {
-    Title = "[测试]战斗大师-气运之子(Reborn)",
+    Title = "[测试]天机秘术-十强武者(Reborn)",
     Author = "dai",
     Cover = "cover2.jpg",
     BackendPlugins = {
@@ -72,6 +72,24 @@ return {
             Key = "JiuSiLiHunShou",
             DisplayName = "【气运】九死离魂手触发秘闻概率增加",
             Description = "九死离魂手触发秘闻概率增加",
+            Options = {
+                "跟随全局",
+                "命途多舛",
+                "时运不济",
+                "顺风顺水",
+                "左右逢源",
+                "心想事成",
+                "福星高照",
+                "洪福齐天",
+                "气运之子"
+            },
+            DefaultValue = 0,
+        },
+        {
+            SettingType = "Dropdown",
+            Key = "LeiZuBoJianShi",
+            DisplayName = "【气运】嫘祖剥茧式脱装备的概率增加",
+            Description = "嫘祖剥茧式脱装备的概率增加",
             Options = {
                 "跟随全局",
                 "命途多舛",
