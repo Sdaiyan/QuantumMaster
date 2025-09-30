@@ -75,6 +75,7 @@ namespace CombatMaster
             { "JiuSiLiHunShou", (typeof(Features.Combat.JiuSiLiHunShouPatch), () => CombatConfigManager.IsFeatureEnabled("JiuSiLiHunShou")) },
             { "LeiZuBoJianShi", (typeof(Features.Combat.LeiZuBoJianShiPatch), () => CombatConfigManager.IsFeatureEnabled("LeiZuBoJianShi")) },
             { "LeiZuBoJianShiCloth", (typeof(Features.Combat.LeiZuBoJianShiClothPatch), () => CombatConfigManager.LeiZuBoJianShiCloth) },
+            { "YueNvJianFa", (typeof(Features.Combat.YueNvJianFaPatch), () => CombatConfigManager.IsFeatureEnabled("YueNvJianFa")) },
         };
 
         // PatchBuilder 补丁配置映射表 - 目前为空，后续添加战斗相关补丁

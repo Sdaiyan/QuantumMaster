@@ -56,7 +56,8 @@ namespace QuantumMaster.Shared
             { "XinWuDingYi", "心无定意获得式或减少式消耗效果生效概率" },
             { "JiuSiLiHunShou", "九死离魂手触发秘闻概率" },
             { "LeiZuBoJianShi", "嫘祖剥茧式脱装备概率" },
-            { "YaoJiYunYuShi", "瑶姬云雨式爱慕概率" }
+            { "YaoJiYunYuShi", "瑶姬云雨式爱慕概率" },
+            { "YueNvJianFa", "越女剑法追击几率提升" }
         };
 
         /// <summary>
