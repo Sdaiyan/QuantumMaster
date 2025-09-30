@@ -53,7 +53,8 @@ namespace QuantumMaster.Shared
             { "ChoosyGetMaterial", "精挑细选品质升级" },
             { "AddChoosyRemainUpgradeData", "精挑细选过月累计最大" },
             { "JieQingKuaiJian", "界青快剑重复触发概率" },
-            { "XinWuDingYi", "心无定意获得式或减少式消耗效果生效概率" }
+            { "XinWuDingYi", "心无定意获得式或减少式消耗效果生效概率" },
+            { "JiuSiLiHunShou", "九死离魂手触发秘闻概率" }
         };
 
         /// <summary>

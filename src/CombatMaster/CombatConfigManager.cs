@@ -19,11 +19,15 @@ namespace CombatMaster
         // 心无定意获得式或者减少式消耗的效果生效概率气运设置
         public static int XinWuDingYi = 0;
 
+        // 九死离魂手触发秘闻概率气运设置
+        public static int JiuSiLiHunShou = 0;
+
         // 功能开关映射表 - 将功能名映射到对应的配置字段
         private static readonly Dictionary<string, string> FeatureMap = new Dictionary<string, string>
         {
             { "JieQingKuaiJian", "JieQingKuaiJian" },
-            { "XinWuDingYi", "XinWuDingYi" }
+            { "XinWuDingYi", "XinWuDingYi" },
+            { "JiuSiLiHunShou", "JiuSiLiHunShou" }
         };
 
         /// <summary>
@@ -45,6 +49,10 @@ namespace CombatMaster
             // 加载心无定意配置
             DomainManager.Mod.GetSetting(modIdStr, "XinWuDingYi", ref XinWuDingYi);
             DebugLog.Info($"[CombatMaster] 心无定意效果生效概率: {XinWuDingYi}");
+
+            // 加载九死离魂手配置
+            DomainManager.Mod.GetSetting(modIdStr, "JiuSiLiHunShou", ref JiuSiLiHunShou);
+            DebugLog.Info($"[CombatMaster] 九死离魂手触发秘闻概率: {JiuSiLiHunShou}");
 
             DebugLog.Info("[CombatMaster] 所有配置项加载完成");
         }
@@ -97,6 +105,7 @@ namespace CombatMaster
             {
                 case "JieQingKuaiJian": return JieQingKuaiJian;
                 case "XinWuDingYi": return XinWuDingYi;
+                case "JiuSiLiHunShou": return JiuSiLiHunShou;
                 default: 
                     DebugLog.Warning($"[CombatMaster] 未知的配置键: {configKey}");
                     return 0;
