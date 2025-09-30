@@ -76,6 +76,7 @@ namespace CombatMaster
             { "LeiZuBoJianShi", (typeof(Features.Combat.LeiZuBoJianShiPatch), () => CombatConfigManager.IsFeatureEnabled("LeiZuBoJianShi")) },
             { "LeiZuBoJianShiCloth", (typeof(Features.Combat.LeiZuBoJianShiClothPatch), () => CombatConfigManager.LeiZuBoJianShiCloth) },
             { "YueNvJianFa", (typeof(Features.Combat.YueNvJianFaPatch), () => CombatConfigManager.IsFeatureEnabled("YueNvJianFa")) },
+            { "JingHuaShuiYue", (typeof(Features.Combat.JingHuaShuiYuePatch), () => CombatConfigManager.IsFeatureEnabled("JingHuaShuiYue")) },
         };
 
         // PatchBuilder 补丁配置映射表 - 目前为空，后续添加战斗相关补丁
@@ -88,6 +89,7 @@ namespace CombatMaster
             { "JiuSiLiHunShouBuilder", (Features.Combat.JiuSiLiHunShouPatch.Apply, () => CombatConfigManager.IsFeatureEnabled("JiuSiLiHunShou")) },
             { "LeiZuBoJianShiBuilder", (Features.Combat.LeiZuBoJianShiPatch.Apply, () => CombatConfigManager.IsFeatureEnabled("LeiZuBoJianShi")) },
             { "YaoJiYunYuShiBuilder", (Features.Combat.YaoJiYunYuShiPatch.Apply, () => CombatConfigManager.IsFeatureEnabled("YaoJiYunYuShi")) },
+            { "JingHuaShuiYueBuilder", (Features.Combat.JingHuaShuiYuePatch.Apply, () => CombatConfigManager.IsFeatureEnabled("JingHuaShuiYue")) },
         };
 
         // 应用 class 形式的补丁

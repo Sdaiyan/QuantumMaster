@@ -12,6 +12,7 @@ CombatMaster is a specialized version of the QuantumMaster project, focusing exc
 【Luck】Leizu Cocoon Peeling Style Equipment Removal Probability Increase: Increases the probability of Leizu Cocoon Peeling Style removing equipment from enemies
 【Luck】Yaoji Cloud Rain Style Admiration Probability Increase: Increases the probability of Yaoji Cloud Rain Style's admiration effect triggering
 【Luck】Yue Nü Sword Technique Pursuit Chance Enhancement: Enhances the pursuit chance provided by Yue Nü Sword Technique
+【Luck】Jing Hua Shui Yue Absolute Deflection Probability Increase: Increases the absolute deflection probability of Jing Hua Shui Yue
 
 ### Combat Strategy Enhancement
 Leizu Cocoon Peeling Style Equipment Removal Priority - Prioritize Appearance Clothing: When Leizu Cocoon Peeling Style removes equipment, prioritize removing appearance clothing items

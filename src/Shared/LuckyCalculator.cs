@@ -57,7 +57,8 @@ namespace QuantumMaster.Shared
             { "JiuSiLiHunShou", "九死离魂手触发秘闻概率" },
             { "LeiZuBoJianShi", "嫘祖剥茧式脱装备概率" },
             { "YaoJiYunYuShi", "瑶姬云雨式爱慕概率" },
-            { "YueNvJianFa", "越女剑法追击几率提升" }
+            { "YueNvJianFa", "越女剑法追击几率提升" },
+            { "JingHuaShuiYue", "镜花水月绝对化解概率" }
         };
 
         /// <summary>

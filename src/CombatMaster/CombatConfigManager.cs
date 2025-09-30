@@ -34,6 +34,9 @@ namespace CombatMaster
         // 越女剑法追击几率提升气运设置
         public static int YueNvJianFa = 0;
 
+        // 镜花水月绝对化解概率气运设置
+        public static int JingHuaShuiYue = 0;
+
         // 功能开关映射表 - 将功能名映射到对应的配置字段
         private static readonly Dictionary<string, string> FeatureMap = new Dictionary<string, string>
         {
@@ -42,7 +45,8 @@ namespace CombatMaster
             { "JiuSiLiHunShou", "JiuSiLiHunShou" },
             { "LeiZuBoJianShi", "LeiZuBoJianShi" },
             { "YaoJiYunYuShi", "YaoJiYunYuShi" },
-            { "YueNvJianFa", "YueNvJianFa" }
+            { "YueNvJianFa", "YueNvJianFa" },
+            { "JingHuaShuiYue", "JingHuaShuiYue" }
         };
 
         /// <summary>
@@ -84,6 +88,10 @@ namespace CombatMaster
             // 加载越女剑法配置
             DomainManager.Mod.GetSetting(modIdStr, "YueNvJianFa", ref YueNvJianFa);
             DebugLog.Info($"[CombatMaster] 越女剑法追击几率提升: {YueNvJianFa}");
+
+            // 加载镜花水月配置
+            DomainManager.Mod.GetSetting(modIdStr, "JingHuaShuiYue", ref JingHuaShuiYue);
+            DebugLog.Info($"[CombatMaster] 镜花水月绝对化解概率: {JingHuaShuiYue}");
 
             DebugLog.Info("[CombatMaster] 所有配置项加载完成");
         }
@@ -140,6 +148,7 @@ namespace CombatMaster
                 case "LeiZuBoJianShi": return LeiZuBoJianShi;
                 case "YaoJiYunYuShi": return YaoJiYunYuShi;
                 case "YueNvJianFa": return YueNvJianFa;
+                case "JingHuaShuiYue": return JingHuaShuiYue;
                 default: 
                     DebugLog.Warning($"[CombatMaster] 未知的配置键: {configKey}");
                     return 0;
