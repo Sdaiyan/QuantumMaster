@@ -60,7 +60,8 @@ namespace QuantumMaster.Shared
             { "YueNvJianFa", "越女剑法追击几率提升" },
             { "JingHuaShuiYue", "镜花水月绝对化解概率" },
             { "FengMoZuiQuan", "疯魔醉拳复读概率" },
-            { "SuiSuoYu", "随所欲获得真气概率" }
+            { "SuiSuoYu", "随所欲获得真气概率" },
+            { "QianNianZui", "千年醉获得的几率增益" }
         };
 
         /// <summary>

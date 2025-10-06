@@ -77,6 +77,7 @@ namespace CombatMaster
             { "LeiZuBoJianShiCloth", (typeof(Features.Combat.LeiZuBoJianShiClothPatch), () => CombatConfigManager.LeiZuBoJianShiCloth) },
             { "YueNvJianFa", (typeof(Features.Combat.YueNvJianFaPatch), () => CombatConfigManager.IsFeatureEnabled("YueNvJianFa")) },
             { "JingHuaShuiYue", (typeof(Features.Combat.JingHuaShuiYuePatch), () => CombatConfigManager.IsFeatureEnabled("JingHuaShuiYue")) },
+            { "QianNianZui", (typeof(Features.Combat.QianNianZuiPatch), () => CombatConfigManager.IsFeatureEnabled("QianNianZui")) },
         };
           // PatchBuilder 补丁配置映射表 - 目前为空，后续添加战斗相关补丁
         private readonly Dictionary<string, (System.Func<Harmony, bool> patchMethod, System.Func<bool> condition)> patchBuilderMappings = 

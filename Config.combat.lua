@@ -198,6 +198,24 @@ return {
                 "气运之子"
             },
             DefaultValue = 0,
+        },
+        {
+            SettingType = "Dropdown",
+            Key = "QianNianZui",
+            DisplayName = "【气运】千年醉获得的几率增益增加",
+            Description = "千年醉获得的几率增益增加",
+            Options = {
+                "跟随全局",
+                "命途多舛",
+                "时运不济",
+                "顺风顺水",
+                "左右逢源",
+                "心想事成",
+                "福星高照",
+                "洪福齐天",
+                "气运之子"
+            },
+            DefaultValue = 0,
         }
     },
 }
