@@ -216,6 +216,24 @@ return {
                 "气运之子"
             },
             DefaultValue = 0,
+        },
+        {
+            SettingType = "Dropdown",
+            Key = "FengGouQuan",
+            DisplayName = "【气运】疯狗拳获得增伤的概率增加",
+            Description = "疯狗拳获得增伤的概率增加",
+            Options = {
+                "跟随全局",
+                "命途多舛",
+                "时运不济",
+                "顺风顺水",
+                "左右逢源",
+                "心想事成",
+                "福星高照",
+                "洪福齐天",
+                "气运之子"
+            },
+            DefaultValue = 0,
         }
     },
 }

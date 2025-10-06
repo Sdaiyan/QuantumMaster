@@ -16,6 +16,7 @@ CombatMaster is a specialized version of the QuantumMaster project, focusing exc
 【Luck】Feng Mo Zui Quan Repeat Probability Increase: Increases the repeat probability of Feng Mo Zui Quan (Crazy Drunk Fist)
 【Luck】Sui Suo Yu Obtain True Qi Probability Increase: Increases the probability of Sui Suo Yu obtaining true qi
 【Luck】Qian Nian Zui Probability Bonus Enhancement: Enhances the probability bonus obtained from Qian Nian Zui (Thousand Year Drunkenness)
+【Luck】Feng Gou Quan Damage Bonus Probability Increase: Increases the probability of Feng Gou Quan obtaining damage bonus
 
 ### Combat Strategy Enhancement
 Leizu Cocoon Peeling Style Equipment Removal Priority - Prioritize Appearance Clothing: When Leizu Cocoon Peeling Style removes equipment, prioritize removing appearance clothing items

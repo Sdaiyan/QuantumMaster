@@ -37,13 +37,15 @@ namespace CombatMaster
 
         // 疯魔醉拳复读概率气运设置
         public static int FengMoZuiQuan = 0;
-        
-        // 随所欲获得真气概率气运设置
+          // 随所欲获得真气概率气运设置
         public static int SuiSuoYu = 0;
 
         // 千年醉获得的几率增益增加气运设置
         public static int QianNianZui = 0;
 
+        // 疯狗拳获得增伤的概率气运设置
+        public static int FengGouQuan = 0;
+        
         // 功能开关映射表 - 将功能名映射到对应的配置字段
         private static readonly Dictionary<string, string> FeatureMap = new Dictionary<string, string>
         {
@@ -56,7 +58,8 @@ namespace CombatMaster
             { "JingHuaShuiYue", "JingHuaShuiYue" },
             { "FengMoZuiQuan", "FengMoZuiQuan" },
             { "SuiSuoYu", "SuiSuoYu" },
-            { "QianNianZui", "QianNianZui" }
+            { "QianNianZui", "QianNianZui" },
+            { "FengGouQuan", "FengGouQuan" }
         };
 
         /// <summary>
@@ -103,14 +106,17 @@ namespace CombatMaster
 
             // 加载疯魔醉拳配置
             DomainManager.Mod.GetSetting(modIdStr, "FengMoZuiQuan", ref FengMoZuiQuan);
-            DebugLog.Info($"[CombatMaster] 疯魔醉拳复读概率: {FengMoZuiQuan}");
-            // 加载随所欲配置
+            DebugLog.Info($"[CombatMaster] 疯魔醉拳复读概率: {FengMoZuiQuan}");            // 加载随所欲配置
             DomainManager.Mod.GetSetting(modIdStr, "SuiSuoYu", ref SuiSuoYu);
             DebugLog.Info($"[CombatMaster] 随所欲获得真气概率: {SuiSuoYu}");
 
             // 加载千年醉配置
             DomainManager.Mod.GetSetting(modIdStr, "QianNianZui", ref QianNianZui);
             DebugLog.Info($"[CombatMaster] 千年醉获得的几率增益增加: {QianNianZui}");
+
+            // 加载疯狗拳配置
+            DomainManager.Mod.GetSetting(modIdStr, "FengGouQuan", ref FengGouQuan);
+            DebugLog.Info($"[CombatMaster] 疯狗拳获得增伤的概率: {FengGouQuan}");
 
             DebugLog.Info("[CombatMaster] 所有配置项加载完成");
         }
@@ -152,8 +158,7 @@ namespace CombatMaster
             
             int luckLevel = GetFeatureLuckLevel(featureKey);
             return luckLevel != 2; // 2 = 顺风顺水（关闭功能）
-        }
-          /// <summary>
+        }        /// <summary>
         /// 根据配置键名获取配置值
         /// </summary>
         private static int GetConfigValue(string configKey)
@@ -170,6 +175,7 @@ namespace CombatMaster
                 case "FengMoZuiQuan": return FengMoZuiQuan;
                 case "SuiSuoYu": return SuiSuoYu;
                 case "QianNianZui": return QianNianZui;
+                case "FengGouQuan": return FengGouQuan;
                 default: 
                     DebugLog.Warning($"[CombatMaster] 未知的配置键: {configKey}");
                     return 0;
