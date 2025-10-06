@@ -32,12 +32,11 @@ namespace CombatMaster
         public static int YaoJiYunYuShi = 0;
 
         // 越女剑法追击几率提升气运设置
-        public static int YueNvJianFa = 0;
-
-        // 镜花水月绝对化解概率气运设置
+        public static int YueNvJianFa = 0;        // 镜花水月绝对化解概率气运设置
         public static int JingHuaShuiYue = 0;
 
-        // 功能开关映射表 - 将功能名映射到对应的配置字段
+        // 疯魔醉拳复读概率气运设置
+        public static int FengMoZuiQuan = 0;        // 功能开关映射表 - 将功能名映射到对应的配置字段
         private static readonly Dictionary<string, string> FeatureMap = new Dictionary<string, string>
         {
             { "JieQingKuaiJian", "JieQingKuaiJian" },
@@ -46,7 +45,8 @@ namespace CombatMaster
             { "LeiZuBoJianShi", "LeiZuBoJianShi" },
             { "YaoJiYunYuShi", "YaoJiYunYuShi" },
             { "YueNvJianFa", "YueNvJianFa" },
-            { "JingHuaShuiYue", "JingHuaShuiYue" }
+            { "JingHuaShuiYue", "JingHuaShuiYue" },
+            { "FengMoZuiQuan", "FengMoZuiQuan" }
         };
 
         /// <summary>
@@ -87,11 +87,13 @@ namespace CombatMaster
 
             // 加载越女剑法配置
             DomainManager.Mod.GetSetting(modIdStr, "YueNvJianFa", ref YueNvJianFa);
-            DebugLog.Info($"[CombatMaster] 越女剑法追击几率提升: {YueNvJianFa}");
-
-            // 加载镜花水月配置
+            DebugLog.Info($"[CombatMaster] 越女剑法追击几率提升: {YueNvJianFa}");            // 加载镜花水月配置
             DomainManager.Mod.GetSetting(modIdStr, "JingHuaShuiYue", ref JingHuaShuiYue);
             DebugLog.Info($"[CombatMaster] 镜花水月绝对化解概率: {JingHuaShuiYue}");
+
+            // 加载疯魔醉拳配置
+            DomainManager.Mod.GetSetting(modIdStr, "FengMoZuiQuan", ref FengMoZuiQuan);
+            DebugLog.Info($"[CombatMaster] 疯魔醉拳复读概率: {FengMoZuiQuan}");
 
             DebugLog.Info("[CombatMaster] 所有配置项加载完成");
         }
@@ -134,7 +136,7 @@ namespace CombatMaster
             int luckLevel = GetFeatureLuckLevel(featureKey);
             return luckLevel != 2; // 2 = 顺风顺水（关闭功能）
         }
-
+        
         /// <summary>
         /// 根据配置键名获取配置值
         /// </summary>
@@ -149,6 +151,7 @@ namespace CombatMaster
                 case "YaoJiYunYuShi": return YaoJiYunYuShi;
                 case "YueNvJianFa": return YueNvJianFa;
                 case "JingHuaShuiYue": return JingHuaShuiYue;
+                case "FengMoZuiQuan": return FengMoZuiQuan;
                 default: 
                     DebugLog.Warning($"[CombatMaster] 未知的配置键: {configKey}");
                     return 0;

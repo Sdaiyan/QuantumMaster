@@ -54,11 +54,11 @@ namespace QuantumMaster.Shared
             { "AddChoosyRemainUpgradeData", "精挑细选过月累计最大" },
             { "JieQingKuaiJian", "界青快剑重复触发概率" },
             { "XinWuDingYi", "心无定意获得式或减少式消耗效果生效概率" },
-            { "JiuSiLiHunShou", "九死离魂手触发秘闻概率" },
-            { "LeiZuBoJianShi", "嫘祖剥茧式脱装备概率" },
+            { "JiuSiLiHunShou", "九死离魂手触发秘闻概率" },            { "LeiZuBoJianShi", "嫘祖剥茧式脱装备概率" },
             { "YaoJiYunYuShi", "瑶姬云雨式爱慕概率" },
             { "YueNvJianFa", "越女剑法追击几率提升" },
-            { "JingHuaShuiYue", "镜花水月绝对化解概率" }
+            { "JingHuaShuiYue", "镜花水月绝对化解概率" },
+            { "FengMoZuiQuan", "疯魔醉拳复读概率" }
         };
 
         /// <summary>
