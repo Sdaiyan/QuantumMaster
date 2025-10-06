@@ -78,8 +78,7 @@ namespace CombatMaster
             { "YueNvJianFa", (typeof(Features.Combat.YueNvJianFaPatch), () => CombatConfigManager.IsFeatureEnabled("YueNvJianFa")) },
             { "JingHuaShuiYue", (typeof(Features.Combat.JingHuaShuiYuePatch), () => CombatConfigManager.IsFeatureEnabled("JingHuaShuiYue")) },
         };
-        
-        // PatchBuilder 补丁配置映射表 - 目前为空，后续添加战斗相关补丁
+          // PatchBuilder 补丁配置映射表 - 目前为空，后续添加战斗相关补丁
         private readonly Dictionary<string, (System.Func<Harmony, bool> patchMethod, System.Func<bool> condition)> patchBuilderMappings = 
             new Dictionary<string, (System.Func<Harmony, bool>, System.Func<bool>)>
         {
@@ -91,6 +90,7 @@ namespace CombatMaster
             { "YaoJiYunYuShiBuilder", (Features.Combat.YaoJiYunYuShiPatch.Apply, () => CombatConfigManager.IsFeatureEnabled("YaoJiYunYuShi")) },
             { "JingHuaShuiYueBuilder", (Features.Combat.JingHuaShuiYuePatch.Apply, () => CombatConfigManager.IsFeatureEnabled("JingHuaShuiYue")) },
             { "FengMoZuiQuanBuilder", (Features.Combat.FengMoZuiQuanPatch.Apply, () => CombatConfigManager.IsFeatureEnabled("FengMoZuiQuan")) },
+            { "SuiSuoYuBuilder", (Features.Combat.SuiSuoYuPatch.Apply, () => CombatConfigManager.IsFeatureEnabled("SuiSuoYu")) },
         };
 
         // 应用 class 形式的补丁

@@ -6,18 +6,19 @@
 
 
 函数的定义是
-`public override int GameData.Domains.SpecialEffect.CombatSkill.Emeipai.Sword.YueNvJianFa.GetModifyValue(GameData.Domains.SpecialEffect.AffectedDataKey dataKey, int currModifyValue)`
+`public override int GameData.Domains.SpecialEffect.CombatSkill.Fulongtan.DefenseAndAssist.QianNianZui.GetModifyValue(GameData.Domains.SpecialEffect.AffectedDataKey dataKey, int currModifyValue)`
 
 需要对这个函数进行 postfix。首先需要判断角色是太吾。然后判断返回值，如果
-等于50 则调用 Calc_Random_Next_2Args_Max_By_Luck ，最大值 100
-等于-50 则调用 Calc_Random_Next_2Args_Min_By_Luck ，最小值 -100
+等于大于0 则调用 Calc_Random_Next_2Args_Max_By_Luck ，最大值为原值的2倍
+等于小于0 则调用 Calc_Random_Next_2Args_Min_By_Luck ，最小值也为原值的2倍
 其他情况什么都不做
 
+你可以参考这个文件的写法 `src\CombatMaster\Features\Combat\YueNvJianFaPatch.cs`
 
 `config.combat.lua` 定义如下，注意他的类型不再是 option 而是 Toggle，默认是开启的。
 
-`key = YueNvJianFa`
+`key = QianNianZui`
 
-`DisplayName = 【气运】越女剑法提供的追击几率提升`
+`DisplayName = 【气运】千年醉获得的几率增益增加`
 
-`Description = 越女剑法提供的追击几率提升`
+`Description = 千年醉获得的几率增益增加`

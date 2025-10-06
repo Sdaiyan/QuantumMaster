@@ -163,12 +163,29 @@ return {
                 "气运之子"
             },
             DefaultValue = 0,
-        },
-        {
+        },        {
             SettingType = "Dropdown",
             Key = "FengMoZuiQuan",
             DisplayName = "【气运】疯魔醉拳复读概率增加",
             Description = "疯魔醉拳复读概率增加",
+            Options = {
+                "跟随全局",
+                "命途多舛",
+                "时运不济",
+                "顺风顺水",
+                "左右逢源",
+                "心想事成",
+                "福星高照",
+                "洪福齐天",
+                "气运之子"
+            },
+            DefaultValue = 0,
+        },
+        {
+            SettingType = "Dropdown",
+            Key = "SuiSuoYu",
+            DisplayName = "【气运】随所欲获得真气概率增加",
+            Description = "随所欲获得真气概率增加",
             Options = {
                 "跟随全局",
                 "命途多舛",

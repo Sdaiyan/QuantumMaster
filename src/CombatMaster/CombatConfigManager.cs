@@ -36,7 +36,10 @@ namespace CombatMaster
         public static int JingHuaShuiYue = 0;
 
         // 疯魔醉拳复读概率气运设置
-        public static int FengMoZuiQuan = 0;        // 功能开关映射表 - 将功能名映射到对应的配置字段
+        public static int FengMoZuiQuan = 0;
+
+        // 随所欲获得真气概率气运设置
+        public static int SuiSuoYu = 0;        // 功能开关映射表 - 将功能名映射到对应的配置字段
         private static readonly Dictionary<string, string> FeatureMap = new Dictionary<string, string>
         {
             { "JieQingKuaiJian", "JieQingKuaiJian" },
@@ -46,7 +49,8 @@ namespace CombatMaster
             { "YaoJiYunYuShi", "YaoJiYunYuShi" },
             { "YueNvJianFa", "YueNvJianFa" },
             { "JingHuaShuiYue", "JingHuaShuiYue" },
-            { "FengMoZuiQuan", "FengMoZuiQuan" }
+            { "FengMoZuiQuan", "FengMoZuiQuan" },
+            { "SuiSuoYu", "SuiSuoYu" }
         };
 
         /// <summary>
@@ -95,6 +99,10 @@ namespace CombatMaster
             DomainManager.Mod.GetSetting(modIdStr, "FengMoZuiQuan", ref FengMoZuiQuan);
             DebugLog.Info($"[CombatMaster] 疯魔醉拳复读概率: {FengMoZuiQuan}");
 
+            // 加载随所欲配置
+            DomainManager.Mod.GetSetting(modIdStr, "SuiSuoYu", ref SuiSuoYu);
+            DebugLog.Info($"[CombatMaster] 随所欲获得真气概率: {SuiSuoYu}");
+
             DebugLog.Info("[CombatMaster] 所有配置项加载完成");
         }
 
@@ -136,8 +144,7 @@ namespace CombatMaster
             int luckLevel = GetFeatureLuckLevel(featureKey);
             return luckLevel != 2; // 2 = 顺风顺水（关闭功能）
         }
-        
-        /// <summary>
+          /// <summary>
         /// 根据配置键名获取配置值
         /// </summary>
         private static int GetConfigValue(string configKey)
@@ -152,6 +159,7 @@ namespace CombatMaster
                 case "YueNvJianFa": return YueNvJianFa;
                 case "JingHuaShuiYue": return JingHuaShuiYue;
                 case "FengMoZuiQuan": return FengMoZuiQuan;
+                case "SuiSuoYu": return SuiSuoYu;
                 default: 
                     DebugLog.Warning($"[CombatMaster] 未知的配置键: {configKey}");
                     return 0;
