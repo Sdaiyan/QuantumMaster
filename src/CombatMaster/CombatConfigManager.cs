@@ -45,6 +45,9 @@ namespace CombatMaster
 
         // 疯狗拳获得增伤的概率气运设置
         public static int FengGouQuan = 0;
+
+        // 凌六虚命中要害概率气运设置
+        public static int LingLiuXu = 0;
         
         // 功能开关映射表 - 将功能名映射到对应的配置字段
         private static readonly Dictionary<string, string> FeatureMap = new Dictionary<string, string>
@@ -59,7 +62,8 @@ namespace CombatMaster
             { "FengMoZuiQuan", "FengMoZuiQuan" },
             { "SuiSuoYu", "SuiSuoYu" },
             { "QianNianZui", "QianNianZui" },
-            { "FengGouQuan", "FengGouQuan" }
+            { "FengGouQuan", "FengGouQuan" },
+            { "LingLiuXu", "LingLiuXu" }
         };
 
         /// <summary>
@@ -117,6 +121,10 @@ namespace CombatMaster
             // 加载疯狗拳配置
             DomainManager.Mod.GetSetting(modIdStr, "FengGouQuan", ref FengGouQuan);
             DebugLog.Info($"[CombatMaster] 疯狗拳获得增伤的概率: {FengGouQuan}");
+
+            // 加载凌六虚配置
+            DomainManager.Mod.GetSetting(modIdStr, "LingLiuXu", ref LingLiuXu);
+            DebugLog.Info($"[CombatMaster] 凌六虚命中要害概率: {LingLiuXu}");
 
             DebugLog.Info("[CombatMaster] 所有配置项加载完成");
         }
@@ -176,6 +184,7 @@ namespace CombatMaster
                 case "SuiSuoYu": return SuiSuoYu;
                 case "QianNianZui": return QianNianZui;
                 case "FengGouQuan": return FengGouQuan;
+                case "LingLiuXu": return LingLiuXu;
                 default: 
                     DebugLog.Warning($"[CombatMaster] 未知的配置键: {configKey}");
                     return 0;

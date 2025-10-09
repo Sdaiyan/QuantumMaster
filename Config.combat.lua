@@ -34,7 +34,7 @@ return {
         {
             SettingType = "Dropdown",
             Key = "JieQingKuaiJian",
-            DisplayName = "【武者】界青快剑重复触发概率增加",
+            DisplayName = "【武者】界青快剑",
             Description = "界青快剑重复触发概率增加（理论上最多连发3次，加上主动释放的话一共4次）",
             Options = {
                 "跟随全局",
@@ -52,7 +52,7 @@ return {
         {
             SettingType = "Dropdown",
             Key = "XinWuDingYi",
-            DisplayName = "【武者】心无定意获得式或者减少式消耗的效果生效概率增加",
+            DisplayName = "【武者】心无定意",
             Description = "心无定意获得式或者减少式消耗的效果生效概率增加",
             Options = {
                 "跟随全局",
@@ -70,7 +70,7 @@ return {
         {
             SettingType = "Dropdown",
             Key = "JiuSiLiHunShou",
-            DisplayName = "【武者】九死离魂手触发秘闻概率增加",
+            DisplayName = "【武者】九死离魂手",
             Description = "九死离魂手触发秘闻概率增加",
             Options = {
                 "跟随全局",
@@ -88,7 +88,7 @@ return {
         {
             SettingType = "Dropdown",
             Key = "LeiZuBoJianShi",
-            DisplayName = "【武者】嫘祖剥茧式脱装备的概率增加",
+            DisplayName = "【武者】嫘祖剥茧式",
             Description = "嫘祖剥茧式脱装备的概率增加",
             Options = {
                 "跟随全局",
@@ -106,14 +106,14 @@ return {
         {
             SettingType = "Toggle",
             Key = "LeiZuBoJianShiCloth",
-            DisplayName = "嫘祖剥茧式脱装备时，是否优先脱外观的衣服",
+            DisplayName = "嫘祖剥茧式",
             Description = "嫘祖剥茧式脱装备时，是否优先脱外观的衣服",
             DefaultValue = true,
         },
         {
             SettingType = "Dropdown",
             Key = "YaoJiYunYuShi",
-            DisplayName = "【武者】瑶姬云雨式爱慕概率增加",
+            DisplayName = "【武者】瑶姬云雨式",
             Description = "瑶姬云雨式爱慕概率增加",
             Options = {
                 "跟随全局",
@@ -131,7 +131,7 @@ return {
         {
             SettingType = "Dropdown",
             Key = "YueNvJianFa",
-            DisplayName = "【武者】越女剑法提供的追击几率提升",
+            DisplayName = "【武者】越女剑法",
             Description = "越女剑法提供的追击几率提升",
             Options = {
                 "跟随全局",
@@ -149,7 +149,7 @@ return {
         {
             SettingType = "Dropdown",
             Key = "JingHuaShuiYue",
-            DisplayName = "【武者】镜花水月绝对化解的概率增加",
+            DisplayName = "【武者】镜花水月",
             Description = "镜花水月绝对化解的概率增加",
             Options = {
                 "跟随全局",
@@ -166,7 +166,7 @@ return {
         },        {
             SettingType = "Dropdown",
             Key = "FengMoZuiQuan",
-            DisplayName = "【武者】疯魔醉拳复读概率增加",
+            DisplayName = "【武者】疯魔醉拳",
             Description = "疯魔醉拳复读概率增加",
             Options = {
                 "跟随全局",
@@ -184,7 +184,7 @@ return {
         {
             SettingType = "Dropdown",
             Key = "SuiSuoYu",
-            DisplayName = "【武者】随所欲获得真气概率增加",
+            DisplayName = "【武者】随所欲",
             Description = "随所欲获得真气概率增加",
             Options = {
                 "跟随全局",
@@ -202,7 +202,7 @@ return {
         {
             SettingType = "Dropdown",
             Key = "QianNianZui",
-            DisplayName = "【武者】千年醉获得的几率增益增加",
+            DisplayName = "【武者】千年醉",
             Description = "千年醉获得的几率增益增加",
             Options = {
                 "跟随全局",
@@ -220,8 +220,26 @@ return {
         {
             SettingType = "Dropdown",
             Key = "FengGouQuan",
-            DisplayName = "【武者】疯狗拳获得增伤的概率增加",
+            DisplayName = "【武者】疯狗拳",
             Description = "疯狗拳获得增伤的概率增加",
+            Options = {
+                "跟随全局",
+                "方寸大乱",
+                "患得患失",
+                "气定神闲",
+                "游刃有余",
+                "随心所欲",
+                "如有神助",
+                "天人合一",
+                "万法归一"
+            },
+            DefaultValue = 0,
+        },
+        {
+            SettingType = "Dropdown",
+            Key = "LingLiuXu",
+            DisplayName = "【武者】凌六虚",
+            Description = "凌六虚命中要害概率增加",
             Options = {
                 "跟随全局",
                 "方寸大乱",

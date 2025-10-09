@@ -62,7 +62,8 @@ namespace QuantumMaster.Shared
             { "FengMoZuiQuan", "疯魔醉拳复读概率" },
             { "SuiSuoYu", "随所欲获得真气概率" },
             { "QianNianZui", "千年醉获得的几率增益" },
-            { "FengGouQuan", "疯狗拳获得增伤的概率" }
+            { "FengGouQuan", "疯狗拳获得增伤的概率" },
+            { "LingLiuXu", "凌六虚命中要害概率" }
         };
 
         /// <summary>

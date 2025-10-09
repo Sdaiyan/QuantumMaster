@@ -81,6 +81,7 @@ namespace CombatMaster
             { "FengMoZuiQuan", (typeof(Features.Combat.FengMoZuiQuanPatch), () => CombatConfigManager.IsFeatureEnabled("FengMoZuiQuan")) },
             { "SuiSuoYu", (typeof(Features.Combat.SuiSuoYuPatch), () => CombatConfigManager.IsFeatureEnabled("SuiSuoYu")) },
             { "FengGouQuan", (typeof(Features.Combat.FengGouQuanPatch), () => CombatConfigManager.IsFeatureEnabled("FengGouQuan")) },
+            { "LingLiuXu", (typeof(Features.Combat.LingLiuXuPatch), () => CombatConfigManager.IsFeatureEnabled("LingLiuXu")) },
         };
 
         // PatchBuilder 补丁配置映射表 - 目前为空，后续添加战斗相关补丁
@@ -97,6 +98,7 @@ namespace CombatMaster
             { "FengMoZuiQuanBuilder", (Features.Combat.FengMoZuiQuanPatch.Apply, () => CombatConfigManager.IsFeatureEnabled("FengMoZuiQuan")) },
             { "SuiSuoYuBuilder", (Features.Combat.SuiSuoYuPatch.Apply, () => CombatConfigManager.IsFeatureEnabled("SuiSuoYu")) },
             { "FengGouQuanBuilder", (Features.Combat.FengGouQuanPatch.Apply, () => CombatConfigManager.IsFeatureEnabled("FengGouQuan")) },
+            { "LingLiuXuBuilder", (Features.Combat.LingLiuXuPatch.Apply, () => CombatConfigManager.IsFeatureEnabled("LingLiuXu")) },
         };
 
         // 应用 class 形式的补丁

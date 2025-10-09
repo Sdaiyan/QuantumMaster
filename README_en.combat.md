@@ -6,20 +6,22 @@ CombatMaster is a specialized version of the QuantumMaster project, focusing exc
 ## Features
 
 ### Combat Skill Enhancement
-【Luck】Jieqing Swift Sword Repeat Trigger Probability Increase: Increases the probability of Jieqing Swift Sword's repeat trigger effect (theoretically up to 3 consecutive triggers, counting the initial active use as 4 times total)
-【Luck】Xinwudingyi Style Acquisition or Consumption Reduction Effect Probability Increase: Increases the probability of Xinwudingyi's style acquisition or consumption reduction effects taking place
-【Luck】Nine Deaths Soul Separation Hand Secret Trigger Probability Increase: Increases the probability of Nine Deaths Soul Separation Hand triggering secret events
-【Luck】Leizu Cocoon Peeling Style Equipment Removal Probability Increase: Increases the probability of Leizu Cocoon Peeling Style removing equipment from enemies
-【Luck】Yaoji Cloud Rain Style Admiration Probability Increase: Increases the probability of Yaoji Cloud Rain Style's admiration effect triggering
-【Luck】Yue Nü Sword Technique Pursuit Chance Enhancement: Enhances the pursuit chance provided by Yue Nü Sword Technique
-【Luck】Jing Hua Shui Yue Absolute Deflection Probability Increase: Increases the absolute deflection probability of Jing Hua Shui Yue
-【Luck】Feng Mo Zui Quan Repeat Probability Increase: Increases the repeat probability of Feng Mo Zui Quan (Crazy Drunk Fist)
-【Luck】Sui Suo Yu Obtain True Qi Probability Increase: Increases the probability of Sui Suo Yu obtaining true qi
-【Luck】Qian Nian Zui Probability Bonus Enhancement: Enhances the probability bonus obtained from Qian Nian Zui (Thousand Year Drunkenness)
-【Luck】Feng Gou Quan Damage Bonus Probability Increase: Increases the probability of Feng Gou Quan obtaining damage bonus
+**【Martial Arts】Jieqing Swift Sword**: Increases the probability of Jieqing Swift Sword's repeat trigger effect (theoretically up to 3 consecutive triggers, counting the initial active use as 4 times total)
+**【Martial Arts】Xinwudingyi**: Increases the probability of Xinwudingyi's style acquisition or consumption reduction effects taking place
+**【Martial Arts】Nine Deaths Soul Separation Hand**: Increases the probability of Nine Deaths Soul Separation Hand triggering secret events
+**【Martial Arts】Leizu Cocoon Peeling Style**: Increases the probability of Leizu Cocoon Peeling Style removing equipment from enemies
+**Leizu Cocoon Peeling Style**: Optional setting to prioritize removing appearance clothing
+**【Martial Arts】Yaoji Cloud Rain Style**: Increases the probability of Yaoji Cloud Rain Style's admiration effect triggering
+**【Martial Arts】Yue Nü Sword Technique**: Enhances the pursuit chance provided by Yue Nü Sword Technique
+**【Martial Arts】Jing Hua Shui Yue**: Increases the absolute deflection probability of Jing Hua Shui Yue
+**【Martial Arts】Feng Mo Zui Quan**: Increases the repeat probability of Feng Mo Zui Quan (Crazy Drunk Fist)
+**【Martial Arts】Sui Suo Yu**: Increases the probability of Sui Suo Yu obtaining true qi
+**【Martial Arts】Qian Nian Zui**: Enhances the probability bonus obtained from Qian Nian Zui (Thousand Year Drunkenness)
+**【Martial Arts】Feng Gou Quan**: Increases the probability of Feng Gou Quan obtaining damage bonus
+**【Martial Arts】Ling Liu Xu**: Increases the probability of Ling Liu Xu hitting vital points
 
-### Combat Strategy Enhancement
-Leizu Cocoon Peeling Style Equipment Removal Priority - Prioritize Appearance Clothing: When Leizu Cocoon Peeling Style removes equipment, prioritize removing appearance clothing items
+### Red Text Warning
+If you encounter red text errors, you can set the problematic skill to "Calm and Composed" to disable the corresponding feature and avoid errors. If you find a skill with red text issues, please report it in the comments or join the QQ group.
 
 ## Installation
 1. Ensure game version compatibility
@@ -27,20 +29,20 @@ Leizu Cocoon Peeling Style Equipment Removal Priority - Prioritize Appearance Cl
 3. Enable the MOD in-game
 
 ## Configuration
-### Combat Luck Levels
-- **Misfortune**: Combat random events are extremely unfavorable
-- **Bad Luck**: Combat random events are quite unfavorable
-- **Smooth Sailing**: Disable MOD features (default game experience)
-- **Everything Goes Well**: Combat random events are relatively favorable
-- **Dreams Come True**: Combat random events are very favorable
-- **Lucky Star**: Combat random events are extremely favorable
-- **Blessed by Heaven**: Combat random events are almost always favorable
-- **Child of Destiny**: Combat random events always reach theoretical maximum
+### Martial Arts Realm Levels (Probability Settings)
+- **Utterly Confused**: Mind completely out of control, techniques in disarray, full of vulnerabilities - the most dangerous predicament for a martial artist. (Combat random events are extremely unfavorable)
+- **Anxious and Hesitant**: Mind unsettled, doubts abound, hesitant when striking, unable to perform at usual standards. (Combat random events are quite unfavorable)
+- **Calm and Composed**: Heart settled, breath long and steady, undisturbed, able to reflect and respond to all things naturally. (Disable MOD features, default game experience)
+- **At Ease**: Mind clear, demeanor composed, finding opportunities even at the edge of a blade, grasping the rhythm of battle. (Combat random events are relatively favorable)
+- **As One Wishes**: Where the heart goes, the body follows, techniques without fixed form yet perfectly matching every opportunity - reaching the realm of a first-rate master. (Combat random events are very favorable)
+- **Divinely Inspired**: Spirit clear as a mirror, as if heaven-sent, often finding life where impossible, unleashing power beyond one's limits. (Combat random events are extremely favorable)
+- **Unity of Heaven and Man**: Spirit united with heaven, body merged with the Dao, all things in the world become allies, every change follows one's heart. (Combat random events are almost always favorable)
+- **All Methods Return to One**: Exhausting all martial arts in the world, finally comprehending their source as one. This heart is the Dao, this thought is the principle, the battle's outcome predetermined before it begins. (Combat random events always reach theoretical maximum)
 
 ### Feature Switches
-Each feature supports independent luck settings:
-- **Follow Global**: Use global combat luck level
-- **Independent Setting**: Set luck level specifically for this feature
+Each feature supports independent realm settings:
+- **Follow Global**: Use global combat martial arts realm
+- **Independent Setting**: Set martial arts realm specifically for this feature
 
 ## Development Info
 - **Author**: dai
@@ -50,8 +52,11 @@ Each feature supports independent luck settings:
 
 ## Notes
 - This MOD focuses on combat features and can coexist with QuantumMaster
+- CombatMaster uses **"Martial Arts Realm"** terminology (Utterly Confused, Anxious and Hesitant, Calm and Composed, etc.)
+- QuantumMaster uses **"Luck"** terminology (Misfortune, Bad Luck, Smooth Sailing, etc.)
+- The underlying calculation mechanism is exactly the same, only the names and descriptions differ
 - Some features require specific game conditions to trigger
-- Adjust luck levels according to personal preferences
+- Adjust martial arts realm levels according to personal preferences
 
 ## Changelog
 ### v0.0.1 (Initial Release)
