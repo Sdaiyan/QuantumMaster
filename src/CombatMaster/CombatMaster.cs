@@ -88,6 +88,7 @@ namespace CombatMaster
             { "JingGuiFu", (typeof(Features.Combat.JingGuiFuPatch), () => CombatConfigManager.IsFeatureEnabled("JingGuiFu")) },
             { "MuGongZhou", (typeof(Features.Combat.MuGongZhouPatch), () => CombatConfigManager.IsFeatureEnabled("MuGongZhou")) },
             { "JiuChiXiang", (typeof(Features.Combat.JiuChiXiangPatch), () => CombatConfigManager.IsFeatureEnabled("JiuChiXiang")) },
+            { "LiHeZhi", (typeof(Features.Combat.LiHeZhiPatch), () => CombatConfigManager.IsFeatureEnabled("LiHeZhi")) },
         };
 
         // PatchBuilder 补丁配置映射表 - 目前为空，后续添加战斗相关补丁
@@ -110,6 +111,7 @@ namespace CombatMaster
             { "JingGuiFuBuilder", (Features.Combat.JingGuiFuPatch.Apply, () => CombatConfigManager.IsFeatureEnabled("JingGuiFu")) },
             { "MuGongZhouBuilder", (Features.Combat.MuGongZhouPatch.Apply, () => CombatConfigManager.IsFeatureEnabled("MuGongZhou")) },
             { "JiuChiXiangBuilder", (Features.Combat.JiuChiXiangPatch.Apply, () => CombatConfigManager.IsFeatureEnabled("JiuChiXiang")) },
+            { "LiHeZhiBuilder", (Features.Combat.LiHeZhiPatch.Apply, () => CombatConfigManager.IsFeatureEnabled("LiHeZhi")) },
         };
 
         // 应用 class 形式的补丁
