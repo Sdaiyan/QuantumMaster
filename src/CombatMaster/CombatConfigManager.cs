@@ -48,6 +48,9 @@ namespace CombatMaster
 
         // 凌六虚命中要害概率气运设置
         public static int LingLiuXu = 0;
+
+        // 青女履冰复读概率气运设置
+        public static int QingNvLvBing = 0;
         
         // 功能开关映射表 - 将功能名映射到对应的配置字段
         private static readonly Dictionary<string, string> FeatureMap = new Dictionary<string, string>
@@ -63,7 +66,8 @@ namespace CombatMaster
             { "SuiSuoYu", "SuiSuoYu" },
             { "QianNianZui", "QianNianZui" },
             { "FengGouQuan", "FengGouQuan" },
-            { "LingLiuXu", "LingLiuXu" }
+            { "LingLiuXu", "LingLiuXu" },
+            { "QingNvLvBing", "QingNvLvBing" }
         };
 
         /// <summary>
@@ -126,6 +130,10 @@ namespace CombatMaster
             DomainManager.Mod.GetSetting(modIdStr, "LingLiuXu", ref LingLiuXu);
             DebugLog.Info($"[CombatMaster] 凌六虚命中要害概率: {LingLiuXu}");
 
+            // 加载青女履冰配置
+            DomainManager.Mod.GetSetting(modIdStr, "QingNvLvBing", ref QingNvLvBing);
+            DebugLog.Info($"[CombatMaster] 青女履冰复读概率: {QingNvLvBing}");
+
             DebugLog.Info("[CombatMaster] 所有配置项加载完成");
         }
 
@@ -185,6 +193,7 @@ namespace CombatMaster
                 case "QianNianZui": return QianNianZui;
                 case "FengGouQuan": return FengGouQuan;
                 case "LingLiuXu": return LingLiuXu;
+                case "QingNvLvBing": return QingNvLvBing;
                 default: 
                     DebugLog.Warning($"[CombatMaster] 未知的配置键: {configKey}");
                     return 0;

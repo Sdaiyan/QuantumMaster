@@ -19,6 +19,7 @@ CombatMaster is a specialized version of the QuantumMaster project, focusing exc
 **【Martial Arts】Qian Nian Zui**: Enhances the probability bonus obtained from Qian Nian Zui (Thousand Year Drunkenness)
 **【Martial Arts】Feng Gou Quan**: Increases the probability of Feng Gou Quan obtaining damage bonus
 **【Martial Arts】Ling Liu Xu**: Increases the probability of Ling Liu Xu hitting vital points
+**【Martial Arts】Qing Nü Lü Bing**: Increases the repeat probability of Qing Nü Lü Bing (Ice Maiden's Step)
 
 ### Red Text Warning
 If you encounter red text errors, you can set the problematic skill to "Calm and Composed" to disable the corresponding feature and avoid errors. If you find a skill with red text issues, please report it in the comments or join the QQ group.
