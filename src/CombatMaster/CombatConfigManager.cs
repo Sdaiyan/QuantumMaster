@@ -75,6 +75,9 @@ namespace CombatMaster
 
         // 太素绝手打断施展功法概率气运设置
         public static int TaiSuJueShou = 0;
+
+        // 漫天花雨式额外封穴/破绽概率气运设置
+        public static int ManTianHuaYuShi = 0;
         
         // 功能开关映射表 - 将功能名映射到对应的配置字段
         private static readonly Dictionary<string, string> FeatureMap = new Dictionary<string, string>
@@ -99,7 +102,8 @@ namespace CombatMaster
             { "JiuChiXiang", "JiuChiXiang" },
             { "LiHeZhi", "LiHeZhi" },
             { "FuYinZhi", "FuYinZhi" },
-            { "TaiSuJueShou", "TaiSuJueShou" }
+            { "TaiSuJueShou", "TaiSuJueShou" },
+            { "ManTianHuaYuShi", "ManTianHuaYuShi" }
         };
 
         /// <summary>
@@ -198,6 +202,10 @@ namespace CombatMaster
             DomainManager.Mod.GetSetting(modIdStr, "TaiSuJueShou", ref TaiSuJueShou);
             DebugLog.Info($"[CombatMaster] 太素绝手打断施展功法概率: {TaiSuJueShou}");
 
+            // 加载漫天花雨式配置
+            DomainManager.Mod.GetSetting(modIdStr, "ManTianHuaYuShi", ref ManTianHuaYuShi);
+            DebugLog.Info($"[CombatMaster] 漫天花雨式额外封穴/破绽概率: {ManTianHuaYuShi}");
+
             DebugLog.Info("[CombatMaster] 所有配置项加载完成");
         }
 
@@ -266,6 +274,7 @@ namespace CombatMaster
                 case "LiHeZhi": return LiHeZhi;
                 case "FuYinZhi": return FuYinZhi;
                 case "TaiSuJueShou": return TaiSuJueShou;
+                case "ManTianHuaYuShi": return ManTianHuaYuShi;
                 default: 
                     DebugLog.Warning($"[CombatMaster] 未知的配置键: {configKey}");
                     return 0;

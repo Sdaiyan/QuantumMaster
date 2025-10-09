@@ -28,6 +28,7 @@ CombatMaster is a specialized version of the QuantumMaster project, focusing exc
 **【Martial Arts】Li He Zhi**: Increases the backlash probability of Li He Zhi (Separation and Union Finger)
 **【Martial Arts】Fu Yin Zhi**: Increases the probability of converting injuries to old wounds with Fu Yin Zhi (Hidden Yin Finger)
 **【Martial Arts】Tai Su Jue Shou**: Increases the probability of interrupting enemy skill casting with Tai Su Jue Shou (Supreme Void Deadly Hand)
+**【Martial Arts】Man Tian Hua Yu Shi**: Increases the probability of additional acupoint sealing/weakness with Man Tian Hua Yu Shi (Sky Full of Flowers and Rain)
 
 ### Red Text Warning
 If you encounter red text errors, you can set the problematic skill to "Calm and Composed" to disable the corresponding feature and avoid errors. If you find a skill with red text issues, please report it in the comments or join the QQ group.

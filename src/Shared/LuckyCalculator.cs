@@ -72,7 +72,8 @@ namespace QuantumMaster.Shared
             { "JiuChiXiang", "九痴香功法打断概率" },
             { "LiHeZhi", "离合指反噬概率" },
             { "FuYinZhi", "伏阴指转化旧伤概率" },
-            { "TaiSuJueShou", "太素绝手打断施展功法概率" }
+            { "TaiSuJueShou", "太素绝手打断施展功法概率" },
+            { "ManTianHuaYuShi", "漫天花雨式额外封穴/破绽概率" }
         };
 
         /// <summary>
