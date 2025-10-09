@@ -26,6 +26,7 @@ CombatMaster is a specialized version of the QuantumMaster project, focusing exc
 **【Martial Arts】Mu Gong Zhou**: Increases the probability of interrupting enemy skills with Mu Gong Zhou (Wood Duke Incantation)
 **【Martial Arts】Jiu Chi Xiang**: Increases the probability of interrupting enemy skills and decreases the probability of being interrupted with Jiu Chi Xiang (Nine Idiot Incense)
 **【Martial Arts】Li He Zhi**: Increases the backlash probability of Li He Zhi (Separation and Union Finger)
+**【Martial Arts】Fu Yin Zhi**: Increases the probability of converting injuries to old wounds with Fu Yin Zhi (Hidden Yin Finger)
 
 ### Red Text Warning
 If you encounter red text errors, you can set the problematic skill to "Calm and Composed" to disable the corresponding feature and avoid errors. If you find a skill with red text issues, please report it in the comments or join the QQ group.

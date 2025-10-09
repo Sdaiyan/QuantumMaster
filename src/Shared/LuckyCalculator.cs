@@ -70,7 +70,8 @@ namespace QuantumMaster.Shared
             { "JingGuiFu", "惊鬼符敌人逃跑概率" },
             { "MuGongZhou", "木公咒打断功法概率" },
             { "JiuChiXiang", "九痴香功法打断概率" },
-            { "LiHeZhi", "离合指反噬概率" }
+            { "LiHeZhi", "离合指反噬概率" },
+            { "FuYinZhi", "伏阴指转化旧伤概率" }
         };
 
         /// <summary>

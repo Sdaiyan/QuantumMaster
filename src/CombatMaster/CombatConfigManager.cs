@@ -69,6 +69,9 @@ namespace CombatMaster
 
         // 离合指反噬概率气运设置
         public static int LiHeZhi = 0;
+
+        // 伏阴指转化旧伤概率气运设置
+        public static int FuYinZhi = 0;
         
         // 功能开关映射表 - 将功能名映射到对应的配置字段
         private static readonly Dictionary<string, string> FeatureMap = new Dictionary<string, string>
@@ -91,7 +94,8 @@ namespace CombatMaster
             { "JingGuiFu", "JingGuiFu" },
             { "MuGongZhou", "MuGongZhou" },
             { "JiuChiXiang", "JiuChiXiang" },
-            { "LiHeZhi", "LiHeZhi" }
+            { "LiHeZhi", "LiHeZhi" },
+            { "FuYinZhi", "FuYinZhi" }
         };
 
         /// <summary>
@@ -182,6 +186,10 @@ namespace CombatMaster
             DomainManager.Mod.GetSetting(modIdStr, "LiHeZhi", ref LiHeZhi);
             DebugLog.Info($"[CombatMaster] 离合指反噬概率: {LiHeZhi}");
 
+            // 加载伏阴指配置
+            DomainManager.Mod.GetSetting(modIdStr, "FuYinZhi", ref FuYinZhi);
+            DebugLog.Info($"[CombatMaster] 伏阴指转化旧伤概率: {FuYinZhi}");
+
             DebugLog.Info("[CombatMaster] 所有配置项加载完成");
         }
 
@@ -248,6 +256,7 @@ namespace CombatMaster
                 case "MuGongZhou": return MuGongZhou;
                 case "JiuChiXiang": return JiuChiXiang;
                 case "LiHeZhi": return LiHeZhi;
+                case "FuYinZhi": return FuYinZhi;
                 default: 
                     DebugLog.Warning($"[CombatMaster] 未知的配置键: {configKey}");
                     return 0;
