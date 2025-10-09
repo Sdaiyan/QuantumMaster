@@ -35,32 +35,11 @@
     <Reference Include="GameData">
       <HintPath>$(TaiwuPath)\Backend\GameData.dll</HintPath>
     </Reference>
-    <Reference Include="GameData.Adventure">
-      <HintPath>$(TaiwuPath)\Backend\GameData.Adventure.dll</HintPath>
-    </Reference>
-    <Reference Include="GameData.Combat.Math">
-      <HintPath>$(TaiwuPath)\Backend\GameData.Combat.Math.dll</HintPath>
-    </Reference>
-    <Reference Include="GameData.Common">
-      <HintPath>$(TaiwuPath)\Backend\GameData.Common.dll</HintPath>
-    </Reference>
-    <Reference Include="GameData.Common.Algorithm">
-      <HintPath>$(TaiwuPath)\Backend\GameData.Common.Algorithm.dll</HintPath>
-    </Reference>
-    <Reference Include="GameData.GameDataBridge">
-      <HintPath>$(TaiwuPath)\Backend\GameData.GameDataBridge.dll</HintPath>
-    </Reference>
-    <Reference Include="GameData.Serializer">
-      <HintPath>$(TaiwuPath)\Backend\GameData.Serializer.dll</HintPath>
-    </Reference>
     <Reference Include="GameData.Shared">
       <HintPath>$(TaiwuPath)\Backend\GameData.Shared.dll</HintPath>
     </Reference>
     <Reference Include="GameData.Utilities">
       <HintPath>$(TaiwuPath)\Backend\GameData.Utilities.dll</HintPath>
-    </Reference>
-    <Reference Include="GameData.Utilities.Structure">
-      <HintPath>$(TaiwuPath)\Backend\GameData.Utilities.Structure.dll</HintPath>
     </Reference>
     <Reference Include="Redzen">
       <HintPath>$(TaiwuPath)\Backend\Redzen.dll</HintPath>
