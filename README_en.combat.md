@@ -44,12 +44,6 @@ Each feature supports independent realm settings:
 - **Follow Global**: Use global combat martial arts realm
 - **Independent Setting**: Set martial arts realm specifically for this feature
 
-## Development Info
-- **Author**: dai
-- **Version**: 0.0.1
-- **Based on**: QuantumMaster Framework
-- **License**: GPL-3.0
-
 ## Notes
 - This MOD focuses on combat features and can coexist with QuantumMaster
 - CombatMaster uses **"Martial Arts Realm"** terminology (Utterly Confused, Anxious and Hesitant, Calm and Composed, etc.)
@@ -57,9 +51,3 @@ Each feature supports independent realm settings:
 - The underlying calculation mechanism is exactly the same, only the names and descriptions differ
 - Some features require specific game conditions to trigger
 - Adjust martial arts realm levels according to personal preferences
-
-## Changelog
-### v0.0.1 (Initial Release)
-- Created basic project structure
-- Implemented configuration management system
-- Prepared combat feature framework
