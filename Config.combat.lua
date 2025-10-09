@@ -106,7 +106,7 @@ return {
         {
             SettingType = "Toggle",
             Key = "LeiZuBoJianShiCloth",
-            DisplayName = "嫘祖剥茧式",
+            DisplayName = "【开关】嫘祖剥茧式",
             Description = "嫘祖剥茧式脱装备时，是否优先脱外观的衣服",
             DefaultValue = true,
         },
