@@ -84,6 +84,7 @@ namespace CombatMaster
             { "LingLiuXu", (typeof(Features.Combat.LingLiuXuPatch), () => CombatConfigManager.IsFeatureEnabled("LingLiuXu")) },
             { "QingNvLvBing", (typeof(Features.Combat.QingNvLvBingPatch), () => CombatConfigManager.IsFeatureEnabled("QingNvLvBing")) },
             { "XiaoZongYueGong", (typeof(Features.Combat.XiaoZongYueGongPatch), () => CombatConfigManager.IsFeatureEnabled("XiaoZongYueGong")) },
+            { "KuangDao", (typeof(Features.Combat.KuangDaoPatch), () => CombatConfigManager.IsFeatureEnabled("KuangDao")) },
         };
 
         // PatchBuilder 补丁配置映射表 - 目前为空，后续添加战斗相关补丁

@@ -65,7 +65,8 @@ namespace QuantumMaster.Shared
             { "FengGouQuan", "疯狗拳获得增伤的概率" },
             { "LingLiuXu", "凌六虚命中要害概率" },
             { "QingNvLvBing", "青女履冰复读概率" },
-            { "XiaoZongYueGong", "小纵跃功不消耗脚力概率" }
+            { "XiaoZongYueGong", "小纵跃功不消耗脚力概率" },
+            { "KuangDao", "狂刀命中DEBUFF减少" }
         };
 
         /// <summary>

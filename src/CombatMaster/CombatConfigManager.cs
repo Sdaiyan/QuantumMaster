@@ -54,6 +54,9 @@ namespace CombatMaster
 
         // 小纵跃功不消耗脚力概率气运设置
         public static int XiaoZongYueGong = 0;
+
+        // 狂刀命中DEBUFF减少气运设置
+        public static int KuangDao = 0;
         
         // 功能开关映射表 - 将功能名映射到对应的配置字段
         private static readonly Dictionary<string, string> FeatureMap = new Dictionary<string, string>
@@ -71,7 +74,8 @@ namespace CombatMaster
             { "FengGouQuan", "FengGouQuan" },
             { "LingLiuXu", "LingLiuXu" },
             { "QingNvLvBing", "QingNvLvBing" },
-            { "XiaoZongYueGong", "XiaoZongYueGong" }
+            { "XiaoZongYueGong", "XiaoZongYueGong" },
+            { "KuangDao", "KuangDao" }
         };
 
         /// <summary>
@@ -142,6 +146,10 @@ namespace CombatMaster
             DomainManager.Mod.GetSetting(modIdStr, "XiaoZongYueGong", ref XiaoZongYueGong);
             DebugLog.Info($"[CombatMaster] 小纵跃功不消耗脚力概率: {XiaoZongYueGong}");
 
+            // 加载狂刀配置
+            DomainManager.Mod.GetSetting(modIdStr, "KuangDao", ref KuangDao);
+            DebugLog.Info($"[CombatMaster] 狂刀命中DEBUFF减少: {KuangDao}");
+
             DebugLog.Info("[CombatMaster] 所有配置项加载完成");
         }
 
@@ -203,6 +211,7 @@ namespace CombatMaster
                 case "LingLiuXu": return LingLiuXu;
                 case "QingNvLvBing": return QingNvLvBing;
                 case "XiaoZongYueGong": return XiaoZongYueGong;
+                case "KuangDao": return KuangDao;
                 default: 
                     DebugLog.Warning($"[CombatMaster] 未知的配置键: {configKey}");
                     return 0;
