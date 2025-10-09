@@ -90,6 +90,7 @@ namespace CombatMaster
             { "JiuChiXiang", (typeof(Features.Combat.JiuChiXiangPatch), () => CombatConfigManager.IsFeatureEnabled("JiuChiXiang")) },
             { "LiHeZhi", (typeof(Features.Combat.LiHeZhiPatch), () => CombatConfigManager.IsFeatureEnabled("LiHeZhi")) },
             { "FuYinZhi", (typeof(Features.Combat.FuYinZhiPatch), () => CombatConfigManager.IsFeatureEnabled("FuYinZhi")) },
+            { "TaiSuJueShou", (typeof(Features.Combat.TaiSuJueShouPatch), () => CombatConfigManager.IsFeatureEnabled("TaiSuJueShou")) },
         };
 
         // PatchBuilder 补丁配置映射表 - 目前为空，后续添加战斗相关补丁

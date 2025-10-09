@@ -72,6 +72,9 @@ namespace CombatMaster
 
         // 伏阴指转化旧伤概率气运设置
         public static int FuYinZhi = 0;
+
+        // 太素绝手打断施展功法概率气运设置
+        public static int TaiSuJueShou = 0;
         
         // 功能开关映射表 - 将功能名映射到对应的配置字段
         private static readonly Dictionary<string, string> FeatureMap = new Dictionary<string, string>
@@ -95,7 +98,8 @@ namespace CombatMaster
             { "MuGongZhou", "MuGongZhou" },
             { "JiuChiXiang", "JiuChiXiang" },
             { "LiHeZhi", "LiHeZhi" },
-            { "FuYinZhi", "FuYinZhi" }
+            { "FuYinZhi", "FuYinZhi" },
+            { "TaiSuJueShou", "TaiSuJueShou" }
         };
 
         /// <summary>
@@ -190,6 +194,10 @@ namespace CombatMaster
             DomainManager.Mod.GetSetting(modIdStr, "FuYinZhi", ref FuYinZhi);
             DebugLog.Info($"[CombatMaster] 伏阴指转化旧伤概率: {FuYinZhi}");
 
+            // 加载太素绝手配置
+            DomainManager.Mod.GetSetting(modIdStr, "TaiSuJueShou", ref TaiSuJueShou);
+            DebugLog.Info($"[CombatMaster] 太素绝手打断施展功法概率: {TaiSuJueShou}");
+
             DebugLog.Info("[CombatMaster] 所有配置项加载完成");
         }
 
@@ -257,6 +265,7 @@ namespace CombatMaster
                 case "JiuChiXiang": return JiuChiXiang;
                 case "LiHeZhi": return LiHeZhi;
                 case "FuYinZhi": return FuYinZhi;
+                case "TaiSuJueShou": return TaiSuJueShou;
                 default: 
                     DebugLog.Warning($"[CombatMaster] 未知的配置键: {configKey}");
                     return 0;
