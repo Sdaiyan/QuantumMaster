@@ -270,6 +270,24 @@ return {
                 "万法归一"
             },
             DefaultValue = 0,
+        },
+        {
+            SettingType = "Dropdown",
+            Key = "XiaoZongYueGong",
+            DisplayName = "【武者】小纵跃功",
+            Description = "不消耗脚力概率增加",
+            Options = {
+                "跟随全局",
+                "方寸大乱",
+                "患得患失",
+                "气定神闲",
+                "游刃有余",
+                "随心所欲",
+                "如有神助",
+                "天人合一",
+                "万法归一"
+            },
+            DefaultValue = 0,
         }
     },
 }

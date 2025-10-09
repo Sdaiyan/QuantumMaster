@@ -51,6 +51,9 @@ namespace CombatMaster
 
         // 青女履冰复读概率气运设置
         public static int QingNvLvBing = 0;
+
+        // 小纵跃功不消耗脚力概率气运设置
+        public static int XiaoZongYueGong = 0;
         
         // 功能开关映射表 - 将功能名映射到对应的配置字段
         private static readonly Dictionary<string, string> FeatureMap = new Dictionary<string, string>
@@ -67,7 +70,8 @@ namespace CombatMaster
             { "QianNianZui", "QianNianZui" },
             { "FengGouQuan", "FengGouQuan" },
             { "LingLiuXu", "LingLiuXu" },
-            { "QingNvLvBing", "QingNvLvBing" }
+            { "QingNvLvBing", "QingNvLvBing" },
+            { "XiaoZongYueGong", "XiaoZongYueGong" }
         };
 
         /// <summary>
@@ -134,6 +138,10 @@ namespace CombatMaster
             DomainManager.Mod.GetSetting(modIdStr, "QingNvLvBing", ref QingNvLvBing);
             DebugLog.Info($"[CombatMaster] 青女履冰复读概率: {QingNvLvBing}");
 
+            // 加载小纵跃功配置
+            DomainManager.Mod.GetSetting(modIdStr, "XiaoZongYueGong", ref XiaoZongYueGong);
+            DebugLog.Info($"[CombatMaster] 小纵跃功不消耗脚力概率: {XiaoZongYueGong}");
+
             DebugLog.Info("[CombatMaster] 所有配置项加载完成");
         }
 
@@ -194,6 +202,7 @@ namespace CombatMaster
                 case "FengGouQuan": return FengGouQuan;
                 case "LingLiuXu": return LingLiuXu;
                 case "QingNvLvBing": return QingNvLvBing;
+                case "XiaoZongYueGong": return XiaoZongYueGong;
                 default: 
                     DebugLog.Warning($"[CombatMaster] 未知的配置键: {configKey}");
                     return 0;
