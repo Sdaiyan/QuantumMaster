@@ -342,6 +342,24 @@ return {
                 "万法归一"
             },
             DefaultValue = 0,
+        },
+        {
+            SettingType = "Dropdown",
+            Key = "JiuChiXiang",
+            DisplayName = "【武者】九痴香",
+            Description = "敌人功法打断概率增加，自身功法被打断概率减少",
+            Options = {
+                "跟随全局",
+                "方寸大乱",
+                "患得患失",
+                "气定神闲",
+                "游刃有余",
+                "随心所欲",
+                "如有神助",
+                "天人合一",
+                "万法归一"
+            },
+            DefaultValue = 0,
         }
     },
 }

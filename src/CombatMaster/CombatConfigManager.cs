@@ -63,6 +63,9 @@ namespace CombatMaster
 
         // 木公咒打断功法概率气运设置
         public static int MuGongZhou = 0;
+
+        // 九痴香功法打断概率气运设置
+        public static int JiuChiXiang = 0;
         
         // 功能开关映射表 - 将功能名映射到对应的配置字段
         private static readonly Dictionary<string, string> FeatureMap = new Dictionary<string, string>
@@ -83,7 +86,8 @@ namespace CombatMaster
             { "XiaoZongYueGong", "XiaoZongYueGong" },
             { "KuangDao", "KuangDao" },
             { "JingGuiFu", "JingGuiFu" },
-            { "MuGongZhou", "MuGongZhou" }
+            { "MuGongZhou", "MuGongZhou" },
+            { "JiuChiXiang", "JiuChiXiang" }
         };
 
         /// <summary>
@@ -166,6 +170,10 @@ namespace CombatMaster
             DomainManager.Mod.GetSetting(modIdStr, "MuGongZhou", ref MuGongZhou);
             DebugLog.Info($"[CombatMaster] 木公咒打断功法概率: {MuGongZhou}");
 
+            // 加载九痴香配置
+            DomainManager.Mod.GetSetting(modIdStr, "JiuChiXiang", ref JiuChiXiang);
+            DebugLog.Info($"[CombatMaster] 九痴香功法打断概率: {JiuChiXiang}");
+
             DebugLog.Info("[CombatMaster] 所有配置项加载完成");
         }
 
@@ -230,6 +238,7 @@ namespace CombatMaster
                 case "KuangDao": return KuangDao;
                 case "JingGuiFu": return JingGuiFu;
                 case "MuGongZhou": return MuGongZhou;
+                case "JiuChiXiang": return JiuChiXiang;
                 default: 
                     DebugLog.Warning($"[CombatMaster] 未知的配置键: {configKey}");
                     return 0;

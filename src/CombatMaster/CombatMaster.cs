@@ -87,6 +87,7 @@ namespace CombatMaster
             { "KuangDao", (typeof(Features.Combat.KuangDaoPatch), () => CombatConfigManager.IsFeatureEnabled("KuangDao")) },
             { "JingGuiFu", (typeof(Features.Combat.JingGuiFuPatch), () => CombatConfigManager.IsFeatureEnabled("JingGuiFu")) },
             { "MuGongZhou", (typeof(Features.Combat.MuGongZhouPatch), () => CombatConfigManager.IsFeatureEnabled("MuGongZhou")) },
+            { "JiuChiXiang", (typeof(Features.Combat.JiuChiXiangPatch), () => CombatConfigManager.IsFeatureEnabled("JiuChiXiang")) },
         };
 
         // PatchBuilder 补丁配置映射表 - 目前为空，后续添加战斗相关补丁
@@ -108,6 +109,7 @@ namespace CombatMaster
             { "XiaoZongYueGongBuilder", (Features.Combat.XiaoZongYueGongPatch.Apply, () => CombatConfigManager.IsFeatureEnabled("XiaoZongYueGong")) },
             { "JingGuiFuBuilder", (Features.Combat.JingGuiFuPatch.Apply, () => CombatConfigManager.IsFeatureEnabled("JingGuiFu")) },
             { "MuGongZhouBuilder", (Features.Combat.MuGongZhouPatch.Apply, () => CombatConfigManager.IsFeatureEnabled("MuGongZhou")) },
+            { "JiuChiXiangBuilder", (Features.Combat.JiuChiXiangPatch.Apply, () => CombatConfigManager.IsFeatureEnabled("JiuChiXiang")) },
         };
 
         // 应用 class 形式的补丁
