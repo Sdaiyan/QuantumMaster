@@ -60,6 +60,9 @@ namespace CombatMaster
 
         // 惊鬼符敌人逃跑概率气运设置
         public static int JingGuiFu = 0;
+
+        // 木公咒打断功法概率气运设置
+        public static int MuGongZhou = 0;
         
         // 功能开关映射表 - 将功能名映射到对应的配置字段
         private static readonly Dictionary<string, string> FeatureMap = new Dictionary<string, string>
@@ -79,7 +82,8 @@ namespace CombatMaster
             { "QingNvLvBing", "QingNvLvBing" },
             { "XiaoZongYueGong", "XiaoZongYueGong" },
             { "KuangDao", "KuangDao" },
-            { "JingGuiFu", "JingGuiFu" }
+            { "JingGuiFu", "JingGuiFu" },
+            { "MuGongZhou", "MuGongZhou" }
         };
 
         /// <summary>
@@ -158,6 +162,10 @@ namespace CombatMaster
             DomainManager.Mod.GetSetting(modIdStr, "JingGuiFu", ref JingGuiFu);
             DebugLog.Info($"[CombatMaster] 惊鬼符敌人逃跑概率: {JingGuiFu}");
 
+            // 加载木公咒配置
+            DomainManager.Mod.GetSetting(modIdStr, "MuGongZhou", ref MuGongZhou);
+            DebugLog.Info($"[CombatMaster] 木公咒打断功法概率: {MuGongZhou}");
+
             DebugLog.Info("[CombatMaster] 所有配置项加载完成");
         }
 
@@ -221,6 +229,7 @@ namespace CombatMaster
                 case "XiaoZongYueGong": return XiaoZongYueGong;
                 case "KuangDao": return KuangDao;
                 case "JingGuiFu": return JingGuiFu;
+                case "MuGongZhou": return MuGongZhou;
                 default: 
                     DebugLog.Warning($"[CombatMaster] 未知的配置键: {configKey}");
                     return 0;

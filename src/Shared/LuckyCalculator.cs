@@ -67,7 +67,8 @@ namespace QuantumMaster.Shared
             { "QingNvLvBing", "青女履冰复读概率" },
             { "XiaoZongYueGong", "小纵跃功不消耗脚力概率" },
             { "KuangDao", "狂刀命中DEBUFF减少" },
-            { "JingGuiFu", "惊鬼符敌人逃跑概率" }
+            { "JingGuiFu", "惊鬼符敌人逃跑概率" },
+            { "MuGongZhou", "木公咒打断功法概率" }
         };
 
         /// <summary>
