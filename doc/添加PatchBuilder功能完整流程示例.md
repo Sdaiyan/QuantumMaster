@@ -2,11 +2,23 @@
 
 本文档展示如何完整地添加一个新的 PatchBuilder 功能，以"【气运】采集蛐蛐成功率"为例。
 
-**重要提醒**: 本项目已重构为双项目结构，请根据功能性质选择正确的项目：
+**重要提醒 - 项目和术语选择**: 
+本项目已重构为双项目结构，请根据功能性质选择正确的项目：
 - **QuantumMaster**: 核心游戏功能修改（资源、建筑、角色等）
+  - 使用 **"气运"** 描述（命途多舛、时运不济、顺风顺水等）
+  - 文档标签使用 **【气运】**
+  - 配置文件：`Config.lua`
+  - 配置管理器：`ConfigManager`
+  
 - **CombatMaster**: 战斗相关功能修改
+  - 使用 **"武学境界"** 描述（方寸大乱、患得患失、气定神闲等）
+  - 文档标签使用 **【武者】**
+  - 配置文件：`Config.combat.lua`
+  - 配置管理器：`CombatConfigManager`
 
-本示例以添加到 **QuantumMaster** 项目为例，如需添加到 CombatMaster 项目，请将对应路径中的 `QuantumMaster` 替换为 `CombatMaster`。
+**核心说明**：两个项目的底层运算机制完全相同，都使用 `LuckyCalculator` 进行计算，仅是名称、描述和文化内涵不同。
+
+本示例以添加到 **QuantumMaster** 项目为例，如需添加到 CombatMaster 项目，请将对应路径中的 `QuantumMaster` 替换为 `CombatMaster`，并使用武学境界相关的术语。
 
 ## 项目选择指南
 
@@ -18,28 +30,35 @@
 - 世界生成功能（地图资源初始化等）
 - 技能学习功能（偷学、指点等）
 - 奇遇相关功能
+- **术语**：使用 **"气运"**（命途多舛、时运不济、顺风顺水等），标签 **【气运】**
 
 ### CombatMaster 项目适用于：
 - 功法的修改
+- 战斗相关的所有功能
+- **术语**：使用 **"武学境界"**（方寸大乱、患得患失、气定神闲等），标签 **【武者】**
 
 ### 配置管理器对应关系：
-- **QuantumMaster 项目** → `ConfigManager` → `Config.lua`
-- **CombatMaster 项目** → `CombatConfigManager` → `Config.combat.lua`
+- **QuantumMaster 项目** → `ConfigManager` → `Config.lua` → 使用 **"气运"** 术语
+- **CombatMaster 项目** → `CombatConfigManager` → `Config.combat.lua` → 使用 **"武学境界"** 术语
+
+**说明**：底层都使用 `LuckyCalculator` 进行计算，仅配置描述不同
 
 ## 功能信息
 
+- **项目**: QuantumMaster（非战斗功能）
 - **featureKey**: `catchGrasshopper`
 - **功能名称**: 采集蛐蛐成功率
 - **功能描述**: 采集蛐蛐时，基础成功率根据气运增加
+- **术语**: 使用 **"气运"**，标签 **【气运】**
 - **目标方法**: `GameData.Domains.World.ResourceDomain.CollectGrasshopper`
 - **需要替换的函数**: `IRandomSource.CheckPercentProb(int percent)`
 - **替换次数**: 1次（假设原方法中只有一个概率判断）
 
+**注意**：如果是 CombatMaster 项目，则使用 **"武学境界"**，标签 **【武者】**
+
 ## 第一步：修改配置文件
 
 **对于 QuantumMaster 项目**，在 `Config.lua` 的 `DefaultSettings` 数组中添加新配置项：
-
-**对于 CombatMaster 项目**，在 `Config.combat.lua` 的 `DefaultSettings` 数组中添加新配置项：
 
 ```lua
 {
@@ -47,10 +66,27 @@
     Key = "catchGrasshopper",
     DisplayName = "【气运】采集蛐蛐成功率",
     Description = "采集蛐蛐时，基础成功率根据气运增加",
-    Options = luckLevelOptions,
+    Options = luckLevelOptions,  -- QuantumMaster 使用气运选项
     DefaultValue = 0,
 },
 ```
+
+**对于 CombatMaster 项目**，在 `Config.combat.lua` 的 `DefaultSettings` 数组中添加新配置项：
+
+```lua
+{
+    SettingType = "Dropdown",
+    Key = "featureKey",
+    DisplayName = "【武者】功能名称",
+    Description = "功能描述",
+    Options = combatMartialLevelOptions,  -- CombatMaster 使用武学境界选项
+    DefaultValue = 0,
+},
+```
+
+**重要区别**：
+- QuantumMaster: 标签用 **【气运】**，Options 用 `luckLevelOptions`
+- CombatMaster: 标签用 **【武者】**，Options 用 `combatMartialLevelOptions`
 
 ## 第二步：更新配置管理器
 
@@ -239,14 +275,33 @@ private readonly Dictionary<string, (System.Func<Harmony, bool> patchMethod, Sys
 
 维护文档十分重要，不要遗漏这个步骤
 
-在 `README.md` 文件中添加新功能的描述，让用户了解功能的作用。找到合适的分类位置添加：
+**对于 QuantumMaster 项目**，在 `README.md` 文件中添加新功能的描述：
+
+```markdown
+【气运】采集蛐蛐成功率: 采集蛐蛐时，基础成功率根据气运增加
+```
 
 同时在 `README_en.md` 添加英文的描述，添加时需要特别注意格式
 
-
-```plaintext
-【气运】采集蛐蛐成功率: 采集蛐蛐时，基础成功率根据气运增加
+```markdown
+【Luck】Grasshopper Collection Success Rate: Increase the base success rate when collecting grasshoppers based on luck
 ```
+
+**对于 CombatMaster 项目**，在 `README.combat.md` 文件中添加新功能的描述：
+
+```markdown
+【武者】功能名称: 功能描述
+```
+
+同时在 `README_en.combat.md` 添加英文的描述
+
+```markdown
+【Martial Arts】Feature Name: Feature description
+```
+
+**重要区别**：
+- QuantumMaster: 使用 **【气运】** / **【Luck】** 标签，文档在 `README.md` 和 `README_en.md`
+- CombatMaster: 使用 **【武者】** / **【Martial Arts】** 标签，文档在 `README.combat.md` 和 `README_en.combat.md`
 
 ## 第七步：编译和测试
 
@@ -368,6 +423,10 @@ public void SomeMethod()
 7. **配置管理器**: 使用对应项目的配置管理器（ConfigManager vs CombatConfigManager）
 8. **Shared 引用**: 补丁类中需要添加 `using QuantumMaster.Shared;` 引用
 9. **配置文件**: 确保在正确的配置文件中添加设置项（Config.lua vs Config.combat.lua）
+10. **术语一致性**: 
+    - QuantumMaster 使用 **"气运"**（命途多舛等），标签 **【气运】**，Options 用 `luckLevelOptions`
+    - CombatMaster 使用 **"武学境界"**（方寸大乱等），标签 **【武者】**，Options 用 `combatMartialLevelOptions`
+    - 底层计算机制完全相同，仅是描述不同
 
 ## 架构说明
 
@@ -398,9 +457,15 @@ QuantumMaster/
 ```
 
 这种架构的优势：
-- **代码复用**: 共享的逻辑（如气运计算）不需要重复实现
+- **代码复用**: 共享的逻辑（如气运/武学境界计算）不需要重复实现
 - **功能分离**: 主功能和战斗功能分开管理，降低复杂度
 - **独立配置**: 每个项目有独立的配置文件和配置管理器
+- **术语区分**: QuantumMaster 用"气运"，CombatMaster 用"武学境界"，符合各自的文化内涵
 - **灵活部署**: 用户可以选择只安装需要的功能模块
+
+**核心原则**：
+- 底层计算使用同一套 `LuckyCalculator`，机制完全相同
+- 仅在配置描述、文档标签、选项名称上有所不同
+- 保持两个项目的独立性和一致性
 
 通过遵循这个流程，可以快速且正确地添加新的 PatchBuilder 功能。

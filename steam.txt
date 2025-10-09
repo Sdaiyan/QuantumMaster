@@ -1,0 +1,17 @@
+[h1] 标题文字 [/h1]
+
+[b] 粗体文本 [/b]
+
+[u] 下划线文本 [/u]
+
+[i] 斜体文本 [/i]
+
+[strike] 删除文本 [/strike]
+
+[spoiler] 隐藏文本 [/spoiler]
+
+[noparse] 不解析[b]标签[/b] [/noparse]
+
+[hr][/hr]渲染水平分隔线
+
+[url=store.steampowered.com] 网站链接 [/url]
