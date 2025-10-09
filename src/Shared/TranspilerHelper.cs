@@ -314,7 +314,7 @@ public static class GenericTranspiler
         // 按索引倒序排列，从后向前替换，避免索引变化
         replacements.Sort((a, b) => b.Index.CompareTo(a.Index));
         
-        foreach (var (index, replacementMethod) in replacements)
+          foreach (var (index, replacementMethod) in replacements)
         {
             if (index < 0 || index >= codes.Count)
             {
@@ -322,7 +322,12 @@ public static class GenericTranspiler
                 continue;
             }
             
-            codes[index] = new CodeInstruction(OpCodes.Call, replacementMethod);
+            // 创建新指令并复制原指令的标签和块信息
+            var newInstruction = new CodeInstruction(OpCodes.Call, replacementMethod);
+            newInstruction.labels = codes[index].labels;
+            newInstruction.blocks = codes[index].blocks;
+            codes[index] = newInstruction;
+            
             totalReplacements++;
             DebugLog.Info($"[{totalReplacements}/{replacements.Count}]替换位置 {index} 的方法调用为 {replacementMethod.DeclaringType.Name}.{replacementMethod.Name}");
         }
