@@ -42,6 +42,7 @@ Please leave a comment if you encounter any issues.
 **【Character Generation 【性别生成】】**
 *   **Gender Control 【生成性别控制】:** Controls the gender of randomly generated characters. Does not affect NPCs with predefined genders.
 *   **Sexuality Control 【性取向控制】:** By default, everyone in the Taiwu world has a 20% chance to be bisexual at birth. This setting allows you to control the sexuality of all characters (including those born before enabling this function). Sexuality affects probabilities for表白 (confession) and结婚 (marriage).
+*   **[Fortune] Multiple Birth Probability 【气运】多胞胎概率:** Increases the probability of having multiple births (twins, triplets, etc.) based on Fortune.
 
 **【World Generation 【世界生成类】】**
 *   **[Fortune] Initial World Buildings 【气运】世界初始建筑:** Increases the initial level and quantity of buildings and resource points in industries during world generation based on Fortune.

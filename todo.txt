@@ -98,3 +98,13 @@ patchBuilder 要做到这一点的话需要每次 replace 声明一个对应的�
 这样做有个好处就是每次随机都可以输出日志和分隔符，可以看到哪个功能正在生效，并且可以通过分隔符清楚的区分每个功能，这个也需要增加上
 
 我们现在就只将 steal 实装到支持单独选择气运，尝试一下。
+
+ParallelCreateNewbornChildren
+↓
+ParallelCreateIntelligentCharacter
+↓
+OfflineCreateIntelligentCharacter
+↓
+CharacterCreation.CreateMainAttributes(random, ref info)
+CharacterCreation.CreateLifeSkillQualifications(random, ref info)
+CharacterCreation.CreateCombatSkillQualifications(random, ref info)

@@ -79,6 +79,11 @@ namespace QuantumMaster
         public static int UpdateResourceBlockBuildingCoreProducing = 0;
 
         /// <summary>
+        /// 多胞胎概率气运设置
+        /// </summary>
+        public static int ParallelCreateNewbornChildren = 0;
+
+        /// <summary>
         /// 从游戏配置中读取所有 MOD 设置
         /// </summary>
         /// <param name="modIdStr">MOD ID 字符串</param>
@@ -265,6 +270,9 @@ namespace QuantumMaster
 
             DomainManager.Mod.GetSetting(modIdStr, "UpdateResourceBlockBuildingCoreProducing", ref UpdateResourceBlockBuildingCoreProducing);
             DebugLog.Info($"配置加载: UpdateResourceBlockBuildingCoreProducing = {UpdateResourceBlockBuildingCoreProducing}");
+
+            DomainManager.Mod.GetSetting(modIdStr, "ParallelCreateNewbornChildren", ref ParallelCreateNewbornChildren);
+            DebugLog.Info($"配置加载: ParallelCreateNewbornChildren = {ParallelCreateNewbornChildren}");
 
             DebugLog.Info("所有配置项加载完成");
         }

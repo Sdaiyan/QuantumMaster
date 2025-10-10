@@ -1303,6 +1303,24 @@ return {
                 "气运之子"
             },
             DefaultValue = 0,
+        },
+        {
+            SettingType = "Dropdown",
+            Key = "ParallelCreateNewbornChildren",
+            DisplayName = "【气运】多胞胎概率",
+            Description = "孩子是多胞胎的概率",
+            Options = {
+                "跟随全局",
+                "命途多舛",
+                "时运不济",
+                "顺风顺水(关闭功能)",
+                "左右逢源",
+                "心想事成",
+                "福星高照",
+                "洪福齐天",
+                "气运之子"
+            },
+            DefaultValue = 0,
         }
     },
 }
