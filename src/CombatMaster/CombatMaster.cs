@@ -93,6 +93,7 @@ namespace CombatMaster
             { "TaiSuJueShou", (typeof(Features.Combat.TaiSuJueShouPatch), () => CombatConfigManager.IsFeatureEnabled("TaiSuJueShou")) },
             { "ManTianHuaYuShi", (typeof(Features.Combat.ManTianHuaYuShiPatch), () => CombatConfigManager.IsFeatureEnabled("ManTianHuaYuShi")) },
             { "GuiYeKu", (typeof(Features.Combat.GuiYeKuPatch), () => CombatConfigManager.IsFeatureEnabled("GuiYeKu")) },
+            { "WuChangJiao", (typeof(Features.Combat.WuChangJiaoPatch), () => CombatConfigManager.IsFeatureEnabled("WuChangJiao")) },
         };
 
         // PatchBuilder 补丁配置映射表 - 目前为空，后续添加战斗相关补丁
@@ -119,6 +120,7 @@ namespace CombatMaster
             { "FuYinZhiBuilder", (Features.Combat.FuYinZhiPatch.Apply, () => CombatConfigManager.IsFeatureEnabled("FuYinZhi")) },
             { "ManTianHuaYuShiBuilder", (Features.Combat.ManTianHuaYuShiPatch.Apply, () => CombatConfigManager.IsFeatureEnabled("ManTianHuaYuShi")) },
             { "GuiYeKuBuilder", (Features.Combat.GuiYeKuPatch.Apply, () => CombatConfigManager.IsFeatureEnabled("GuiYeKu")) },
+            { "WuChangJiaoBuilder", (Features.Combat.WuChangJiaoPatch.Apply, () => CombatConfigManager.IsFeatureEnabled("WuChangJiao")) },
         };
 
         // 应用 class 形式的补丁
