@@ -31,8 +31,13 @@ namespace CombatMaster
         // 瑶姬云雨式爱慕概率气运设置
         public static int YaoJiYunYuShi = 0;
 
+        // 鬼夜哭反击成功后的特效触发概率气运设置
+        public static int GuiYeKu = 0;
+
         // 越女剑法追击几率提升气运设置
-        public static int YueNvJianFa = 0;        // 镜花水月绝对化解概率气运设置
+        public static int YueNvJianFa = 0;
+        
+        // 镜花水月绝对化解概率气运设置
         public static int JingHuaShuiYue = 0;
 
         // 疯魔醉拳复读概率气运设置
@@ -87,6 +92,7 @@ namespace CombatMaster
             { "JiuSiLiHunShou", "JiuSiLiHunShou" },
             { "LeiZuBoJianShi", "LeiZuBoJianShi" },
             { "YaoJiYunYuShi", "YaoJiYunYuShi" },
+            { "GuiYeKu", "GuiYeKu" },
             { "YueNvJianFa", "YueNvJianFa" },
             { "JingHuaShuiYue", "JingHuaShuiYue" },
             { "FengMoZuiQuan", "FengMoZuiQuan" },
@@ -141,6 +147,10 @@ namespace CombatMaster
             // 加载瑶姬云雨式配置
             DomainManager.Mod.GetSetting(modIdStr, "YaoJiYunYuShi", ref YaoJiYunYuShi);
             DebugLog.Info($"[CombatMaster] 瑶姬云雨式爱慕概率: {YaoJiYunYuShi}");
+
+            // 加载鬼夜哭配置
+            DomainManager.Mod.GetSetting(modIdStr, "GuiYeKu", ref GuiYeKu);
+            DebugLog.Info($"[CombatMaster] 鬼夜哭反击成功后的特效触发概率: {GuiYeKu}");
 
             // 加载越女剑法配置
             DomainManager.Mod.GetSetting(modIdStr, "YueNvJianFa", ref YueNvJianFa);
@@ -258,6 +268,7 @@ namespace CombatMaster
                 case "JiuSiLiHunShou": return JiuSiLiHunShou;
                 case "LeiZuBoJianShi": return LeiZuBoJianShi;
                 case "YaoJiYunYuShi": return YaoJiYunYuShi;
+                case "GuiYeKu": return GuiYeKu;
                 case "YueNvJianFa": return YueNvJianFa;
                 case "JingHuaShuiYue": return JingHuaShuiYue;
                 case "FengMoZuiQuan": return FengMoZuiQuan;

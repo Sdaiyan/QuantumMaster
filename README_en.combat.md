@@ -12,6 +12,7 @@ CombatMaster is a specialized version of the QuantumMaster project, focusing exc
 **【Martial Arts】Leizu Cocoon Peeling Style**: Increases the probability of Leizu Cocoon Peeling Style removing equipment from enemies
 **Leizu Cocoon Peeling Style**: Optional setting to prioritize removing appearance clothing
 **【Martial Arts】Yaoji Cloud Rain Style**: Increases the probability of Yaoji Cloud Rain Style's admiration effect triggering
+**【Martial Arts】Gui Ye Ku**: Increases the probability of special effects triggering after successful counterattack
 **【Martial Arts】Yue Nü Sword Technique**: Enhances the pursuit chance provided by Yue Nü Sword Technique
 **【Martial Arts】Jing Hua Shui Yue**: Increases the absolute deflection probability of Jing Hua Shui Yue
 **【Martial Arts】Feng Mo Zui Quan**: Increases the repeat probability of Feng Mo Zui Quan (Crazy Drunk Fist)
