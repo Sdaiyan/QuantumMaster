@@ -21,8 +21,4 @@ config.lua 定义如下
 
 `Description = 过月时，采集到资源点心材的概率（有内置冷却时间，低品3个月，高品6个月）`
 
-`Options = luckLevelOptions`  （QuantumMaster 使用气运选项）
-
-`DefaultValue = 0`
-
 不要忘记按照 流程示例中的要求维护 README.md 和 README_en.md
