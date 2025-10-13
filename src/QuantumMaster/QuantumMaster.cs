@@ -67,11 +67,11 @@ namespace QuantumMaster
 			
 			harmony = new Harmony("QuantumMaster");
 
-			if (ConfigManager.LuckyLevel == 2)
-			{
-				DebugLog.Info($"选择了顺风顺水气运，MOD将不会生效");
-				return;
-			}
+			// if (ConfigManager.LuckyLevel == 2)
+			// {
+			// 	DebugLog.Info($"选择了顺风顺水气运，MOD将不会生效");
+			// 	return;
+			// }
 
 			// 不再使用 harmony.PatchAll() 直接应用所有补丁
 			// 而是根据配置选择性应用

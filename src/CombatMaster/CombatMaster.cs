@@ -50,11 +50,11 @@ namespace CombatMaster
             
             harmony = new Harmony("CombatMaster");
 
-            if (CombatConfigManager.LuckyLevel == 2)
-            {
-                DebugLog.Info($"[CombatMaster] 选择了顺风顺水气运，MOD将不会生效");
-                return;
-            }
+            // if (CombatConfigManager.LuckyLevel == 2)
+            // {
+            //     DebugLog.Info($"[CombatMaster] 选择了顺风顺水气运，MOD将不会生效");
+            //     return;
+            // }
 
             // 应用战斗相关补丁
             // TODO: 在这里添加具体的补丁应用逻辑
