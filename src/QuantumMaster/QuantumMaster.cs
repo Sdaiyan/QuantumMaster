@@ -187,7 +187,8 @@ namespace QuantumMaster
 			{ "GenerateMaxDurability", (Features.Items.GenerateMaxDurabilityPatch.Apply, () => ConfigManager.IsFeatureEnabled("GenerateMaxDurability")) },
 			
 			// Extra 模块
-			{ "UpdateResourceBlockBuildingCoreProducing", (Features.Extra.UpdateResourceBlockBuildingCoreProducingPatch.Apply, () => ConfigManager.IsFeatureEnabled("UpdateResourceBlockBuildingCoreProducing")) }
+			{ "UpdateResourceBlockBuildingCoreProducing", (Features.Extra.UpdateResourceBlockBuildingCoreProducingPatch.Apply, () => ConfigManager.IsFeatureEnabled("UpdateResourceBlockBuildingCoreProducing")) },
+			{ "FindTreasureStandard", (Features.Extra.FindTreasureStandardPatch.Apply, () => ConfigManager.IsFeatureEnabled("FindTreasureStandard")) }
 		};
 
 		// 新增方法，根据配置选择性应用 class 形式的补丁

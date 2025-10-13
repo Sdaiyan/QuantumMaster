@@ -89,6 +89,11 @@ namespace QuantumMaster
         public static int GenerateMaxDurability = 0;
 
         /// <summary>
+        /// 挖宝概率提升气运设置
+        /// </summary>
+        public static int FindTreasureStandard = 0;
+
+        /// <summary>
         /// 从游戏配置中读取所有 MOD 设置
         /// </summary>
         /// <param name="modIdStr">MOD ID 字符串</param>
@@ -281,6 +286,9 @@ namespace QuantumMaster
 
             DomainManager.Mod.GetSetting(modIdStr, "GenerateMaxDurability", ref GenerateMaxDurability);
             DebugLog.Info($"配置加载: GenerateMaxDurability = {GenerateMaxDurability}");
+
+            DomainManager.Mod.GetSetting(modIdStr, "FindTreasureStandard", ref FindTreasureStandard);
+            DebugLog.Info($"配置加载: FindTreasureStandard = {FindTreasureStandard}");
 
             DebugLog.Info("所有配置项加载完成");
         }

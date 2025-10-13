@@ -63,6 +63,7 @@ Please leave a comment if you encounter any issues.
 *   **[Fortune] Adventure Harvest 【气运】奇遇收获:** Increases the quantity of resources gained from adventures within their floating range based on Fortune.
 *   **[Fortune] NPC Guidance Success Rate 【气运】NPC受到指点的成功率:** Increases the success rate of the Taiwu receiving guidance from NPCs.
 *   **[Fortune] Celestial Revelation 【气运】天人感应:** Increases the success rate of triggering Celestial Revelation.
+*   **[Fortune] Treasure Hunting Success Rate 【气运】挖宝概率提升:** Increases the probability of finding treasures when digging for treasure.
 
 **【Resource Acquisition 【资源获取类】】**
 *   **[Fortune] Catalyst Gathering 【气运】采集资源引子:** Increases the probability and quality of obtaining Catalysts while gathering resources.
