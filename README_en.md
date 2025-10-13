@@ -89,6 +89,9 @@ Please leave a comment if you encounter any issues.
 *   **[Fortune] Cricket Vibrancy Chance 【气运】蛐蛐神采非凡概率:** Increases the chance for a cricket to become 'Vibrant' during the quality check based on Fortune. (Note: Vanilla logic requires the cricket to have matching parts to be eligible for Vibrancy, which has a base 20% chance).
 *   **Healthy Crickets 【健康的蛐蛐】:** Generated crickets will always have maximum durability and will not be injured.
 
+**【Items 【物品相关】】**
+*   **[Fortune] Maximum Item Durability 【气运】物品耐久上限最大:** When generating items, the item's initial durability will be at the theoretical maximum (original logic was random between half of max value and max value).
+
 **【Cultivation 【功法修习类】】**
 *   **[Fortune] Zhou Tian Inner Force Gain 【气运】周天内力获取:** Increases the Inner Force gained from Zhou Tian cultivation within its floating range based on Fortune.
 *   **[Fortune] Max Zhou Tian Strategy Gain 【气运】周天内力策略收益最大:** Maximizes the Inner Force gained from the chosen Zhou Tian strategy based on Fortune.

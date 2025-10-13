@@ -184,6 +184,7 @@ namespace QuantumMaster
 			
 			// Items 模块
 			{ "CatchCricketDouble", (Features.Items.CatchCricketDoublePatch.Apply, () => ConfigManager.IsFeatureEnabled("CatchCricketDouble")) },
+			{ "GenerateMaxDurability", (Features.Items.GenerateMaxDurabilityPatch.Apply, () => ConfigManager.IsFeatureEnabled("GenerateMaxDurability")) },
 			
 			// Extra 模块
 			{ "UpdateResourceBlockBuildingCoreProducing", (Features.Extra.UpdateResourceBlockBuildingCoreProducingPatch.Apply, () => ConfigManager.IsFeatureEnabled("UpdateResourceBlockBuildingCoreProducing")) }

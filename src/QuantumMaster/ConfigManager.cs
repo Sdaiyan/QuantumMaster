@@ -69,9 +69,9 @@ namespace QuantumMaster
         public static int ChoosyGetMaterial = 0; // 精挑细选品质升级的独立气运设置，0=跟随全局
         public static int AddChoosyRemainUpgradeData = 0; // 精挑细选过月累计的独立气运设置，0=跟随全局
         public static int ParallelUpdateOnMonthChange = 0; // 过月地块资源恢复的独立气运设置，0=跟随全局
-        public static int BuildingRandomCorrection; // 【气运】太吾村经营收益
-        public static int BuildingManageHarvestSpecialSuccessRate; // 【气运】赌坊与青楼基础暴击率
-        public static int UpdateShopBuildingTeach; // 【气运】村民经营资质增加概率
+        public static int BuildingRandomCorrection = 0; // 【气运】太吾村经营收益
+        public static int BuildingManageHarvestSpecialSuccessRate = 0; // 【气运】赌坊与青楼基础暴击率
+        public static int UpdateShopBuildingTeach = 0; // 【气运】村民经营资质增加概率
         
         /// <summary>
         /// 村庄资源点获得心材概率气运设置
@@ -82,6 +82,11 @@ namespace QuantumMaster
         /// 多胞胎概率气运设置
         /// </summary>
         public static int ParallelCreateNewbornChildren = 0;
+
+        /// <summary>
+        /// 物品耐久上限最大气运设置
+        /// </summary>
+        public static int GenerateMaxDurability = 0;
 
         /// <summary>
         /// 从游戏配置中读取所有 MOD 设置
@@ -273,6 +278,9 @@ namespace QuantumMaster
 
             DomainManager.Mod.GetSetting(modIdStr, "ParallelCreateNewbornChildren", ref ParallelCreateNewbornChildren);
             DebugLog.Info($"配置加载: ParallelCreateNewbornChildren = {ParallelCreateNewbornChildren}");
+
+            DomainManager.Mod.GetSetting(modIdStr, "GenerateMaxDurability", ref GenerateMaxDurability);
+            DebugLog.Info($"配置加载: GenerateMaxDurability = {GenerateMaxDurability}");
 
             DebugLog.Info("所有配置项加载完成");
         }
