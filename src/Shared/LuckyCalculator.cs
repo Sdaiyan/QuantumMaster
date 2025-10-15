@@ -24,7 +24,7 @@ namespace QuantumMaster.Shared
             { "poison", "下毒" },
             { "plotHarm", "暗害" },
             { "CreateBuildingArea", "世界初始建筑" },
-            { "ropeOrSword", "绳子/剑柄救人" },
+            { "ropeOrSword", "绳子绑人" },
             { "collectResource", "采集资源引子" },
             { "GetCollectResourceAmount", "采集资源数量" },
             { "OfflineUpdateShopManagement", "太吾村经营成功率" },

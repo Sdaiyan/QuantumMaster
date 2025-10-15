@@ -49,7 +49,7 @@ Please leave a comment if you encounter any issues.
 *   **Max Initial Tile Resources 【初始生成地格资源最大】:** During world generation, resources on each tile are set to the maximum of their floating range. Currently collectible resources on a tile are still affected by difficulty.
 
 **【Events 【事件类】】**
-*   **[Fortune] Rope/Sword Hilt Rescue 【气运】绳子/剑柄救人:** Increases the success rate of rope kidnap or sword hilt rescue events.
+*   **[Fortune] Rope/Sword Hilt Rescue 【气运】绳子绑人:** Increases the success rate of rope kidnap or sword hilt rescue events.
 *   **[Fortune] Taiwu Village Management Success Rate 【气运】太吾村经营成功率:** Increases the success rate and grade of items obtained from selling and collecting in Taiwu Village.
 *   **[Fortune] Taiwu Village Management Yield 【气运】太吾村经营收益:** Increases the quantity of industry yields (Wood, Metal, Silver, Prestige, etc.) based on Fortune.
 *   **[Fortune] Villager Aptitude Increase Chance 【气运】村民经营资质增加概率:** Increases the probability of villagers gaining aptitude while working based on Fortune.

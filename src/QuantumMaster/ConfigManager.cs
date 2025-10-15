@@ -18,7 +18,7 @@ namespace QuantumMaster
         public static int poison; // 下毒气运等级：0=跟随全局，1-8=独立气运等级
         public static int plotHarm; // 暗害气运等级：0=跟随全局，1-8=独立气运等级
         public static int genderControl; // 生成性别控制：0=关闭功能，1=修改为女，2=修改为男
-        public static int ropeOrSword = 0; // 绳子/剑柄救人的独立气运设置，0=跟随全局
+        public static int ropeOrSword = 0; // 绳子绑人的独立气运设置，0=跟随全局
         public static int OfflineCalcGeneralAction_TeachSkill = 0; // 太吾受到指点的独立气运设置，0=跟随全局
         public static int CatchCricket; // 抓蛐蛐必定成功
         public static int CatchCricketDouble = 0; // 抓蛐蛐时获得双只蛐蛐

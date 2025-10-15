@@ -201,7 +201,7 @@ return {
         {
             SettingType = "Dropdown",
             Key = "ropeOrSword",
-            DisplayName = "【气运】绳子/剑柄救人",
+            DisplayName = "【气运】绳子绑人",
             Description = "事件触发时，绳子绑架或者剑柄救人的成功率根据气运增加",
             Options = {
                 "跟随全局",
