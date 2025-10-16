@@ -78,6 +78,7 @@ namespace QuantumMaster.Shared
             { "ManTianHuaYuShi", "漫天花雨式额外封穴/破绽概率" },
             { "ZuiBaXianBu", "醉八仙步获得BUFF概率" },
             { "BaiCaoQueZhuoZhi", "百草雀啄灸恢复自身/恶化敌人几率" },
+            { "YuZhenShu", "逆御针术获得变招几率" },
             { "ParallelCreateNewbornChildren", "多胞胎概率" },
             { "GenerateMaxDurability", "物品耐久上限最大" },
             { "FindTreasureStandard", "挖宝概率提升" }
