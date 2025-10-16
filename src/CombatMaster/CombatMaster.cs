@@ -100,6 +100,7 @@ namespace CombatMaster
             { "BoDaShiBaShi", (typeof(Features.Combat.BoDaShiBaShiPatch), () => CombatConfigManager.IsFeatureEnabled("BoDaShiBaShi")) },
             { "ShiBaDianQiMeiGun", (typeof(Features.Combat.ShiBaDianQiMeiGunPatch), () => CombatConfigManager.IsFeatureEnabled("ShiBaDianQiMeiGun")) },
             { "JinDaoHuanZhangGong", (typeof(Features.Combat.JinDaoHuanZhangGongPatch), () => CombatConfigManager.IsFeatureEnabled("JinDaoHuanZhangGong")) },
+            { "AoWangShenTui", (typeof(Features.Combat.AoWangShenTuiPatch), () => CombatConfigManager.IsFeatureEnabled("AoWangShenTui")) },
         };
 
         // PatchBuilder 补丁配置映射表 - 目前为空，后续添加战斗相关补丁
@@ -133,6 +134,7 @@ namespace CombatMaster
             { "BoDaShiBaShiBuilder", (Features.Combat.BoDaShiBaShiPatch.Apply, () => CombatConfigManager.IsFeatureEnabled("BoDaShiBaShi")) },
             { "ShiBaDianQiMeiGunBuilder", (Features.Combat.ShiBaDianQiMeiGunPatch.Apply, () => CombatConfigManager.IsFeatureEnabled("ShiBaDianQiMeiGun")) },
             { "JinDaoHuanZhangGongBuilder", (Features.Combat.JinDaoHuanZhangGongPatch.Apply, () => CombatConfigManager.IsFeatureEnabled("JinDaoHuanZhangGong")) },
+            { "AoWangShenTuiBuilder", (Features.Combat.AoWangShenTuiPatch.Apply, () => CombatConfigManager.IsFeatureEnabled("AoWangShenTui")) },
         };
 
         // 应用 class 形式的补丁

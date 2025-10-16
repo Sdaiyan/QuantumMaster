@@ -104,6 +104,9 @@ namespace CombatMaster
 
         // 金刀换掌功必然化解几率气运设置
         public static int JinDaoHuanZhangGong = 0;
+
+        // 鳌王神腿发动伤害的几率气运设置
+        public static int AoWangShenTui = 0;
         
         // 功能开关映射表 - 将功能名映射到对应的配置字段
         private static readonly Dictionary<string, string> FeatureMap = new Dictionary<string, string>
@@ -137,7 +140,8 @@ namespace CombatMaster
             { "YuZhenShu", "YuZhenShu" },
             { "BoDaShiBaShi", "BoDaShiBaShi" },
             { "ShiBaDianQiMeiGun", "ShiBaDianQiMeiGun" },
-            { "JinDaoHuanZhangGong", "JinDaoHuanZhangGong" }
+            { "JinDaoHuanZhangGong", "JinDaoHuanZhangGong" },
+            { "AoWangShenTui", "AoWangShenTui" }
         };
 
         /// <summary>
@@ -272,6 +276,10 @@ namespace CombatMaster
             DomainManager.Mod.GetSetting(modIdStr, "JinDaoHuanZhangGong", ref JinDaoHuanZhangGong);
             DebugLog.Info($"[CombatMaster] 金刀换掌功必然化解几率: {JinDaoHuanZhangGong}");
 
+            // 加载鳌王神腿配置
+            DomainManager.Mod.GetSetting(modIdStr, "AoWangShenTui", ref AoWangShenTui);
+            DebugLog.Info($"[CombatMaster] 鳌王神腿发动伤害的几率: {AoWangShenTui}");
+
             DebugLog.Info("[CombatMaster] 所有配置项加载完成");
         }
 
@@ -349,6 +357,7 @@ namespace CombatMaster
                 case "BoDaShiBaShi": return BoDaShiBaShi;
                 case "ShiBaDianQiMeiGun": return ShiBaDianQiMeiGun;
                 case "JinDaoHuanZhangGong": return JinDaoHuanZhangGong;
+                case "AoWangShenTui": return AoWangShenTui;
                 default: 
                     DebugLog.Warning($"[CombatMaster] 未知的配置键: {configKey}");
                     return 0;
