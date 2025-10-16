@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * Markdown to Steam BBCode Converter
- * 将 README.combat.md 转换为 Steam 创意工坊的 BBCode 格式
+ * 将 README.md 和 README.combat.md 转换为 Steam 创意工坊的 BBCode 格式
  */
 
 const fs = require('fs');
@@ -134,13 +134,29 @@ function saveFile(filePath, content) {
 
 // 主函数
 function main() {
-    const inputFile = process.argv[2] || 'README.combat.md';
-    const outputFile = process.argv[3] || 'README.combat.steam.txt';
+    // 如果指定了参数，则使用参数
+    if (process.argv.length > 2) {
+        const inputFile = process.argv[2];
+        const outputFile = process.argv[3] || inputFile.replace('.md', '.steam.txt');
+        convertSingleFile(inputFile, outputFile);
+    } else {
+        // 否则转换两个默认文件
+        console.log('=== Markdown to Steam BBCode Converter ===');
+        console.log('转换默认文件...\n');
+        
+        convertSingleFile('README.md', 'README.steam.txt');
+        console.log('');
+        convertSingleFile('README.combat.md', 'README.combat.steam.txt');
+        
+        console.log('');
+        console.log('=== 全部转换完成 ===');
+    }
+}
 
-    console.log('=== Markdown to Steam BBCode Converter ===');
-    console.log(`输入文件: ${inputFile}`);
+// 转换单个文件
+function convertSingleFile(inputFile, outputFile) {
+    console.log(`--- 转换 ${inputFile} ---`);
     console.log(`输出文件: ${outputFile}`);
-    console.log('');
 
     // 读取文件
     const markdown = readMarkdownFile(inputFile);
@@ -152,10 +168,6 @@ function main() {
 
     // 保存文件
     saveFile(outputFile, steamBBCode);
-
-    console.log('');
-    console.log('=== 转换完成 ===');
-    console.log(`请检查 ${outputFile} 文件`);
 }
 
 // 如果直接运行此脚本
@@ -163,4 +175,4 @@ if (require.main === module) {
     main();
 }
 
-module.exports = { convertToSteamBBCode, readMarkdownFile, saveFile };
+module.exports = { convertToSteamBBCode, readMarkdownFile, saveFile, convertSingleFile };
