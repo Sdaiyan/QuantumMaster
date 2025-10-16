@@ -101,6 +101,9 @@ namespace CombatMaster
 
         // 逆十八点齐眉棍获得变招几率气运设置
         public static int ShiBaDianQiMeiGun = 0;
+
+        // 金刀换掌功必然化解几率气运设置
+        public static int JinDaoHuanZhangGong = 0;
         
         // 功能开关映射表 - 将功能名映射到对应的配置字段
         private static readonly Dictionary<string, string> FeatureMap = new Dictionary<string, string>
@@ -133,7 +136,8 @@ namespace CombatMaster
             { "BaiCaoQueZhuoZhi", "BaiCaoQueZhuoZhi" },
             { "YuZhenShu", "YuZhenShu" },
             { "BoDaShiBaShi", "BoDaShiBaShi" },
-            { "ShiBaDianQiMeiGun", "ShiBaDianQiMeiGun" }
+            { "ShiBaDianQiMeiGun", "ShiBaDianQiMeiGun" },
+            { "JinDaoHuanZhangGong", "JinDaoHuanZhangGong" }
         };
 
         /// <summary>
@@ -264,6 +268,10 @@ namespace CombatMaster
             DomainManager.Mod.GetSetting(modIdStr, "ShiBaDianQiMeiGun", ref ShiBaDianQiMeiGun);
             DebugLog.Info($"[CombatMaster] 逆十八点齐眉棍获得变招几率: {ShiBaDianQiMeiGun}");
 
+            // 加载金刀换掌功配置
+            DomainManager.Mod.GetSetting(modIdStr, "JinDaoHuanZhangGong", ref JinDaoHuanZhangGong);
+            DebugLog.Info($"[CombatMaster] 金刀换掌功必然化解几率: {JinDaoHuanZhangGong}");
+
             DebugLog.Info("[CombatMaster] 所有配置项加载完成");
         }
 
@@ -340,6 +348,7 @@ namespace CombatMaster
                 case "YuZhenShu": return YuZhenShu;
                 case "BoDaShiBaShi": return BoDaShiBaShi;
                 case "ShiBaDianQiMeiGun": return ShiBaDianQiMeiGun;
+                case "JinDaoHuanZhangGong": return JinDaoHuanZhangGong;
                 default: 
                     DebugLog.Warning($"[CombatMaster] 未知的配置键: {configKey}");
                     return 0;

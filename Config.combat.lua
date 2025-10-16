@@ -525,6 +525,24 @@ return {
         },
         {
             SettingType = "Dropdown",
+            Key = "JinDaoHuanZhangGong",
+            DisplayName = "【武者】金刀换掌功",
+            Description = "必然化解几率增加",
+            Options = {
+                "跟随全局",
+                "方寸大乱",
+                "患得患失",
+                "气定神闲",
+                "游刃有余",
+                "随心所欲",
+                "如有神助",
+                "天人合一",
+                "万法归一"
+            },
+            DefaultValue = 0,
+        },
+        {
+            SettingType = "Dropdown",
             Key = "BoDaShiBaShi",
             DisplayName = "【武者】逆跛打八十式",
             Description = "获得变招几率增加",
