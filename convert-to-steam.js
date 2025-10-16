@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * Markdown to Steam BBCode Converter
- * 将 README.md 和 README.combat.md 转换为 Steam 创意工坊的 BBCode 格式
+ * 将 README.md、README_en.md 和 README.combat.md 转换为 Steam 创意工坊的 BBCode 格式
  */
 
 const fs = require('fs');
@@ -140,11 +140,13 @@ function main() {
         const outputFile = process.argv[3] || inputFile.replace('.md', '.steam.txt');
         convertSingleFile(inputFile, outputFile);
     } else {
-        // 否则转换两个默认文件
+        // 否则转换三个默认文件
         console.log('=== Markdown to Steam BBCode Converter ===');
         console.log('转换默认文件...\n');
         
         convertSingleFile('README.md', 'README.steam.txt');
+        console.log('');
+        convertSingleFile('README_en.md', 'README_en.steam.txt');
         console.log('');
         convertSingleFile('README.combat.md', 'README.combat.steam.txt');
         
