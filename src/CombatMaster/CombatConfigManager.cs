@@ -95,6 +95,9 @@ namespace CombatMaster
 
         // 逆御针术获得变招几率气运设置
         public static int YuZhenShu = 0;
+
+        // 逆跛打八十式获得变招几率气运设置
+        public static int BoDaShiBaShi = 0;
         
         // 功能开关映射表 - 将功能名映射到对应的配置字段
         private static readonly Dictionary<string, string> FeatureMap = new Dictionary<string, string>
@@ -125,7 +128,8 @@ namespace CombatMaster
             { "ManTianHuaYuShi", "ManTianHuaYuShi" },
             { "ZuiBaXianBu", "ZuiBaXianBu" },
             { "BaiCaoQueZhuoZhi", "BaiCaoQueZhuoZhi" },
-            { "YuZhenShu", "YuZhenShu" }
+            { "YuZhenShu", "YuZhenShu" },
+            { "BoDaShiBaShi", "BoDaShiBaShi" }
         };
 
         /// <summary>
@@ -248,6 +252,10 @@ namespace CombatMaster
             DomainManager.Mod.GetSetting(modIdStr, "YuZhenShu", ref YuZhenShu);
             DebugLog.Info($"[CombatMaster] 逆御针术获得变招几率: {YuZhenShu}");
 
+            // 加载逆跛打八十式配置
+            DomainManager.Mod.GetSetting(modIdStr, "BoDaShiBaShi", ref BoDaShiBaShi);
+            DebugLog.Info($"[CombatMaster] 逆跛打八十式获得变招几率: {BoDaShiBaShi}");
+
             DebugLog.Info("[CombatMaster] 所有配置项加载完成");
         }
 
@@ -322,6 +330,7 @@ namespace CombatMaster
                 case "ZuiBaXianBu": return ZuiBaXianBu;
                 case "BaiCaoQueZhuoZhi": return BaiCaoQueZhuoZhi;
                 case "YuZhenShu": return YuZhenShu;
+                case "BoDaShiBaShi": return BoDaShiBaShi;
                 default: 
                     DebugLog.Warning($"[CombatMaster] 未知的配置键: {configKey}");
                     return 0;

@@ -97,6 +97,7 @@ namespace CombatMaster
             { "ZuiBaXianBu", (typeof(Features.Combat.ZuiBaXianBuPatch), () => CombatConfigManager.IsFeatureEnabled("ZuiBaXianBu")) },
             { "BaiCaoQueZhuoZhi", (typeof(Features.Combat.BaiCaoQueZhuoZhiPatch), () => CombatConfigManager.IsFeatureEnabled("BaiCaoQueZhuoZhi")) },
             { "YuZhenShu", (typeof(Features.Combat.YuZhenShuPatch), () => CombatConfigManager.IsFeatureEnabled("YuZhenShu")) },
+            { "BoDaShiBaShi", (typeof(Features.Combat.BoDaShiBaShiPatch), () => CombatConfigManager.IsFeatureEnabled("BoDaShiBaShi")) },
         };
 
         // PatchBuilder 补丁配置映射表 - 目前为空，后续添加战斗相关补丁
@@ -127,6 +128,7 @@ namespace CombatMaster
             { "ZuiBaXianBuBuilder", (Features.Combat.ZuiBaXianBuPatch.Apply, () => CombatConfigManager.IsFeatureEnabled("ZuiBaXianBu")) },
             { "BaiCaoQueZhuoZhiBuilder", (Features.Combat.BaiCaoQueZhuoZhiPatch.Apply, () => CombatConfigManager.IsFeatureEnabled("BaiCaoQueZhuoZhi")) },
             { "YuZhenShuBuilder", (Features.Combat.YuZhenShuPatch.Apply, () => CombatConfigManager.IsFeatureEnabled("YuZhenShu")) },
+            { "BoDaShiBaShiBuilder", (Features.Combat.BoDaShiBaShiPatch.Apply, () => CombatConfigManager.IsFeatureEnabled("BoDaShiBaShi")) },
         };
 
         // 应用 class 形式的补丁
