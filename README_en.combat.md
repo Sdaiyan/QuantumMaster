@@ -15,6 +15,7 @@ CombatMaster is a specialized version of the QuantumMaster project, focusing exc
 **【Martial Arts】BaiCao QueChuoZhi**: Increases the probability of healing self/worsening enemy conditions
 **【Martial Arts】Reverse Needle Art**: Increases the probability of obtaining trick variations
 **【Martial Arts】Reverse Lame Strike Eighty Forms**: Increases the probability of obtaining trick variations
+**【Martial Arts】Reverse Eighteen Point Eyebrow Staff**: Increases the probability of obtaining trick variations
 **【Martial Arts】Gui Ye Ku**: Increases the probability of special effects triggering after successful counterattack
 **【Martial Arts】Wu Chang Jiao**: Increases the probability of power enhancement effects
 **【Martial Arts】Zui Ba Xian Bu**: Increases the probability of obtaining buffs

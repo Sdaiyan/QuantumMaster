@@ -80,6 +80,7 @@ namespace QuantumMaster.Shared
             { "BaiCaoQueZhuoZhi", "百草雀啄灸恢复自身/恶化敌人几率" },
             { "YuZhenShu", "逆御针术获得变招几率" },
             { "BoDaShiBaShi", "逆跛打八十式获得变招几率" },
+            { "ShiBaDianQiMeiGun", "逆十八点齐眉棍获得变招几率" },
             { "ParallelCreateNewbornChildren", "多胞胎概率" },
             { "GenerateMaxDurability", "物品耐久上限最大" },
             { "FindTreasureStandard", "挖宝概率提升" }
