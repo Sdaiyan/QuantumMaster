@@ -486,6 +486,24 @@ return {
                 "万法归一"
             },
             DefaultValue = 0,
+        },
+        {
+            SettingType = "Dropdown",
+            Key = "BaiCaoQueZhuoZhi",
+            DisplayName = "【武者】百草雀啄灸",
+            Description = "恢复自身/恶化敌人几率增加",
+            Options = {
+                "跟随全局",
+                "方寸大乱",
+                "患得患失",
+                "气定神闲",
+                "游刃有余",
+                "随心所欲",
+                "如有神助",
+                "天人合一",
+                "万法归一"
+            },
+            DefaultValue = 0,
         }
     },
 }

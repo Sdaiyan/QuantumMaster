@@ -89,6 +89,9 @@ namespace CombatMaster
 
         // 醉八仙步获得BUFF概率气运设置
         public static int ZuiBaXianBu = 0;
+
+        // 百草雀啄灸恢复自身/恶化敌人几率气运设置
+        public static int BaiCaoQueZhuoZhi = 0;
         
         // 功能开关映射表 - 将功能名映射到对应的配置字段
         private static readonly Dictionary<string, string> FeatureMap = new Dictionary<string, string>
@@ -117,7 +120,8 @@ namespace CombatMaster
             { "FuYinZhi", "FuYinZhi" },
             { "TaiSuJueShou", "TaiSuJueShou" },
             { "ManTianHuaYuShi", "ManTianHuaYuShi" },
-            { "ZuiBaXianBu", "ZuiBaXianBu" }
+            { "ZuiBaXianBu", "ZuiBaXianBu" },
+            { "BaiCaoQueZhuoZhi", "BaiCaoQueZhuoZhi" }
         };
 
         /// <summary>
@@ -232,6 +236,10 @@ namespace CombatMaster
             DomainManager.Mod.GetSetting(modIdStr, "ZuiBaXianBu", ref ZuiBaXianBu);
             DebugLog.Info($"[CombatMaster] 醉八仙步获得BUFF概率: {ZuiBaXianBu}");
 
+            // 加载百草雀啄灸配置
+            DomainManager.Mod.GetSetting(modIdStr, "BaiCaoQueZhuoZhi", ref BaiCaoQueZhuoZhi);
+            DebugLog.Info($"[CombatMaster] 百草雀啄灸恢复自身/恶化敌人几率: {BaiCaoQueZhuoZhi}");
+
             DebugLog.Info("[CombatMaster] 所有配置项加载完成");
         }
 
@@ -304,6 +312,7 @@ namespace CombatMaster
                 case "TaiSuJueShou": return TaiSuJueShou;
                 case "ManTianHuaYuShi": return ManTianHuaYuShi;
                 case "ZuiBaXianBu": return ZuiBaXianBu;
+                case "BaiCaoQueZhuoZhi": return BaiCaoQueZhuoZhi;
                 default: 
                     DebugLog.Warning($"[CombatMaster] 未知的配置键: {configKey}");
                     return 0;
