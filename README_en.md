@@ -51,6 +51,8 @@ These features only take effect if enabled when creating the world
 ## Event Triggers
 **[Fortune]Treasure Hunt**: *Probability↑*
 **[Fortune]Rope Binding**: *Success rate↑*
+**[Fortune]Caravan Robbery Probability**: *Reduce probability of caravans being robbed during movement*
+**[Fortune]Caravan Income Critical Rate**: *Increase probability of caravans getting critical income*
 **[Fortune]Divine Resonance**: *Probability↑*
 **[Fortune]Combat Reading**: *Probability↑*
 **[Fortune]Combat Loot Drop Rate**: *Probability↑ (vanilla limit is enemy count + 2)*

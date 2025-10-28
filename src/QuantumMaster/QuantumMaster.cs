@@ -173,6 +173,8 @@ namespace QuantumMaster
 			
 			// Adventure 模块
 			{ "InitPathContent", (Features.Adventure.InitPathContentPatch.Apply, () => ConfigManager.IsFeatureEnabled("InitPathContent")) },
+			{ "UpdateCaravansMove", (Features.Adventure.UpdateCaravansMovePatch.Apply, () => ConfigManager.IsFeatureEnabled("UpdateCaravansMove")) },
+			{ "OnCaravanArrive", (Features.Adventure.OnCaravanArrivePatch.Apply, () => ConfigManager.IsFeatureEnabled("OnCaravanArrive")) },
 			
 			// Reading 模块
 			{ "ReadingInspirationPatch", (Features.Reading.UpdateReadingProgressOncePatch.Apply, () => ConfigManager.IsFeatureEnabled("GetCurrReadingEventBonusRate")) },

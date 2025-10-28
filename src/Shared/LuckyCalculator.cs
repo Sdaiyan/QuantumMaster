@@ -85,7 +85,9 @@ namespace QuantumMaster.Shared
             { "AoWangShenTui", "鳌王神腿发动伤害的几率" },
             { "ParallelCreateNewbornChildren", "多胞胎概率" },
             { "GenerateMaxDurability", "物品耐久上限最大" },
-            { "FindTreasureStandard", "挖宝概率提升" }
+            { "FindTreasureStandard", "挖宝概率提升" },
+            { "UpdateCaravansMove", "商队抢劫概率" },
+            { "OnCaravanArrive", "商队收益暴击率" }
         };
 
         /// <summary>
