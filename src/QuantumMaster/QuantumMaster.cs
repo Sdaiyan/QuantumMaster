@@ -152,6 +152,7 @@ namespace QuantumMaster
 			
 			// Skills 模块
 			{ "CalcNeigongLoopingEffect", (Features.Skills.SkillsPatch.Apply, () => ConfigManager.IsFeatureEnabled("CalcNeigongLoopingEffect")) },
+			{ "DebateGameTryForceWin", (Features.Skills.DebateGameTryForceWinPatch.Apply, () => ConfigManager.IsFeatureEnabled("DebateGameTryForceWin")) },
 			
 			// Resources 模块
 			{ "CollectResource", (Features.Resources.CollectResourcePatch.Apply, () => ConfigManager.IsFeatureEnabled("collectResource")) },

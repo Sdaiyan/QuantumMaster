@@ -87,7 +87,8 @@ namespace QuantumMaster.Shared
             { "GenerateMaxDurability", "物品耐久上限最大" },
             { "FindTreasureStandard", "挖宝概率提升" },
             { "UpdateCaravansMove", "商队抢劫概率" },
-            { "OnCaravanArrive", "商队收益暴击率" }
+            { "OnCaravanArrive", "商队收益暴击率" },
+            { "DebateGameTryForceWin", "较艺迫使认输成功率" }
         };
 
         /// <summary>

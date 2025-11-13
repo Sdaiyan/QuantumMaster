@@ -104,6 +104,11 @@ namespace QuantumMaster
         public static int OnCaravanArrive = 0;
 
         /// <summary>
+        /// 较艺迫使认输成功率气运设置
+        /// </summary>
+        public static int DebateGameTryForceWin = 0;
+
+        /// <summary>
         /// 从游戏配置中读取所有 MOD 设置
         /// </summary>
         /// <param name="modIdStr">MOD ID 字符串</param>
@@ -305,6 +310,9 @@ namespace QuantumMaster
 
             DomainManager.Mod.GetSetting(modIdStr, "OnCaravanArrive", ref OnCaravanArrive);
             DebugLog.Info($"配置加载: OnCaravanArrive = {OnCaravanArrive}");
+
+            DomainManager.Mod.GetSetting(modIdStr, "DebateGameTryForceWin", ref DebateGameTryForceWin);
+            DebugLog.Info($"配置加载: DebateGameTryForceWin = {DebateGameTryForceWin}");
 
             DebugLog.Info("所有配置项加载完成");
         }

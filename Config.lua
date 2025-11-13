@@ -1324,6 +1324,24 @@ return {
         },
         {
             SettingType = "Dropdown",
+            Key = "DebateGameTryForceWin",
+            DisplayName = "【气运】较艺迫使认输成功率",
+            Description = "概率上升",
+            Options = {
+                "跟随全局",
+                "命途多舛",
+                "时运不济",
+                "顺风顺水(关闭功能)",
+                "左右逢源",
+                "心想事成",
+                "福星高照",
+                "洪福齐天",
+                "气运之子"
+            },
+            DefaultValue = 0,
+        },
+        {
+            SettingType = "Dropdown",
             Key = "UpdateResourceBlockBuildingCoreProducing",
             DisplayName = "【气运】村庄资源点获得心材概率",
             Description = "过月时，太吾村内资源采集建筑采集到资源点心材的概率（有内置冷却时间，低品3个月，高品6个月）",
