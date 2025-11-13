@@ -60,6 +60,7 @@ These features only take effect if enabled when creating the world
 **[Fortune]Village Business Income**: *Success rate, gathering success rate, harvest quality↑*
 **[Fortune]Village Income Quantity**: *Quantity of wood, metal, coins, prestige, etc.↑*
 **[Fortune]Teaching Reading Zhoutian**: *Probability↑*
+**[Fortune]Debate Force Surrender Success Rate**: *Probability↑*
 **[Fortune]Gambling Hall/Brothel Critical**: *Probability↑ (critical is 3x income)*
 **[Fortune]Weapon Durability Consumption**: *Probability↓ (ineffective when forced deduction)*
 **[Fortune]Armor Durability Consumption**: *Probability↓ (ineffective when forced deduction)*
