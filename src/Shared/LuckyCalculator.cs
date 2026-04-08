@@ -88,6 +88,10 @@ namespace QuantumMaster.Shared
             { "FindTreasureStandard", "挖宝概率提升" },
             { "UpdateCaravansMove", "商队抢劫概率" },
             { "OnCaravanArrive", "商队收益暴击率" },
+            { "OnRobGraveOptionResource", "盗墓获得资源概率增加" },
+            { "OnRobGraveOptionItem", "盗墓获得物品概率增加" },
+            { "OnRobGraveOptionNothingHappen", "盗墓无事发生概率降低" },
+            { "OnRobGraveOptionMeetSkeleton", "盗墓遇到骷髅概率降低" },
             { "DebateGameTryForceWin", "较艺迫使认输成功率" },
             { "ParallelUpdatePregnantState", "胎教触发概率提升" }
         };

@@ -104,6 +104,26 @@ namespace QuantumMaster
         public static int OnCaravanArrive = 0;
 
         /// <summary>
+        /// 盗墓获得资源概率气运设置
+        /// </summary>
+        public static int OnRobGraveOptionResource = 0;
+
+        /// <summary>
+        /// 盗墓获得物品概率气运设置
+        /// </summary>
+        public static int OnRobGraveOptionItem = 0;
+
+        /// <summary>
+        /// 盗墓无事发生概率气运设置
+        /// </summary>
+        public static int OnRobGraveOptionNothingHappen = 0;
+
+        /// <summary>
+        /// 盗墓遇到骷髅概率气运设置
+        /// </summary>
+        public static int OnRobGraveOptionMeetSkeleton = 0;
+
+        /// <summary>
         /// 较艺迫使认输成功率气运设置
         /// </summary>
         public static int DebateGameTryForceWin = 0;
@@ -315,6 +335,18 @@ namespace QuantumMaster
 
             DomainManager.Mod.GetSetting(modIdStr, "OnCaravanArrive", ref OnCaravanArrive);
             DebugLog.Info($"配置加载: OnCaravanArrive = {OnCaravanArrive}");
+
+            DomainManager.Mod.GetSetting(modIdStr, "OnRobGraveOptionResource", ref OnRobGraveOptionResource);
+            DebugLog.Info($"配置加载: OnRobGraveOptionResource = {OnRobGraveOptionResource}");
+
+            DomainManager.Mod.GetSetting(modIdStr, "OnRobGraveOptionItem", ref OnRobGraveOptionItem);
+            DebugLog.Info($"配置加载: OnRobGraveOptionItem = {OnRobGraveOptionItem}");
+
+            DomainManager.Mod.GetSetting(modIdStr, "OnRobGraveOptionNothingHappen", ref OnRobGraveOptionNothingHappen);
+            DebugLog.Info($"配置加载: OnRobGraveOptionNothingHappen = {OnRobGraveOptionNothingHappen}");
+
+            DomainManager.Mod.GetSetting(modIdStr, "OnRobGraveOptionMeetSkeleton", ref OnRobGraveOptionMeetSkeleton);
+            DebugLog.Info($"配置加载: OnRobGraveOptionMeetSkeleton = {OnRobGraveOptionMeetSkeleton}");
 
             DomainManager.Mod.GetSetting(modIdStr, "DebateGameTryForceWin", ref DebateGameTryForceWin);
             DebugLog.Info($"配置加载: DebateGameTryForceWin = {DebateGameTryForceWin}");
