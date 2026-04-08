@@ -140,6 +140,7 @@ namespace QuantumMaster
 			// Character 模块
 			{ "OfflineCalcGeneralActionTeachSkill", (Features.Character.OfflineCalcGeneralActionTeachSkillPatch.Apply, () => ConfigManager.IsFeatureEnabled("OfflineCalcGeneralAction_TeachSkill")) },
 			{ "ParallelCreateNewbornChildren", (Features.Character.ParallelCreateNewbornChildrenPatch.Apply, () => ConfigManager.IsFeatureEnabled("ParallelCreateNewbornChildren")) },
+			{ "ParallelUpdatePregnantState", (Features.Character.ParallelUpdatePregnantStatePatch.Apply, () => ConfigManager.IsFeatureEnabled("ParallelUpdatePregnantState")) },
 			
 			// Core 模块
 			{ "TryAddLoopingEvent", (Features.Core.LoopingEventPatch.Apply, () => ConfigManager.IsFeatureEnabled("TryAddLoopingEvent")) },

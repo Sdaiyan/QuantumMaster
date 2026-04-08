@@ -1378,6 +1378,24 @@ return {
         },
         {
             SettingType = "Dropdown",
+            Key = "ParallelUpdatePregnantState",
+            DisplayName = "【气运】胎教触发概率提升",
+            Description = "过月时触发胎教的概率提升，原本概率为75%",
+            Options = {
+                "跟随全局",
+                "命途多舛",
+                "时运不济",
+                "顺风顺水(关闭功能)",
+                "左右逢源",
+                "心想事成",
+                "福星高照",
+                "洪福齐天",
+                "气运之子"
+            },
+            DefaultValue = 0,
+        },
+        {
+            SettingType = "Dropdown",
             Key = "GenerateMaxDurability",
             DisplayName = "【气运】物品耐久上限最大",
             Description = "生成物品时，物品的初始耐久为理论最大值（原逻辑是 上限值的一半-上限值随机）",

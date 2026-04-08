@@ -88,7 +88,8 @@ namespace QuantumMaster.Shared
             { "FindTreasureStandard", "挖宝概率提升" },
             { "UpdateCaravansMove", "商队抢劫概率" },
             { "OnCaravanArrive", "商队收益暴击率" },
-            { "DebateGameTryForceWin", "较艺迫使认输成功率" }
+            { "DebateGameTryForceWin", "较艺迫使认输成功率" },
+            { "ParallelUpdatePregnantState", "胎教触发概率提升" }
         };
 
         /// <summary>

@@ -109,6 +109,11 @@ namespace QuantumMaster
         public static int DebateGameTryForceWin = 0;
 
         /// <summary>
+        /// 胎教触发概率气运设置
+        /// </summary>
+        public static int ParallelUpdatePregnantState = 0;
+
+        /// <summary>
         /// 从游戏配置中读取所有 MOD 设置
         /// </summary>
         /// <param name="modIdStr">MOD ID 字符串</param>
@@ -313,6 +318,9 @@ namespace QuantumMaster
 
             DomainManager.Mod.GetSetting(modIdStr, "DebateGameTryForceWin", ref DebateGameTryForceWin);
             DebugLog.Info($"配置加载: DebateGameTryForceWin = {DebateGameTryForceWin}");
+
+            DomainManager.Mod.GetSetting(modIdStr, "ParallelUpdatePregnantState", ref ParallelUpdatePregnantState);
+            DebugLog.Info($"配置加载: ParallelUpdatePregnantState = {ParallelUpdatePregnantState}");
 
             DebugLog.Info("所有配置项加载完成");
         }

@@ -37,6 +37,7 @@ In the following descriptions, if your fortune is negative, the effects are reve
 
 ## NPC Interactions
 **[Fortune]Multiple Birth Probability**: *Probability↑*
+**[Fortune]Prenatal Education Trigger Probability**: *Probability of triggering prenatal education when month passes is increased; original probability is 75%*
 **[Orientation]Sexual Orientation Control**: *Override everyone's sexual orientation*
 **[Gender]Generated Gender Control**: *Can control the gender of NPCs that allow random gender*
 **[Fortune]Steal/Rob/Cheat/Poison**: *Success rate↑ when Taihu is the initiator, success rate↓ when Taihu is the victim*
