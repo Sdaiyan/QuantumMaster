@@ -74,6 +74,28 @@ public static int Next1Arg0_Method(this IRandomSource randomSource, int max)
 }
 ```
 
+## 5. CheckProbability(int value) — 奇遇事件概率（静态方法）
+
+**适用场景**：`GameData.Domains.TaiwuEvent.EventHelper.EventHelper.CheckProbability(int)` 调用，常见于奇遇事件处理逻辑。
+
+**注意**：此方法是**纯静态方法**，无 `IRandomSource` 参数，替换方法签名也只有 `int`。
+
+**PatchPresets**: `PatchPresets.Extensions.CheckProbability`
+
+```csharp
+// 倾向成功（true）
+public static bool CheckProbabilityTrue_Method(int percent)
+{
+    return LuckyCalculator.Calc_Random_CheckProbability_True_By_Luck(percent, "featureKey");
+}
+
+// 倾向失败（false）
+public static bool CheckProbabilityFalse_Method(int percent)
+{
+    return LuckyCalculator.Calc_Random_CheckProbability_False_By_Luck(percent, "featureKey");
+}
+```
+
 ## 替换规则调用方式
 
 ```csharp
@@ -81,6 +103,12 @@ public static int Next1Arg0_Method(this IRandomSource randomSource, int max)
 patchBuilder.AddExtensionMethodReplacement(
     PatchPresets.Extensions.CheckPercentProb,   // 目标方法预设
     Replacements.CheckPercentProbTrue,           // 替换方法
+    1);                                          // 替换第几次出现
+
+// CheckProbability（静态方法，同样用 AddExtensionMethodReplacement）
+patchBuilder.AddExtensionMethodReplacement(
+    PatchPresets.Extensions.CheckProbability,    // 目标方法预设
+    Replacements.CheckProbabilityTrue,           // 替换方法
     1);                                          // 替换第几次出现
 
 // 接口/实例方法（Next）

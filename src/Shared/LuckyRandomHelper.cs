@@ -76,6 +76,22 @@ namespace QuantumMaster.Shared
         }
 
         /// <summary>
+        /// EventHelper.CheckProbability 概率检查（倾向成功）- 用于被 patch 替换
+        /// </summary>
+        public static bool Random_CheckProbability_True(int percent)
+        {
+            return LuckyCalculator.Calc_Random_CheckProbability_True_By_Luck(percent);
+        }
+
+        /// <summary>
+        /// EventHelper.CheckProbability 概率检查（倾向失败）- 用于被 patch 替换
+        /// </summary>
+        public static bool Random_CheckProbability_False(int percent)
+        {
+            return LuckyCalculator.Calc_Random_CheckProbability_False_By_Luck(percent);
+        }
+
+        /// <summary>
         /// 根据建筑配置公式计算最大值 - 用于被 patch 替换
         /// </summary>
         public static int Random_Calculate_Max(Config.Common.IConfigFormula type)
