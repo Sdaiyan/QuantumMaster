@@ -19,6 +19,7 @@
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
     <!-- 禁用自动生成的 AssemblyInfo -->
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
   </PropertyGroup>
 
   <ItemGroup>
