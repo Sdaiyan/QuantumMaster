@@ -87,25 +87,37 @@ namespace QuantumMaster.Features.Adventure
 
         private static void ConfigureReplacements(PatchBuilder patchBuilder)
         {
-            patchBuilder.AddExtensionMethodReplacement(
-                PatchPresets.Extensions.CheckProbability,
-                Replacements.CheckProbabilityResourceTrue,
-                1);
+            if (ConfigManager.IsFeatureEnabled("OnRobGraveOptionResource"))
+            {
+                patchBuilder.AddExtensionMethodReplacement(
+                    PatchPresets.Extensions.CheckProbability,
+                    Replacements.CheckProbabilityResourceTrue,
+                    1);
+            }
 
-            patchBuilder.AddExtensionMethodReplacement(
-                PatchPresets.Extensions.CheckProbability,
-                Replacements.CheckProbabilityItemTrue,
-                2);
+            if (ConfigManager.IsFeatureEnabled("OnRobGraveOptionItem"))
+            {
+                patchBuilder.AddExtensionMethodReplacement(
+                    PatchPresets.Extensions.CheckProbability,
+                    Replacements.CheckProbabilityItemTrue,
+                    2);
+            }
 
-            patchBuilder.AddExtensionMethodReplacement(
-                PatchPresets.Extensions.CheckProbability,
-                Replacements.CheckProbabilityNothingHappenFalse,
-                3);
+            if (ConfigManager.IsFeatureEnabled("OnRobGraveOptionNothingHappen"))
+            {
+                patchBuilder.AddExtensionMethodReplacement(
+                    PatchPresets.Extensions.CheckProbability,
+                    Replacements.CheckProbabilityNothingHappenFalse,
+                    3);
+            }
 
-            patchBuilder.AddExtensionMethodReplacement(
-                PatchPresets.Extensions.CheckProbability,
-                Replacements.CheckProbabilityMeetSkeletonFalse,
-                4);
+            if (ConfigManager.IsFeatureEnabled("OnRobGraveOptionMeetSkeleton"))
+            {
+                patchBuilder.AddExtensionMethodReplacement(
+                    PatchPresets.Extensions.CheckProbability,
+                    Replacements.CheckProbabilityMeetSkeletonFalse,
+                    4);
+            }
         }
 
         private static bool ShouldApply()
