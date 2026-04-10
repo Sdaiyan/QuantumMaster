@@ -48,6 +48,9 @@
     <Reference Include="TaiwuModdingLib">
       <HintPath>$(TaiwuPath)\The Scroll of Taiwu_Data\Managed\TaiwuModdingLib.dll</HintPath>
     </Reference>
+    <Reference Include="Taiwu_EventPackage_TabutInteract">
+      <HintPath>$(TaiwuPath)\Event\EventLib\Taiwu_EventPackage_TabutInteract.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>

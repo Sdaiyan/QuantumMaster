@@ -88,7 +88,12 @@ namespace QuantumMaster.Shared
             { "FindTreasureStandard", "挖宝概率提升" },
             { "UpdateCaravansMove", "商队抢劫概率" },
             { "OnCaravanArrive", "商队收益暴击率" },
-            { "DebateGameTryForceWin", "较艺迫使认输成功率" }
+            { "OnRobGraveOptionResource", "盗墓获得资源概率增加" },
+            { "OnRobGraveOptionItem", "盗墓获得物品概率增加" },
+            { "OnRobGraveOptionNothingHappen", "盗墓无事发生概率降低" },
+            { "OnRobGraveOptionMeetSkeleton", "盗墓遇到骷髅概率降低" },
+            { "DebateGameTryForceWin", "较艺迫使认输成功率" },
+            { "ParallelUpdatePregnantState", "胎教触发概率提升" }
         };
 
         /// <summary>
@@ -377,6 +382,81 @@ namespace QuantumMaster.Shared
                 result = randomValue <= adjustedChance;
                 string arrow = result ? "<=" : ">";
                 DebugLog.Info($"[LR] {featureName}, {luckyLevel}, {randomValue} {arrow} {adjustedChance:F2}, 原始={originalResult} -> 气运后={result}");
+                return result;
+            }
+            return originalResult;
+        }
+
+        /// <summary>
+        /// 根据幸运等级计算 CheckProbability 概率（倾向成功）
+        /// </summary>
+        /// <param name="percent">成功概率百分比</param>
+        /// <param name="featureKey">功能键，用于获取该功能的专属气运等级</param>
+        /// <returns>是否成功</returns>
+        public static bool Calc_Random_CheckProbability_True_By_Luck(int percent, string featureKey = null)
+        {
+            if (percent <= 0) return false;
+            if (percent >= 100) return true;
+
+            var config = ConfigProvider.Instance;
+            var luckyLevel = featureKey != null ? config.GetFeatureLuckLevel(featureKey) : config.GlobalLuckyLevel;
+            var luck = config.LuckyLevelFactor[luckyLevel];
+            var randomValue = config.Random.Next(0, 100);
+            var originalResult = randomValue <= percent;
+            var featureName = GetFeatureName(featureKey);
+            if (luck != 0)
+            {
+                double adjustedPercent;
+                bool result;
+                if (luck > 0)
+                {
+                    adjustedPercent = Math.Min(100, percent + (100 - percent) * luck);
+                    result = randomValue <= adjustedPercent;
+                }
+                else
+                {
+                    adjustedPercent = Math.Max(0, percent * (1 + luck));
+                    result = randomValue <= adjustedPercent;
+                }
+                string arrow = result ? "<=" : ">";
+                DebugLog.Info($"[LR] {featureName}, {luckyLevel}, {randomValue} {arrow} {adjustedPercent:F2}%, 原始={originalResult} -> 气运后={result}");
+                return result;
+            }
+            return originalResult;
+        }
+
+        /// <summary>
+        /// 根据幸运等级计算 CheckProbability 概率（倾向失败）
+        /// </summary>
+        /// <param name="percent">成功概率百分比</param>
+        /// <param name="featureKey">功能键，用于获取该功能的专属气运等级</param>
+        /// <returns>是否失败</returns>
+        public static bool Calc_Random_CheckProbability_False_By_Luck(int percent, string featureKey = null)
+        {
+            if (percent <= 0) return false;
+            if (percent >= 100) return true;
+
+            var config = ConfigProvider.Instance;
+            var luckyLevel = featureKey != null ? config.GetFeatureLuckLevel(featureKey) : config.GlobalLuckyLevel;
+            var luck = config.LuckyLevelFactor[luckyLevel];
+            var randomValue = config.Random.Next(0, 100);
+            var originalResult = randomValue <= percent;
+            var featureName = GetFeatureName(featureKey);
+            if (luck != 0)
+            {
+                double adjustedPercent;
+                bool result;
+                if (luck > 0)
+                {
+                    adjustedPercent = Math.Max(0, percent - percent * luck);
+                }
+                else
+                {
+                    adjustedPercent = Math.Min(100, percent + (100 - percent) * (-luck));
+                }
+                result = randomValue <= adjustedPercent;
+                string arrow = result ? "<=" : ">";
+                DebugLog.Info($"[LR] {featureName}, {luckyLevel}, {randomValue} {arrow} {adjustedPercent:F2}%, 原始={originalResult} -> 气运后={result}");
                 return result;
             }
             return originalResult;

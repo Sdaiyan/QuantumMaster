@@ -43,6 +43,16 @@ namespace QuantumMaster.Shared
                 MethodName = nameof(Config.Common.ConfigFormulaExtensions.Calculate),
                 Parameters = new Type[] { typeof(Config.Common.IConfigFormula) }
             };
+
+            /// <summary>
+            /// GameData.Domains.TaiwuEvent.EventHelper.EventHelper.CheckProbability(int value) 静态方法
+            /// </summary>
+            public static readonly ExtensionMethodInfo CheckProbability = new ExtensionMethodInfo
+            {
+                Type = typeof(GameData.Domains.TaiwuEvent.EventHelper.EventHelper),
+                MethodName = "CheckProbability",
+                Parameters = new Type[] { typeof(int) }
+            };
         }
         
         /// <summary>
@@ -193,6 +203,24 @@ namespace QuantumMaster.Shared
             {
                 Type = typeof(LuckyRandomHelper),
                 MethodName = nameof(LuckyRandomHelper.Random_Calculate_Max)
+            };
+
+            /// <summary>
+            /// 总是返回 true 的 CheckProbability 替换
+            /// </summary>
+            public static readonly ReplacementMethodInfo CheckProbabilityTrue = new ReplacementMethodInfo
+            {
+                Type = typeof(LuckyRandomHelper),
+                MethodName = nameof(LuckyRandomHelper.Random_CheckProbability_True)
+            };
+
+            /// <summary>
+            /// 总是返回 false 的 CheckProbability 替换
+            /// </summary>
+            public static readonly ReplacementMethodInfo CheckProbabilityFalse = new ReplacementMethodInfo
+            {
+                Type = typeof(LuckyRandomHelper),
+                MethodName = nameof(LuckyRandomHelper.Random_CheckProbability_False)
             };
 
         }
