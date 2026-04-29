@@ -51,10 +51,6 @@ These features only take effect if enabled when creating the world
 
 ## Event Triggers
 **[Fortune]Treasure Hunt**: *Probability↑*
-**[Fortune]Rob Grave Resource Gain**: *Probability↑ (resources and items are mutually exclusive; enabling only item is recommended)*
-**[Fortune]Rob Grave Item Gain**: *Probability↑ (resources and items are mutually exclusive; enabling only item is recommended)*
-**[Fortune]Rob Grave Nothing Happens**: *Probability↓*
-**[Fortune]Rob Grave Meet Skeleton**: *Probability↓ (this can delay the Xuehou storyline trigger, so disabling it during that storyline is recommended)*
 **[Fortune]Rope Binding**: *Success rate↑*
 **[Fortune]Caravan Robbery Probability**: *Reduce probability of caravans being robbed during movement*
 **[Fortune]Caravan Income Critical Rate**: *Increase probability of caravans getting critical income*

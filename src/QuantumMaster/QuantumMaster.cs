@@ -177,11 +177,6 @@ namespace QuantumMaster
 			{ "InitPathContent", (Features.Adventure.InitPathContentPatch.Apply, () => ConfigManager.IsFeatureEnabled("InitPathContent")) },
 			{ "UpdateCaravansMove", (Features.Adventure.UpdateCaravansMovePatch.Apply, () => ConfigManager.IsFeatureEnabled("UpdateCaravansMove")) },
 			{ "OnCaravanArrive", (Features.Adventure.OnCaravanArrivePatch.Apply, () => ConfigManager.IsFeatureEnabled("OnCaravanArrive")) },
-			{ "OnRobGraveOption", (Features.Adventure.OnRobGraveOptionPatch.Apply, () =>
-				ConfigManager.IsFeatureEnabled("OnRobGraveOptionResource") ||
-				ConfigManager.IsFeatureEnabled("OnRobGraveOptionItem") ||
-				ConfigManager.IsFeatureEnabled("OnRobGraveOptionNothingHappen") ||
-				ConfigManager.IsFeatureEnabled("OnRobGraveOptionMeetSkeleton")) },
 			
 			// Reading 模块
 			{ "ReadingInspirationPatch", (Features.Reading.UpdateReadingProgressOncePatch.Apply, () => ConfigManager.IsFeatureEnabled("GetCurrReadingEventBonusRate")) },
