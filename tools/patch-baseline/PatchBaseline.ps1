@@ -4,7 +4,7 @@ param(
 
     [string]$WorkspaceRoot = ([System.IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..\..'))),
 
-    [string]$GameSourceRoot = 'D:\code\Data',
+    [string]$GameSourceRoot,
 
     [string]$OutputRoot = ([System.IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..\..\.cache\patch-baseline'))),
 
@@ -106,6 +106,63 @@ function Read-TextLines {
     param([string]$Path)
 
     return [System.IO.File]::ReadAllLines($Path)
+}
+
+function Get-DirectoryBuildPropsValue {
+    param(
+        [string]$WorkspaceRootPath,
+        [string]$PropertyName
+    )
+
+    $propsPath = Join-Path $WorkspaceRootPath 'Directory.Build.props'
+    if (-not (Test-Path -LiteralPath $propsPath)) {
+        return $null
+    }
+
+    try {
+        [xml]$propsXml = Read-TextFile -Path $propsPath
+    }
+    catch {
+        return $null
+    }
+
+    foreach ($propertyGroup in @($propsXml.Project.PropertyGroup)) {
+        if ($null -eq $propertyGroup) {
+            continue
+        }
+
+        $propertyNode = $propertyGroup.SelectSingleNode($PropertyName)
+        if ($null -eq $propertyNode) {
+            continue
+        }
+
+        $value = [string]$propertyNode.InnerText
+        if (-not [string]::IsNullOrWhiteSpace($value)) {
+            return $value.Trim()
+        }
+    }
+
+    return $null
+}
+
+function Resolve-ConfiguredGameSourceRoot {
+    param(
+        [string]$WorkspaceRootPath,
+        [string]$OverrideRoot
+    )
+
+    if (-not [string]::IsNullOrWhiteSpace($OverrideRoot)) {
+        return $OverrideRoot.Trim()
+    }
+
+    foreach ($propertyName in @('PatchBaselineGameSourceRoot', 'GameSourceRoot')) {
+        $configuredValue = Get-DirectoryBuildPropsValue -WorkspaceRootPath $WorkspaceRootPath -PropertyName $propertyName
+        if (-not [string]::IsNullOrWhiteSpace($configuredValue)) {
+            return $configuredValue
+        }
+    }
+
+    return 'D:\code\Data'
 }
 
 function Normalize-StringList {
@@ -1617,9 +1674,14 @@ function Invoke-Collect {
     $functionSnapshotRoot = Ensure-Directory -Path (Join-Path $versionRoot 'function-snapshots')
     $gameSourceSnapshotRoot = Join-Path $versionRoot 'game-source'
 
-    $effectiveGameSourceRoot = $GameSourceRoot
+    $configuredGameSourceRoot = Resolve-ConfiguredGameSourceRoot -WorkspaceRootPath $WorkspaceRoot -OverrideRoot $GameSourceRoot
+    if (-not (Test-Path -LiteralPath $configuredGameSourceRoot)) {
+        throw "Game source root not found: $configuredGameSourceRoot. Pass -GameSourceRoot or set <PatchBaselineGameSourceRoot> in Directory.Build.props."
+    }
+
+    $effectiveGameSourceRoot = $configuredGameSourceRoot
     if ($CopyGameSource) {
-        Copy-GameSourceSnapshot -SourceRoot $GameSourceRoot -DestinationRoot $gameSourceSnapshotRoot
+        Copy-GameSourceSnapshot -SourceRoot $configuredGameSourceRoot -DestinationRoot $gameSourceSnapshotRoot
         $effectiveGameSourceRoot = $gameSourceSnapshotRoot
     }
 

@@ -9,5 +9,8 @@
   <PropertyGroup>
     <!-- 请修改为您的太吾绘卷安装路径 -->
     <TaiwuPath>D:\tw</TaiwuPath>
+
+    <!-- 反编译游戏源码根目录，供 patch baseline 工作流使用 -->
+    <PatchBaselineGameSourceRoot>D:\code\Data</PatchBaselineGameSourceRoot>
   </PropertyGroup>
 </Project>

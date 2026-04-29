@@ -8,9 +8,10 @@
    ```
 
 2. **修改本地路径**：
-   编辑 `Directory.Build.props` 文件，将 `<TaiwuPath>` 修改为您的太吾绘卷安装路径：
+   编辑 `Directory.Build.props` 文件，将 `<TaiwuPath>` 修改为您的太吾绘卷安装路径；如果需要运行 patch baseline 工作流，再同时配置 `<PatchBaselineGameSourceRoot>`：
    ```xml
    <TaiwuPath>您的太吾绘卷安装路径</TaiwuPath>
+   <PatchBaselineGameSourceRoot>您的反编译游戏源码根目录</PatchBaselineGameSourceRoot>
    ```
 
 3. **编译项目**：
@@ -27,4 +28,4 @@
 
 - `Directory.Build.props` 文件已被添加到 `.gitignore`，不会被提交到版本控制系统
 - 每个开发者都需要根据自己的环境创建和配置自己的 `Directory.Build.props` 文件
-- 如果您的太吾绘卷路径发生变化，只需要修改 `Directory.Build.props` 中的路径即可
+- 如果您的太吾绘卷路径或反编译源码路径发生变化，只需要修改 `Directory.Build.props` 中的对应路径即可
