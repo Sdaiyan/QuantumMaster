@@ -1,6 +1,8 @@
-param(
+﻿param(
     [ValidateSet('Collect', 'Compare')]
     [string]$Action = 'Collect',
+
+    [switch]$NonInteractive,
 
     [string]$WorkspaceRoot = ([System.IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..\..'))),
 
@@ -14,7 +16,7 @@ param(
 
     [string[]]$IncludeConfigKey,
 
-    [switch]$CopyGameSource,
+    [bool]$CopyGameSource = $true,
 
     [string]$BaseVersion,
 
@@ -66,6 +68,24 @@ $script:ModuleSourceFilesCache = @{}
 $script:PatchClassScopeCache = @{}
 
 $script:PatchMetadataCache = @{}
+
+$script:ComparisonReasonDisplayMap = @{
+    'config-added' = '配置项新增'
+    'config-removed' = '配置项移除'
+    'config-type-changed' = '配置类型变更'
+    'target-method-added' = '目标函数新增'
+    'target-method-removed' = '目标函数移除'
+    'signature-changed' = '签名变更'
+    'method-code-changed' = '方法体变更'
+    'occurrence-profile-changed' = 'occurrence 变化'
+    'patch-added' = '补丁新增'
+    'patch-removed' = '补丁移除'
+    'patch-kind-changed' = 'Patch 类型变更'
+    'registration-type-changed' = '注册类型变更'
+    'condition-config-changed' = '条件配置变更'
+    'replacement-definition-changed' = 'replacement 定义变更'
+    'work-summary-changed' = '工作摘要变更'
+}
 
 function Write-Status {
     param([string]$Message)
@@ -183,6 +203,191 @@ function Normalize-StringList {
     }
 
     return @($items | Select-Object -Unique)
+}
+
+function Read-InteractiveText {
+    param(
+        [string]$Prompt,
+        [AllowNull()]
+        [string]$DefaultValue,
+        [switch]$AllowEmpty
+    )
+
+    $suffix = if ([string]::IsNullOrWhiteSpace($DefaultValue)) { '' } else { " [$DefaultValue]" }
+    $response = Read-Host "$Prompt$suffix"
+    if ([string]::IsNullOrWhiteSpace($response)) {
+        if ($AllowEmpty -and [string]::IsNullOrWhiteSpace($DefaultValue)) {
+            return ''
+        }
+
+        return $DefaultValue
+    }
+
+    return $response.Trim()
+}
+
+function Read-InteractiveChoice {
+    param(
+        [string]$Prompt,
+        [string[]]$Options,
+        [string]$DefaultValue
+    )
+
+    $optionText = $Options -join '/'
+    while ($true) {
+        $response = Read-Host "$Prompt ($optionText) [$DefaultValue]"
+        if ([string]::IsNullOrWhiteSpace($response)) {
+            return $DefaultValue
+        }
+
+        foreach ($option in $Options) {
+            if ($response.Trim() -ieq $option) {
+                return $option
+            }
+        }
+
+        Write-Status "无效选项: $response。可选值: $optionText"
+    }
+}
+
+function Read-InteractiveBoolean {
+    param(
+        [string]$Prompt,
+        [bool]$DefaultValue
+    )
+
+    $defaultToken = if ($DefaultValue) { 'Y' } else { 'N' }
+    while ($true) {
+        $response = Read-Host "$Prompt (Y/N) [$defaultToken]"
+        if ([string]::IsNullOrWhiteSpace($response)) {
+            return $DefaultValue
+        }
+
+        switch -Regex ($response.Trim()) {
+            '^(y|yes|1|true|是)$' { return $true }
+            '^(n|no|0|false|否)$' { return $false }
+            default { Write-Status '请输入 Y 或 N。' }
+        }
+    }
+}
+
+function Read-InteractiveStringList {
+    param(
+        [string]$Prompt,
+        [string[]]$DefaultValues
+    )
+
+    $normalizedDefaults = Normalize-StringList -Values $DefaultValues
+    $defaultText = $normalizedDefaults -join ','
+    $response = Read-InteractiveText -Prompt $Prompt -DefaultValue $defaultText -AllowEmpty
+    if ([string]::IsNullOrWhiteSpace($response)) {
+        return @($normalizedDefaults)
+    }
+
+    return Normalize-StringList -Values @($response)
+}
+
+function Get-AvailableVersionNames {
+    param([string]$BaselineOutputRoot)
+
+    $versionsRoot = Join-Path $BaselineOutputRoot 'versions'
+    if (-not (Test-Path -LiteralPath $versionsRoot)) {
+        return @()
+    }
+
+    return @(
+        Get-ChildItem -LiteralPath $versionsRoot -Directory |
+        Sort-Object -Property Name -Descending |
+        ForEach-Object { $_.Name }
+    )
+}
+
+function Get-InteractiveExecutionParameters {
+    param(
+        [string]$CurrentAction,
+        [string]$CurrentWorkspaceRoot,
+        [string]$CurrentGameSourceRoot,
+        [string]$CurrentOutputRoot,
+        [string]$CurrentVersion,
+        [string[]]$CurrentModules,
+        [string[]]$CurrentIncludeConfigKey,
+        [bool]$CurrentCopyGameSource,
+        [string]$CurrentBaseVersion,
+        [string]$CurrentTargetVersion
+    )
+
+    Write-Status '交互模式已启用。直接回车会采用方括号中的默认值。'
+
+    $selectedAction = Read-InteractiveChoice -Prompt '操作' -Options @('Collect', 'Compare') -DefaultValue $CurrentAction
+    $selectedWorkspaceRoot = $CurrentWorkspaceRoot
+    $selectedGameSourceRoot = $CurrentGameSourceRoot
+    $selectedOutputRoot = $CurrentOutputRoot
+    $selectedVersion = $CurrentVersion
+    $selectedModules = Normalize-StringList -Values $CurrentModules
+    $selectedIncludeConfigKey = Normalize-StringList -Values $CurrentIncludeConfigKey
+    $selectedCopyGameSource = $CurrentCopyGameSource
+    $selectedBaseVersion = $CurrentBaseVersion
+    $selectedTargetVersion = $CurrentTargetVersion
+
+    if ($selectedAction -eq 'Collect') {
+        $selectedWorkspaceRoot = Read-InteractiveText -Prompt '工作区根目录 WorkspaceRoot' -DefaultValue $CurrentWorkspaceRoot
+    }
+
+    $selectedOutputRoot = Read-InteractiveText -Prompt '导出目录 OutputRoot' -DefaultValue $CurrentOutputRoot
+
+    if ($selectedAction -eq 'Collect') {
+        $defaultGameSourceRoot = Resolve-ConfiguredGameSourceRoot -WorkspaceRootPath $selectedWorkspaceRoot -OverrideRoot $CurrentGameSourceRoot
+        $selectedGameSourceRoot = Read-InteractiveText -Prompt '游戏源码目录 GameSourceRoot' -DefaultValue $defaultGameSourceRoot
+        $defaultVersion = if ([string]::IsNullOrWhiteSpace($CurrentVersion)) { Get-Date -Format 'yyyyMMdd-HHmmss' } else { $CurrentVersion }
+        $selectedVersion = Read-InteractiveText -Prompt '版本号 Version' -DefaultValue $defaultVersion
+        $selectedModules = Read-InteractiveStringList -Prompt '模块 Modules（逗号分隔）' -DefaultValues $CurrentModules
+        $selectedIncludeConfigKey = Read-InteractiveStringList -Prompt '配置项过滤 IncludeConfigKey（逗号分隔，留空表示全部）' -DefaultValues $CurrentIncludeConfigKey
+        $selectedCopyGameSource = Read-InteractiveBoolean -Prompt '是否复制游戏源码 CopyGameSource' -DefaultValue $CurrentCopyGameSource
+        $selectedBaseVersion = $null
+        $selectedTargetVersion = $null
+    }
+    else {
+        $availableVersions = Get-AvailableVersionNames -BaselineOutputRoot $selectedOutputRoot
+        if ($availableVersions.Count -gt 0) {
+            Write-Status ("检测到可用版本: " + ($availableVersions -join ', '))
+        }
+
+        $defaultBaseVersion = if (-not [string]::IsNullOrWhiteSpace($CurrentBaseVersion)) {
+            $CurrentBaseVersion
+        }
+        elseif ($availableVersions.Count -ge 2) {
+            $availableVersions[1]
+        }
+        else {
+            ''
+        }
+
+        $defaultTargetVersion = if (-not [string]::IsNullOrWhiteSpace($CurrentTargetVersion)) {
+            $CurrentTargetVersion
+        }
+        elseif ($availableVersions.Count -ge 1) {
+            $availableVersions[0]
+        }
+        else {
+            ''
+        }
+
+        $selectedBaseVersion = Read-InteractiveText -Prompt '基线版本 BaseVersion' -DefaultValue $defaultBaseVersion -AllowEmpty
+        $selectedTargetVersion = Read-InteractiveText -Prompt '目标版本 TargetVersion' -DefaultValue $defaultTargetVersion -AllowEmpty
+    }
+
+    return [pscustomobject]@{
+        Action = $selectedAction
+        WorkspaceRoot = $selectedWorkspaceRoot
+        GameSourceRoot = $selectedGameSourceRoot
+        OutputRoot = $selectedOutputRoot
+        Version = $selectedVersion
+        Modules = @($selectedModules)
+        IncludeConfigKey = @($selectedIncludeConfigKey)
+        CopyGameSource = [bool]$selectedCopyGameSource
+        BaseVersion = $selectedBaseVersion
+        TargetVersion = $selectedTargetVersion
+    }
 }
 
 function Convert-ToSafeName {
@@ -1659,6 +1864,382 @@ function Export-UpdateReviewTemplate {
     $templateRows | ConvertTo-Json -Depth 20 | Set-Content -LiteralPath $TemplatePath -Encoding UTF8
 }
 
+function Get-UniqueOrderedStrings {
+    param([string[]]$Values)
+
+    $seen = [System.Collections.Generic.HashSet[string]]::new([System.StringComparer]::Ordinal)
+    $items = New-Object System.Collections.Generic.List[string]
+
+    foreach ($value in @($Values)) {
+        if ([string]::IsNullOrWhiteSpace($value)) {
+            continue
+        }
+
+        $trimmed = $value.Trim()
+        if ($seen.Add($trimmed)) {
+            $items.Add($trimmed) | Out-Null
+        }
+    }
+
+    return @($items)
+}
+
+function Convert-ToMarkdownCellText {
+    param([string]$Text)
+
+    if ([string]::IsNullOrWhiteSpace($Text)) {
+        return ''
+    }
+
+    $value = $Text.Replace('|', '\|')
+    $value = $value -replace '(\r?\n)+', '<br>'
+    return $value.Trim()
+}
+
+function Join-ReviewText {
+    param([string[]]$Parts)
+
+    return ((Get-UniqueOrderedStrings -Values $Parts) -join '；')
+}
+
+function Get-EntryWarnings {
+    param($Entry)
+
+    if ($null -eq $Entry) {
+        return @()
+    }
+
+    $warnings = New-Object System.Collections.Generic.List[string]
+
+    foreach ($warning in @($Entry.Warnings)) {
+        if (-not [string]::IsNullOrWhiteSpace($warning)) {
+            $warnings.Add($warning.Trim()) | Out-Null
+        }
+    }
+
+    foreach ($patch in @($Entry.PatchEntries)) {
+        foreach ($warning in @($patch.Warnings)) {
+            if (-not [string]::IsNullOrWhiteSpace($warning)) {
+                $warnings.Add($warning.Trim()) | Out-Null
+            }
+        }
+    }
+
+    return @(Get-UniqueOrderedStrings -Values $warnings)
+}
+
+function Get-EntrySnapshotStatusText {
+    param($Entry)
+
+    if ($null -eq $Entry) {
+        return '条目缺失'
+    }
+
+    $missingSnapshotWarnings = @(Get-EntryWarnings -Entry $Entry | Where-Object { $_ -like 'Failed to resolve method snapshot*' })
+    if ($missingSnapshotWarnings.Count -gt 0) {
+        return '快照缺失'
+    }
+
+    return '快照完整'
+}
+
+function Get-MethodDeclarationLine {
+    param($TargetMethod)
+
+    if ($null -eq $TargetMethod) {
+        return $null
+    }
+
+    $text = $null
+    if ($TargetMethod.PSObject.Properties['MethodCode'] -and -not [string]::IsNullOrWhiteSpace([string]$TargetMethod.MethodCode)) {
+        $text = [string]$TargetMethod.MethodCode
+    }
+    elseif ($TargetMethod.PSObject.Properties['SnapshotFile'] -and -not [string]::IsNullOrWhiteSpace([string]$TargetMethod.SnapshotFile) -and (Test-Path -LiteralPath $TargetMethod.SnapshotFile)) {
+        $text = Read-TextFile -Path $TargetMethod.SnapshotFile
+    }
+
+    if ([string]::IsNullOrWhiteSpace($text)) {
+        return $null
+    }
+
+    foreach ($line in ($text -split '\r?\n')) {
+        if ([string]::IsNullOrWhiteSpace($line)) {
+            continue
+        }
+
+        $trimmed = $line.Trim()
+        if ($trimmed.Length -gt 0 -and $trimmed[0] -eq [char]0xFEFF) {
+            $trimmed = $trimmed.Substring(1).Trim()
+        }
+
+        return $trimmed
+    }
+
+    return $null
+}
+
+function Get-MethodParameterDeclarationText {
+    param([string]$DeclarationLine)
+
+    if ([string]::IsNullOrWhiteSpace($DeclarationLine)) {
+        return $null
+    }
+
+    $openParenIndex = $DeclarationLine.IndexOf('(')
+    $closeParenIndex = $DeclarationLine.LastIndexOf(')')
+    if ($openParenIndex -lt 0 -or $closeParenIndex -le $openParenIndex) {
+        return $DeclarationLine.Trim()
+    }
+
+    return $DeclarationLine.Substring($openParenIndex + 1, $closeParenIndex - $openParenIndex - 1).Trim()
+}
+
+function Get-EntryPatchClassesText {
+    param($EntryComparison)
+
+    $patchClasses = New-Object System.Collections.Generic.List[string]
+    foreach ($entry in @($EntryComparison.Base, $EntryComparison.Target)) {
+        if ($null -eq $entry) {
+            continue
+        }
+
+        foreach ($patch in @($entry.PatchEntries)) {
+            if (-not [string]::IsNullOrWhiteSpace($patch.PatchClass)) {
+                $patchClasses.Add($patch.PatchClass) | Out-Null
+            }
+        }
+    }
+
+    return ((Get-UniqueOrderedStrings -Values $patchClasses) -join ' / ')
+}
+
+function Get-EntryTargetMethodsText {
+    param($EntryComparison)
+
+    $targetMethods = New-Object System.Collections.Generic.List[string]
+    foreach ($entry in @($EntryComparison.Base, $EntryComparison.Target)) {
+        if ($null -eq $entry) {
+            continue
+        }
+
+        foreach ($patch in @($entry.PatchEntries)) {
+            foreach ($targetMethod in @($patch.TargetMethods)) {
+                $display = if (-not [string]::IsNullOrWhiteSpace([string]$targetMethod.TypeName) -and -not [string]::IsNullOrWhiteSpace([string]$targetMethod.MethodName)) {
+                    '{0}.{1}' -f $targetMethod.TypeName, $targetMethod.MethodName
+                }
+                else {
+                    [string]$targetMethod.Signature
+                }
+
+                if (-not [string]::IsNullOrWhiteSpace($display)) {
+                    $targetMethods.Add($display) | Out-Null
+                }
+            }
+        }
+    }
+
+    return ((Get-UniqueOrderedStrings -Values $targetMethods) -join ' / ')
+}
+
+function Convert-ComparisonReasonsToChinese {
+    param([string[]]$Reasons)
+
+    $translated = foreach ($reason in @($Reasons | Select-Object -Unique)) {
+        if ($script:ComparisonReasonDisplayMap.ContainsKey($reason)) {
+            $script:ComparisonReasonDisplayMap[$reason]
+        }
+        else {
+            $reason
+        }
+    }
+
+    return ((Get-UniqueOrderedStrings -Values $translated) -join ' + ')
+}
+
+function Get-EntryPatchBuilderSignatureDriftNotes {
+    param($EntryComparison)
+
+    $notes = New-Object System.Collections.Generic.List[string]
+
+    foreach ($patchComparison in @($EntryComparison.PatchComparisons)) {
+        if ($null -eq $patchComparison.Base -or $null -eq $patchComparison.Target) {
+            continue
+        }
+
+        $patchKind = if ($patchComparison.Target.PatchKind) { $patchComparison.Target.PatchKind } else { $patchComparison.Base.PatchKind }
+        if ($patchKind -notin @('PatchBuilder', 'Hybrid')) {
+            continue
+        }
+
+        foreach ($methodComparison in @($patchComparison.TargetMethodComparisons)) {
+            if ($null -eq $methodComparison.Base -or $null -eq $methodComparison.Target) {
+                continue
+            }
+
+            $baseParameterDeclaration = Get-MethodParameterDeclarationText -DeclarationLine (Get-MethodDeclarationLine -TargetMethod $methodComparison.Base)
+            $targetParameterDeclaration = Get-MethodParameterDeclarationText -DeclarationLine (Get-MethodDeclarationLine -TargetMethod $methodComparison.Target)
+            if ([string]::IsNullOrWhiteSpace($baseParameterDeclaration) -or [string]::IsNullOrWhiteSpace($targetParameterDeclaration)) {
+                continue
+            }
+
+            if ($baseParameterDeclaration -ne $targetParameterDeclaration) {
+                $patchClass = if ($patchComparison.Target.PatchClass) { $patchComparison.Target.PatchClass } else { $patchComparison.Base.PatchClass }
+                $notes.Add(('{0} 参数声明变更: {1} -> {2}' -f $patchClass, $baseParameterDeclaration, $targetParameterDeclaration)) | Out-Null
+            }
+        }
+    }
+
+    return @(Get-UniqueOrderedStrings -Values $notes)
+}
+
+function Get-ReviewTriageEvaluation {
+    param($EntryComparison)
+
+    $baseWarnings = @(Get-EntryWarnings -Entry $EntryComparison.Base)
+    $targetWarnings = @(Get-EntryWarnings -Entry $EntryComparison.Target)
+    $missingSnapshotWarnings = @((@($baseWarnings) + @($targetWarnings)) | Where-Object { $_ -like 'Failed to resolve method snapshot*' } | Select-Object -Unique)
+    $signatureDriftNotes = @(Get-EntryPatchBuilderSignatureDriftNotes -EntryComparison $EntryComparison)
+    $reasonText = Convert-ComparisonReasonsToChinese -Reasons $EntryComparison.Reasons
+
+    if ($missingSnapshotWarnings.Count -gt 0) {
+        return [pscustomobject]@{
+            Conclusion = '2-人工查看'
+            SortRank = 1
+            Suggestion = '先补旧版/新版函数快照，再人工复核'
+            Note = Join-ReviewText -Parts @('存在方法快照缺失，当前无法做可靠函数级比对', $missingSnapshotWarnings)
+        }
+    }
+
+    $highRiskReasons = @(
+        'config-added',
+        'config-removed',
+        'config-type-changed',
+        'target-method-added',
+        'target-method-removed',
+        'signature-changed',
+        'occurrence-profile-changed',
+        'patch-added',
+        'patch-removed',
+        'patch-kind-changed',
+        'replacement-definition-changed'
+    )
+
+    if (@($EntryComparison.Reasons | Where-Object { $highRiskReasons -contains $_ }).Count -gt 0 -or $signatureDriftNotes.Count -gt 0) {
+        $suggestion = '优先复核并更新相关补丁'
+        if (@($EntryComparison.Reasons | Where-Object { $_ -in @('signature-changed') }).Count -gt 0 -or $signatureDriftNotes.Count -gt 0) {
+            $suggestion = '优先更新目标方法签名和 replacement 定位'
+        }
+        elseif (@($EntryComparison.Reasons | Where-Object { $_ -eq 'occurrence-profile-changed' }).Count -gt 0) {
+            $suggestion = '优先复核并更新 replacement occurrence'
+        }
+        elseif (@($EntryComparison.Reasons | Where-Object { $_ -in @('patch-added', 'patch-removed', 'target-method-added', 'target-method-removed', 'config-added', 'config-removed') }).Count -gt 0) {
+            $suggestion = '优先重新检查补丁注册与目标函数映射'
+        }
+
+        return [pscustomobject]@{
+            Conclusion = '3-需要更新'
+            SortRank = 0
+            Suggestion = $suggestion
+            Note = Join-ReviewText -Parts @(
+                $(if (-not [string]::IsNullOrWhiteSpace($reasonText)) { "高风险变化: $reasonText" }),
+                $signatureDriftNotes
+            )
+        }
+    }
+
+    $manualReviewReasons = @('condition-config-changed', 'registration-type-changed', 'work-summary-changed')
+    if (@($EntryComparison.Reasons | Where-Object { $manualReviewReasons -contains $_ }).Count -gt 0) {
+        return [pscustomobject]@{
+            Conclusion = '2-人工查看'
+            SortRank = 1
+            Suggestion = '人工检查 patch 定义变化是否影响功能'
+            Note = Join-ReviewText -Parts @('当前存在非函数级高风险变化，需要人工复核', $reasonText)
+        }
+    }
+
+    return [pscustomobject]@{
+        Conclusion = '1-可跳过'
+        SortRank = 2
+        Suggestion = '现有补丁可保留，后续适配可跳过'
+        Note = '当前未发现签名、occurrence 或 replacement 的高风险漂移'
+    }
+}
+
+function Export-ReviewTriageMarkdown {
+    param(
+        [object[]]$EntryComparisons,
+        [string]$BaseVersionName,
+        [string]$TargetVersionName,
+        [string]$MarkdownPath
+    )
+
+    $rows = foreach ($entry in @($EntryComparisons | Where-Object { $_.Status -ne 'unchanged' })) {
+        $evaluation = Get-ReviewTriageEvaluation -EntryComparison $entry
+        [pscustomobject]@{
+            SortRank = $evaluation.SortRank
+            Module = $entry.Module
+            ConfigKey = $entry.ConfigKey
+            PatchClasses = Get-EntryPatchClassesText -EntryComparison $entry
+            TargetMethods = Get-EntryTargetMethodsText -EntryComparison $entry
+            BaseStatusText = Get-EntrySnapshotStatusText -Entry $entry.Base
+            TargetStatusText = Get-EntrySnapshotStatusText -Entry $entry.Target
+            ChangeTypeText = Convert-ComparisonReasonsToChinese -Reasons $entry.Reasons
+            Conclusion = $evaluation.Conclusion
+            Suggestion = $evaluation.Suggestion
+            Note = $evaluation.Note
+        }
+    }
+
+    $orderedRows = @($rows | Sort-Object SortRank, Module, ConfigKey)
+
+    $summary = [ordered]@{
+        updateNeeded = @($orderedRows | Where-Object { $_.Conclusion -eq '3-需要更新' }).Count
+        manualReview = @($orderedRows | Where-Object { $_.Conclusion -eq '2-人工查看' }).Count
+        skip = @($orderedRows | Where-Object { $_.Conclusion -eq '1-可跳过' }).Count
+    }
+
+    $lines = @(
+        "# Patch 基线校对表（$BaseVersionName -> $TargetVersionName）",
+        '',
+        '## 说明',
+        '',
+        "- 旧版基线：``$BaseVersionName``",
+        "- 新版基线：``$TargetVersionName``",
+        '- 本表由 `PatchBaseline.ps1 -Action Compare` 自动生成。',
+        '- 排序规则：`3-需要更新` 在前，`2-人工查看` 第二，`1-可跳过` 最后。',
+        '',
+        '## 汇总',
+        '',
+        "- `3-需要更新`：$($summary.updateNeeded) 项",
+        "- `2-人工查看`：$($summary.manualReview) 项",
+        "- `1-可跳过`：$($summary.skip) 项",
+        '',
+        '## 校对表',
+        '',
+        '| 模块 | 配置项/功能 | Patch 类 | 目标函数 | 旧版 | 新版 | 变化类型 | 三级结论 | 建议 | 备注 |',
+        '| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |'
+    )
+
+    foreach ($row in $orderedRows) {
+        $cells = @(
+            (Convert-ToMarkdownCellText -Text $row.Module),
+            (Convert-ToMarkdownCellText -Text $row.ConfigKey),
+            (Convert-ToMarkdownCellText -Text $row.PatchClasses),
+            (Convert-ToMarkdownCellText -Text $row.TargetMethods),
+            (Convert-ToMarkdownCellText -Text $row.BaseStatusText),
+            (Convert-ToMarkdownCellText -Text $row.TargetStatusText),
+            (Convert-ToMarkdownCellText -Text $row.ChangeTypeText),
+            (Convert-ToMarkdownCellText -Text $row.Conclusion),
+            (Convert-ToMarkdownCellText -Text $row.Suggestion),
+            (Convert-ToMarkdownCellText -Text $row.Note)
+        )
+
+        $lines += ('| {0} | {1} | {2} | {3} | {4} | {5} | {6} | {7} | {8} | {9} |' -f $cells)
+    }
+
+    Set-Content -LiteralPath $MarkdownPath -Value $lines -Encoding UTF8
+}
+
 function Invoke-Collect {
     param(
         [string]$SelectedVersion,
@@ -1845,6 +2426,7 @@ function Invoke-Compare {
     $comparisonRoot = Ensure-Directory -Path (Join-Path $OutputRoot (Join-Path 'comparisons' ("$CompareBaseVersion-to-$CompareTargetVersion")))
     $comparisonJsonPath = Join-Path $comparisonRoot 'comparison.json'
     $comparisonMarkdownPath = Join-Path $comparisonRoot 'comparison.md'
+    $reviewTriagePath = Join-Path $comparisonRoot 'review-triage.md'
     $reviewTemplatePath = Join-Path $comparisonRoot 'update-review-template.json'
 
     $comparisonDocument = [pscustomobject]@{
@@ -1856,18 +2438,50 @@ function Invoke-Compare {
 
     $comparisonDocument | ConvertTo-Json -Depth 100 | Set-Content -LiteralPath $comparisonJsonPath -Encoding UTF8
     Export-ComparisonMarkdown -EntryComparisons $entryComparisons -BaseVersionName $CompareBaseVersion -TargetVersionName $CompareTargetVersion -MarkdownPath $comparisonMarkdownPath
+    Export-ReviewTriageMarkdown -EntryComparisons $entryComparisons -BaseVersionName $CompareBaseVersion -TargetVersionName $CompareTargetVersion -MarkdownPath $reviewTriagePath
     Export-UpdateReviewTemplate -EntryComparisons $entryComparisons -TemplatePath $reviewTemplatePath
 
     Write-Status "Comparison written to $comparisonJsonPath"
+    Write-Status "Review triage written to $reviewTriagePath"
     Write-Status "Update review template written to $reviewTemplatePath"
 
     return [pscustomobject]@{
         ComparisonRoot = $comparisonRoot
         ComparisonJsonPath = $comparisonJsonPath
         ComparisonMarkdownPath = $comparisonMarkdownPath
+        ReviewTriagePath = $reviewTriagePath
         ReviewTemplatePath = $reviewTemplatePath
     }
 }
+
+$executionParameters = if (-not $NonInteractive) {
+    Get-InteractiveExecutionParameters -CurrentAction $Action -CurrentWorkspaceRoot $WorkspaceRoot -CurrentGameSourceRoot $GameSourceRoot -CurrentOutputRoot $OutputRoot -CurrentVersion $Version -CurrentModules $Modules -CurrentIncludeConfigKey $IncludeConfigKey -CurrentCopyGameSource $CopyGameSource -CurrentBaseVersion $BaseVersion -CurrentTargetVersion $TargetVersion
+}
+else {
+    [pscustomobject]@{
+        Action = $Action
+        WorkspaceRoot = $WorkspaceRoot
+        GameSourceRoot = $GameSourceRoot
+        OutputRoot = $OutputRoot
+        Version = $Version
+        Modules = @(Normalize-StringList -Values $Modules)
+        IncludeConfigKey = @(Normalize-StringList -Values $IncludeConfigKey)
+        CopyGameSource = [bool]$CopyGameSource
+        BaseVersion = $BaseVersion
+        TargetVersion = $TargetVersion
+    }
+}
+
+$Action = $executionParameters.Action
+$WorkspaceRoot = $executionParameters.WorkspaceRoot
+$GameSourceRoot = $executionParameters.GameSourceRoot
+$OutputRoot = $executionParameters.OutputRoot
+$Version = $executionParameters.Version
+$Modules = @($executionParameters.Modules)
+$IncludeConfigKey = @($executionParameters.IncludeConfigKey)
+$CopyGameSource = [bool]$executionParameters.CopyGameSource
+$BaseVersion = $executionParameters.BaseVersion
+$TargetVersion = $executionParameters.TargetVersion
 
 switch ($Action) {
     'Collect' {
