@@ -85,6 +85,7 @@ $script:ComparisonReasonDisplayMap = @{
     'condition-config-changed' = '条件配置变更'
     'replacement-definition-changed' = 'replacement 定义变更'
     'work-summary-changed' = '工作摘要变更'
+    'occurrence-line-changed' = 'occurrence 调用行变更'
 }
 
 function Write-Status {
@@ -1309,6 +1310,59 @@ function Get-ReplacementOccurrenceSummary {
     return $results
 }
 
+function Get-OccurrenceLineText {
+    param(
+        [string]$MethodText,
+        [string]$MethodName,
+        [int]$OccurrenceIndex
+    )
+
+    $allMatches = [regex]::Matches($MethodText, '\b' + [regex]::Escape($MethodName) + '\s*\(')
+    if ($OccurrenceIndex -lt 1 -or $OccurrenceIndex -gt $allMatches.Count) {
+        return $null
+    }
+
+    $matchPos = $allMatches[$OccurrenceIndex - 1].Index
+    $lineStart = $MethodText.LastIndexOf("`n", $matchPos) + 1
+    if ($lineStart -lt 0) { $lineStart = 0 }
+    $lineEnd = $MethodText.IndexOf("`n", $matchPos)
+    if ($lineEnd -lt 0) { $lineEnd = $MethodText.Length }
+    return $MethodText.Substring($lineStart, $lineEnd - $lineStart).TrimEnd("`r").Trim()
+}
+
+function Get-OccurrenceLineTexts {
+    param(
+        [object[]]$Replacements,
+        [string]$MethodText
+    )
+
+    if (-not $MethodText -or -not $Replacements) {
+        return @()
+    }
+
+    $seen = @{}
+    $results = @()
+    foreach ($replacement in $Replacements) {
+        $methodName = $replacement.TargetMethodName
+        if ([string]::IsNullOrWhiteSpace($methodName)) { continue }
+        foreach ($occ in @($replacement.TargetOccurrences)) {
+            $intOcc = 0
+            if (-not [int]::TryParse([string]$occ, [ref]$intOcc)) { continue }
+            $key = '{0}|{1}' -f $methodName, $intOcc
+            if ($seen.ContainsKey($key)) { continue }
+            $seen[$key] = $true
+            $lineText = Get-OccurrenceLineText -MethodText $MethodText -MethodName $methodName -OccurrenceIndex $intOcc
+            $results += [pscustomobject]@{
+                TargetMethodName = $methodName
+                Occurrence = $intOcc
+                LineText = if ($null -ne $lineText) { $lineText } else { '' }
+            }
+        }
+    }
+
+    return @($results)
+}
+
 function Get-PatchKindDescription {
     param(
         $RegistrationTypes,
@@ -1627,6 +1681,16 @@ function Compare-TargetMethods {
             }
             if ((ConvertTo-ComparableJson -Value $baseMethod.ObservedOccurrences) -ne (ConvertTo-ComparableJson -Value $targetMethod.ObservedOccurrences)) {
                 $reasons += 'occurrence-profile-changed'
+            }
+
+            if (-not ($reasons -contains 'occurrence-profile-changed') -and ($reasons -contains 'method-code-changed')) {
+                $baseHasLines = $baseMethod.PSObject.Properties['ObservedOccurrenceLines'] -and $null -ne $baseMethod.ObservedOccurrenceLines
+                $targetHasLines = $targetMethod.PSObject.Properties['ObservedOccurrenceLines'] -and $null -ne $targetMethod.ObservedOccurrenceLines
+                if ($baseHasLines -and $targetHasLines) {
+                    if ((ConvertTo-ComparableJson -Value @($baseMethod.ObservedOccurrenceLines)) -ne (ConvertTo-ComparableJson -Value @($targetMethod.ObservedOccurrenceLines))) {
+                        $reasons += 'occurrence-line-changed'
+                    }
+                }
             }
         }
 
@@ -2092,6 +2156,52 @@ function Get-EntryPatchBuilderSignatureDriftNotes {
     return @(Get-UniqueOrderedStrings -Values $notes)
 }
 
+function Get-EntryOccurrenceLineChangeNotes {
+    param($EntryComparison)
+
+    $notes = New-Object System.Collections.Generic.List[string]
+
+    foreach ($patchComparison in @($EntryComparison.PatchComparisons)) {
+        if ($null -eq $patchComparison.Base -or $null -eq $patchComparison.Target) {
+            continue
+        }
+
+        foreach ($methodComparison in @($patchComparison.TargetMethodComparisons)) {
+            if ($null -eq $methodComparison.Base -or $null -eq $methodComparison.Target) {
+                continue
+            }
+            if (-not ($methodComparison.Reasons -contains 'occurrence-line-changed')) {
+                continue
+            }
+
+            $baseLines = if ($methodComparison.Base.PSObject.Properties['ObservedOccurrenceLines']) { @($methodComparison.Base.ObservedOccurrenceLines) } else { @() }
+            $targetLines = if ($methodComparison.Target.PSObject.Properties['ObservedOccurrenceLines']) { @($methodComparison.Target.ObservedOccurrenceLines) } else { @() }
+
+            $baseLookup = @{}
+            foreach ($item in $baseLines) {
+                $baseLookup[('{0}|{1}' -f $item.TargetMethodName, $item.Occurrence)] = [string]$item.LineText
+            }
+
+            $targetLookup = @{}
+            foreach ($item in $targetLines) {
+                $targetLookup[('{0}|{1}' -f $item.TargetMethodName, $item.Occurrence)] = [string]$item.LineText
+            }
+
+            $allLineKeys = @($baseLookup.Keys + $targetLookup.Keys | Sort-Object -Unique)
+            foreach ($lineKey in $allLineKeys) {
+                $baseText = if ($baseLookup.ContainsKey($lineKey)) { $baseLookup[$lineKey] } else { '' }
+                $targetText = if ($targetLookup.ContainsKey($lineKey)) { $targetLookup[$lineKey] } else { '' }
+                if ($baseText -ne $targetText) {
+                    $keyParts = $lineKey -split '\|'
+                    $notes.Add(('{0} occ{1}: 旧: {2} → 新: {3}' -f $keyParts[0], $keyParts[1], $baseText, $targetText)) | Out-Null
+                }
+            }
+        }
+    }
+
+    return @(Get-UniqueOrderedStrings -Values $notes)
+}
+
 function Get-ReviewTriageEvaluation {
     param($EntryComparison)
 
@@ -2099,6 +2209,7 @@ function Get-ReviewTriageEvaluation {
     $targetWarnings = @(Get-EntryWarnings -Entry $EntryComparison.Target)
     $missingSnapshotWarnings = @((@($baseWarnings) + @($targetWarnings)) | Where-Object { $_ -like 'Failed to resolve method snapshot*' } | Select-Object -Unique)
     $signatureDriftNotes = @(Get-EntryPatchBuilderSignatureDriftNotes -EntryComparison $EntryComparison)
+    $occurrenceLineChangeNotes = @(Get-EntryOccurrenceLineChangeNotes -EntryComparison $EntryComparison)
     $reasonText = Convert-ComparisonReasonsToChinese -Reasons $EntryComparison.Reasons
 
     if ($missingSnapshotWarnings.Count -gt 0) {
@@ -2147,8 +2258,17 @@ function Get-ReviewTriageEvaluation {
         }
     }
 
-    $manualReviewReasons = @('condition-config-changed', 'registration-type-changed', 'work-summary-changed')
+    $manualReviewReasons = @('occurrence-line-changed', 'condition-config-changed', 'registration-type-changed', 'work-summary-changed')
     if (@($EntryComparison.Reasons | Where-Object { $manualReviewReasons -contains $_ }).Count -gt 0) {
+        if ($EntryComparison.Reasons -contains 'occurrence-line-changed') {
+            $lineNoteParts = @('调用行发生变更，需人工确认语义') + @($occurrenceLineChangeNotes)
+            return [pscustomobject]@{
+                Conclusion = '2-人工查看'
+                SortRank = 1
+                Suggestion = '复核 occurrence 调用行语义是否仍然正确'
+                Note = Join-ReviewText -Parts $lineNoteParts
+            }
+        }
         return [pscustomobject]@{
             Conclusion = '2-人工查看'
             SortRank = 1
@@ -2335,6 +2455,7 @@ function Invoke-Collect {
                         MethodCode = $methodCode
                         MethodCodeHash = $methodHash
                         ObservedOccurrences = @($occurrenceSummary)
+                        ObservedOccurrenceLines = @(Get-OccurrenceLineTexts -Replacements $patchMetadata.Replacements -MethodText $methodCode)
                     }
                 }
 
