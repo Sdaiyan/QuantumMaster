@@ -4,9 +4,9 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>annotations</Nullable>
-	  <OutputPath>E:\SteamLibrary\steamapps\common\The Scroll Of Taiwu\Mod\QMBreak\Plugins</OutputPath>
+	  <OutputPath>E:\SteamLibrary\steamapps\common\The Scroll Of Taiwu\Mod\[测试]天机秘术(自定义突破)\Plugins</OutputPath>
     <ProduceReferenceAssembly>False</ProduceReferenceAssembly>
-    <PackageOutputPath>E:\SteamLibrary\steamapps\common\The Scroll Of Taiwu\Mod\QMBreak\Plugins</PackageOutputPath>
+    <PackageOutputPath>E:\SteamLibrary\steamapps\common\The Scroll Of Taiwu\Mod\[测试]天机秘术(自定义突破)\Plugins</PackageOutputPath>
     <BaseIntermediateOutputPath></BaseIntermediateOutputPath>
     <AnalysisLevel>none</AnalysisLevel>
     <EnableNETAnalyzers>False</EnableNETAnalyzers>

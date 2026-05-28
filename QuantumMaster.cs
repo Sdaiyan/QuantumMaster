@@ -8,7 +8,7 @@ namespace QuantumMaster
 {
 
     [PluginConfig("QuantumMaster", "dai", "0.0.1")]
-    public class QuantumMaster : TaiwuRemakeHarmonyPlugin
+    public class QuantumMaster : TaiwuRemakePlugin
     {
         Harmony harmony;
         public static bool BreakBaseChane; // 突破基础概率
